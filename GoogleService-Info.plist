@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>746020028729-ic7pqr8obugous9k46gjkrk074e299cv.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.746020028729-ic7pqr8obugous9k46gjkrk074e299cv</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>746020028729-2ban0r9e4scp1b4kkekmo6rv6s14bbrn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBSn6rMVKHlIsLKEXLtkG7tPkHaa1-5ujk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>746020028729</string>
+	<key>BUNDLE_ID</key>
+	<string>uk.co.pm247</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>PROJECT_ID</key>
+	<string>partner-maintenance-247</string>
+	<key>STORAGE_BUCKET</key>
+	<string>partner-maintenance-247.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:746020028729:ios:e5feec535c3646e7</string>
+	<key>DATABASE_URL</key>
+	<string>https://partner-maintenance-247.firebaseio.com</string>
+</dict>
+</plist>

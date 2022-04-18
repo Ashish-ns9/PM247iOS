@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Partner_AllocateEng" representedClassName="Partner_AllocateEng" syncable="YES">
+        <attribute name="eng_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eng_status" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="manager_id" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Partner_AllocateEngineer" representedClassName="Partner_AllocateEngineer" syncable="YES">
+        <attribute name="eng_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="eng_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isaccepted" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="manager_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="manager_name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Partner_Job" representedClassName="Partner_Job" syncable="YES">
+        <attribute name="job_address" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_advchannel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_citytown" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_contactno" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_contactnumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_contactperson" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_datepost" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_description" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_emailaddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_firstname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_lastname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_nameoforganization" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_natureofjob" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_paymentmode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_postcode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_recreatedfrominvoice" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_remarks" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_statusid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_statusname" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_typeofaddress" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_typeofcustomer" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="job_typeoforganization" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Partner_UserDetails" representedClassName="Partner_UserDetails" syncable="YES">
+        <attribute name="user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="user_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="user_role" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Partner_AllocateEngineer" positionX="-54" positionY="144" width="128" height="135"/>
+        <element name="Partner_Job" positionX="-63" positionY="-18" width="128" height="420"/>
+        <element name="Partner_UserDetails" positionX="-63" positionY="135" width="128" height="90"/>
+        <element name="Partner_AllocateEng" positionX="-45" positionY="144" width="128" height="105"/>
+    </elements>
+</model>

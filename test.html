@@ -1,0 +1,34 @@
+
+
+<html>
+    
+<body onload="userdetail();">
+
+<p hidden id="var1">coustomername</p>
+<p hidden id="var2">postalcode</p>
+<script>
+window.fwSettings={
+'widget_id':80000002595
+};
+!function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()
+</script>
+<script type='text/javascript' src='https://euc-widget.freshworks.com/widgets/80000002595.js' async defer></script>
+
+
+<script type='text/javascript'>
+FreshworksWidget('hide');
+FreshworksWidget('hide', 'launcher');
+FreshworksWidget('open', 'ticketForm');
+function userdetail()
+{
+FreshworksWidget('prefill', 'ticketForm', {
+custom_fields: {
+cf_customername: document.getElementById("var1").innerHTML,
+cf_postcode:document.getElementById("var2").innerHTML
+}
+
+});
+}
+</script>
+</body>
+</html>

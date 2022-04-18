@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6DF161DF-149C-489E-9FC2-A9C11E1313B9</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Partner Maintenance</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>FA63D8C4E0667AD93984483E62A57F9EE3493A95</key>
+		<string>https://bitbucket.org/city_tech/pm24-7.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Partner Maintenance.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>FA63D8C4E0667AD93984483E62A57F9EE3493A95</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://bitbucket.org/city_tech/pm24-7.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>FA63D8C4E0667AD93984483E62A57F9EE3493A95</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FA63D8C4E0667AD93984483E62A57F9EE3493A95</string>
+			<key>IDESourceControlWCCName</key>
+			<string>partnersmaintainance</string>
+		</dict>
+	</array>
+</dict>
+</plist>

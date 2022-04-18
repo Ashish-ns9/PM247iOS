@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSHumanReadableCopyright</key>
+	<string></string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires location services to get your current location for estimating traval time and for navigation.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires location services to get your current location for estimating traval time and for navigation.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Continued use of GPS running in the background can dramatically decrease battery life</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>uk.co.pm247</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>PM247</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to use your camera roll and photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to use your camera.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>TheSansArabic-ExtraLight.otf</string>
+		<string>TheSansArabic-Plain.otf</string>
+		<string>MyriadPro-Regular.otf</string>
+		<string>MyriadPro-Bold.otf</string>
+		<string>TheSansArabic-Bold.otf</string>
+		<string>TheSansArabic-Light.otf</string>
+	</array>
+</dict>
+</plist>

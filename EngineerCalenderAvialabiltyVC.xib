@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EngineerCalenderAvialabiltyVC">
+            <connections>
+                <outlet property="CalendarView" destination="WhK-6e-Uen" id="qJD-yK-d7c"/>
+                <outlet property="btnSlideMenu" destination="cIQ-iF-b4j" id="tmD-UI-GmT"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WhK-6e-Uen">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav_bar" translatesAutoresizingMaskIntoConstraints="NO" id="p2s-AU-qeH">
+                    <rect key="frame" x="0.0" y="30" width="414" height="44"/>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cIQ-iF-b4j">
+                    <rect key="frame" x="371" y="30" width="43" height="43"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="43" id="UID-bh-Fbz"/>
+                        <constraint firstAttribute="height" constant="43" id="yzE-mE-e4c"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <state key="normal" backgroundImage="slideIcon">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Engineer Availability" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AIH-at-a1g">
+                    <rect key="frame" x="131" y="40" width="152" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.92549019610000005" green="0.92941176469999998" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <color key="backgroundColor" red="0.84306299689999997" green="0.84318488840000005" blue="0.84303635359999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="WhK-6e-Uen" secondAttribute="bottom" id="8op-3s-VSk"/>
+                <constraint firstItem="cIQ-iF-b4j" firstAttribute="top" secondItem="p2s-AU-qeH" secondAttribute="top" id="H0B-MD-Zux"/>
+                <constraint firstItem="p2s-AU-qeH" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="Hku-kJ-YBF"/>
+                <constraint firstItem="WhK-6e-Uen" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Oh9-7d-pDw"/>
+                <constraint firstItem="p2s-AU-qeH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="30" id="UWV-id-83t"/>
+                <constraint firstItem="p2s-AU-qeH" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="YqM-XC-2QO"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="cIQ-iF-b4j" secondAttribute="trailing" id="hJB-g5-P0W"/>
+                <constraint firstItem="WhK-6e-Uen" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="hN1-Px-Jws"/>
+                <constraint firstItem="AIH-at-a1g" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="40" id="jni-8Y-qVq"/>
+                <constraint firstItem="AIH-at-a1g" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="pi2-Bo-MFZ"/>
+                <constraint firstItem="WhK-6e-Uen" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="ysd-Jv-WRI"/>
+            </constraints>
+            <point key="canvasLocation" x="-430.43478260869568" y="41.517857142857139"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="nav_bar" width="320" height="44"/>
+        <image name="slideIcon" width="47.5" height="46"/>
+    </resources>
+</document>

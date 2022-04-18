@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "iconfinder_2730360_hand_help_inkcontober_united_icon_512px.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "iconfinder_2730360_hand_help_inkcontober_united_icon_512px-2.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "iconfinder_2730360_hand_help_inkcontober_united_icon_512px-1.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
