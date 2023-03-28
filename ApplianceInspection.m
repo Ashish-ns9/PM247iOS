@@ -90,6 +90,7 @@
 #pragma mark- Submit Press Method
 - (IBAction)btnSubmitapped:(id)sender
 {
+    
     NSLog(@"arrApplianceData :%@",arrApplianceData);
     
     _dataApplianceDetails=[[NSMutableDictionary alloc]init];

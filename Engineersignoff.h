@@ -45,6 +45,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtOperativeID;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnsubmit;
+
 - (IBAction)btnSubmitapped:(id)sender;
 - (IBAction)btnbacktapped:(id)sender;
 - (IBAction)btnenggSignTapped:(id)sender;

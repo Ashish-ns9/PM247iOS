@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FinancialVC">
             <connections>
                 <outlet property="btnCalculate" destination="jp1-Wt-T1q" id="bGf-oL-3hy"/>
-                <outlet property="btnSubmit" destination="tSx-uc-wS0" id="Zl4-Yz-nuH"/>
+                <outlet property="btnPaymentDetail" destination="MJ6-5Z-1XL" id="OZC-VN-eCq"/>
+                <outlet property="btnSubmit" destination="tSx-uc-wS0" id="oD4-Nv-RBa"/>
                 <outlet property="lblCreatDate" destination="fjr-Am-fQy" id="W4M-82-RbO"/>
                 <outlet property="lblDecription" destination="guF-S1-SVz" id="shJ-c5-GHz"/>
                 <outlet property="lblProfitCommissionMessage" destination="w6d-vZ-AYN" id="52c-ii-h0J"/>
@@ -525,6 +526,8 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
+                    <viewLayoutGuide key="contentLayoutGuide" id="qlr-FW-wPj"/>
+                    <viewLayoutGuide key="frameLayoutGuide" id="hWg-9R-f9k"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="0a0-ic-F25"/>
                     </connections>

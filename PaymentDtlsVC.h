@@ -18,6 +18,8 @@
     KLCPopup *popPicker,*popImage;
     
     NSString *strAmtDue;
+    NSString *desc;
+
     NSInteger index;
     
     //Image
@@ -47,6 +49,8 @@
 @property (nonatomic) NSMutableData *imageData;
 
 @property(nonatomic,retain)  NSDictionary *dictJob;
+@property(nonatomic,retain)  NSString *outStandingAmount;
+
 @property (strong, nonatomic) IBOutlet UITableView *tblPayment;
 @property (strong, nonatomic) IBOutlet UIView *viewTakePayment;
 

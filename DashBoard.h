@@ -99,7 +99,8 @@
     NSInteger refreshCompleteloadmorePagecount;
     NSInteger  ViewWillAppearBookedloadmorePagecount;
     NSInteger ViewWillAppearActiveloadmorePagecount;
-    NSInteger ViewWillAppearcompleteloadmorePagecount;
+    NSInteger ViewWillAppearcompleteloadmorePagecount,SignAgreementCount;
+    NSString *SignAgreementCount1;
  
     NSInteger allpageValue;
     BOOL isNxtJobAvailable,isPrevJobAvailable;

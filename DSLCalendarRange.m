@@ -71,11 +71,13 @@
 #pragma mark - Properties
 
 - (void)setStartDay:(NSDateComponents *)startDay {
+    
     NSParameterAssert(startDay);
     _startDay = [startDay copy];
 }
 
 - (void)setEndDay:(NSDateComponents *)endDay {
+    
     NSParameterAssert(endDay);
     _endDay = [endDay copy];
 }
@@ -84,6 +86,7 @@
 #pragma mark
 
 - (BOOL)containsDay:(NSDateComponents*)day {
+    
     return [self containsDate:day.date];
 }
 

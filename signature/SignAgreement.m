@@ -22,6 +22,7 @@ AppDelegate *app;
 #pragma mark- Back Press Method
 - (IBAction)backTapped:(id)sender
 {
+    
     [self.navigationController popViewControllerAnimated:true];
 }
 
@@ -44,6 +45,7 @@ AppDelegate *app;
     [numberTool sizeToFit];
     _txtNoteDesComplete.inputAccessoryView = numberTool;
     isBack=NO;
+    
     self.navigationController.navigationBar.hidden = YES;
     _lblHeading.font=[UIFont fontWithName:@"TheSansArabic-Bold" size:18.0];
     app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -56,6 +58,7 @@ AppDelegate *app;
     arrAgrLinks=[[NSMutableDictionary alloc]init];
     if ([strHeading isEqualToString:@"Agreement"])
     {
+        
          DLog(@"inside agreement if ");
        
         
@@ -105,6 +108,11 @@ AppDelegate *app;
     }
     
      DLog(@"viewDidLoad Ended ");
+    
+    NSString *Count = @"ndata";
+    
+    [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 -(void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event //here enable the touch
@@ -140,6 +148,7 @@ AppDelegate *app;
 #pragma mark - view PopUp Customer 1st Agreement Method
 -(void)viewPopUpCustomer1stAgreement
 {
+    
     scrlAgreements=[[UIScrollView alloc]initWithFrame:CGRectMake(0,CGRectGetMaxY(_imgvHeader.frame)+5,CGRectGetWidth([[UIScreen mainScreen]bounds]),[[UIScreen mainScreen]bounds].size.height-CGRectGetMaxY(_imgvHeader.frame))];
     CGFloat currX=5.0f;
     
@@ -234,6 +243,7 @@ AppDelegate *app;
         }
         else
         {
+          
             NSString *str= [GlobalDirector ReplaceStringNull:[_JobDic valueForKey:@"JobPrice"]];
             const char *cString = [str UTF8String];
             NSData *data = [NSData dataWithBytes:cString length:strlen(cString)];
@@ -309,6 +319,7 @@ AppDelegate *app;
     if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
         
+        
         UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(signTapped:)];
         [singleTap setNumberOfTapsRequired:1];
         [ImgSign addGestureRecognizer:singleTap];
@@ -349,10 +360,12 @@ AppDelegate *app;
     
     if ([strHeading isEqualToString:@"Invoice"])
     {
+        
         [btnAccept addTarget:self action:@selector(SelectInvoiceNumberPopUp:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
     {
+        
         [btnAccept addTarget:self action:@selector(acceptPress:) forControlEvents:UIControlEventTouchUpInside];
     }
     
@@ -390,6 +403,7 @@ AppDelegate *app;
     
     if ([strHeading isEqualToString:@"Invoice"])
     {
+        
         [btnSignViaPaper addTarget:self action:@selector(SelectInvoiceNumberPopUp:) forControlEvents:UIControlEventTouchUpInside];
     }
     else
@@ -419,7 +433,7 @@ AppDelegate *app;
 
 -(void)signTapped:(UIGestureRecognizer *)recognizer
 {
-    NSLog([NSString stringWithFormat:@"%@", signURL]);
+    NSLog(@"%@", [NSString stringWithFormat:@"%@", signURL]);
     
     if (signURL.length>0)
     {
@@ -511,6 +525,7 @@ AppDelegate *app;
 
 -(void)ProceedWithPaperWork
 {
+   
     UIAlertController *controller = [UIAlertController alertControllerWithTitle: @""
                                                                         message:@"Do you accept this agreement via paperwork ?"
                                                                  preferredStyle: UIAlertControllerStyleAlert];
@@ -519,8 +534,8 @@ AppDelegate *app;
                                                   style: UIAlertActionStyleDefault
                                                 handler: ^(UIAlertAction *action) {
         
-        ImgSign.image=[UIImage imageNamed:@"SignViaPaperwork"];
-        imgCheckSignature=YES;
+        self->ImgSign.image=[UIImage imageNamed:@"SignViaPaperwork"];
+        self->imgCheckSignature=YES;
         [self acceptPress:nil];
         
     }];
@@ -539,6 +554,8 @@ AppDelegate *app;
 #pragma mark- AcceptPress Method
 -(void)acceptPress:(UIButton *)sender
 {
+    
+    
     
     UIImage *img ;
     
@@ -622,6 +639,7 @@ AppDelegate *app;
 #pragma mark- DeclinePress Method
 -(void)declinePress:(id)sender
 {
+    
     [self backTapped:nil];
 }
 -(void)MaskinViewController:(PJRSignatureView *)viewController IsSignatureDone:(BOOL)value{
@@ -738,6 +756,7 @@ AppDelegate *app;
 
 
 -(IBAction)DoneSignature:(id)sender{
+    
     ImgSign.image=[scratchableView getSignatureImage];
     [self bgPopupTouched:nil];
 }
@@ -763,6 +782,7 @@ AppDelegate *app;
 #pragma mark - Agreement 1 Page job create
 -(void)showPopUpAgreementPage :(NSString *)strNewOrRecReate
 {
+   
     mainBg1 = [[UIView alloc] initWithFrame:CGRectMake(0,0,[UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.height)];
     mainBg1.backgroundColor =[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.8];
     
@@ -849,6 +869,7 @@ AppDelegate *app;
 
 -(void)pressAcceptYes:(id)sender
 {
+    
     UIButton *btn=(UIButton *)sender;
     DLog(@"tag :%ld",(long)btn.tag);
     [mainBg1 removeFromSuperview];
@@ -858,6 +879,7 @@ AppDelegate *app;
 
 -(void)pressDeclineNo:(id)sender
 {
+    
     UIButton *btn=(UIButton *)sender;
     DLog(@"tag :%ld",(long)btn.tag);
     [self.dataTaskAgr cancel];
@@ -958,6 +980,7 @@ AppDelegate *app;
 }
 -(void)pressAcceptYes2:(id)sender
 {
+    
     [mainBg2 removeFromSuperview];
     [self viewPopUpCustomer1stAgreement];
     
@@ -971,6 +994,7 @@ AppDelegate *app;
 
 -(void)pressDeclineNo2:(id)sender
 {
+    
     UIButton *btn=(UIButton *)sender;
     DLog(@"tag :%ld",(long)btn.tag);
     [self.dataTaskAgr cancel];
@@ -1039,6 +1063,7 @@ AppDelegate *app;
             
             if ([Str isEqualToString:@"Small Repair Agreement"])
             {
+                
                 btnEmail.tag=2;
             }
             else if ([Str isEqualToString:@"Fixed Price Agreement"])
@@ -1064,6 +1089,7 @@ AppDelegate *app;
             
             if ([Str isEqualToString:@"Small Repair Agreement"])
             {
+                
                 btnDropBox.tag=2;
             }
             else if ([Str isEqualToString:@"Fixed Price Agreement"])
@@ -1237,6 +1263,7 @@ AppDelegate *app;
     }
     else if (btn.tag==2)
     {
+        
         strJobType=@"Small Repair Agreement";
         DLog(@"agggg :%@",[arrAgrLinks valueForKey:@"Small Repair Agreement"]);
         url = [NSURL URLWithString:[[arrAgrLinks valueForKey:@"Small Repair Agreement"] stringByReplacingOccurrencesOfString:@"\\" withString:@"/"]];
@@ -1315,6 +1342,7 @@ AppDelegate *app;
     else if (btn.tag==2)
     {
         
+        
         NSURL *fileurl = [NSURL URLWithString:[[arrAgrLinks valueForKey:@"Small Repair Agreement"] stringByReplacingOccurrencesOfString:@"\\" withString:@"/"]];
         DLog(@"fileurl>>>>> %@",fileurl);
         
@@ -1387,6 +1415,7 @@ AppDelegate *app;
     }
     else if (btn.tag==2)
     {
+        
         DLog(@"agggg :%@",[arrAgrLinks valueForKey:@"Small Repair Agreement"]);
         
         urlString=[NSString stringWithFormat:@"%sSendAgreementToUser?userToken=%@&jobId=%@&agreementType=%@",conn_url, (NSString *)[userdetails valueForKey:@"UserToken"],_jobID,@"SmallRepairAgreement"];
@@ -1431,6 +1460,7 @@ AppDelegate *app;
 #pragma mark - Select Invoice Number PopUp Method
 -(IBAction)SelectInvoiceNumberPopUp:(UIButton *)sender
 {
+    
     DLog(@"imgCheckSignature :%i",imgCheckSignature);
     if (imgCheckSignature==NO&&sender.tag!=212)
     {
@@ -1538,6 +1568,7 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         selectInvoiceNo.userInteractionEnabled=NO;
         if (invId.length>0) {
             selectInvoiceNo.text=invId;
@@ -1714,6 +1745,7 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"]) {
         
+        
         txtvNoteInvoice.userInteractionEnabled=NO;
     }
     
@@ -1751,6 +1783,7 @@ AppDelegate *app;
         
         if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             // [btnGenerateInvoice addTarget:self action:@selector(btnRecomandations) forControlEvents:UIControlEventTouchUpInside];
             [btnGenerateInvoice addTarget:self action:@selector(ShowPopupComplete) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -1868,6 +1901,7 @@ AppDelegate *app;
         
         if ([txtvNoteInvoice.text isEqualToString:@""])
                 {
+                    
                     UIAlertController *alert= [UIAlertController
                                                alertControllerWithTitle:@"Please call the office on this 01992586311 to describe what has been done"
                                                message:@""
@@ -1875,6 +1909,7 @@ AppDelegate *app;
                     
                     UIAlertAction* ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                                                                handler:^(UIAlertAction * action){
+                        
                         [self.navigationController popViewControllerAnimated:YES];
                         [alert dismissViewControllerAnimated:YES completion:nil];
                     }];
@@ -1885,6 +1920,7 @@ AppDelegate *app;
         
         else  if ([txtvNoteInvoice.text isEqualToString:@"."])
            {
+            
                UIAlertController *alert= [UIAlertController
                                           alertControllerWithTitle:@"Please call the office on this 01992586311 to describe what has done"
                                           message:@""
@@ -2301,6 +2337,7 @@ AppDelegate *app;
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    
     NSMutableDictionary* temp;
     if (_responseData !=nil)
     {
@@ -2370,7 +2407,7 @@ AppDelegate *app;
         }
         else
         {
-            NSLog([NSString stringWithFormat:@"%@", error]);
+            NSLog(@"%@", [NSString stringWithFormat:@"%@", error]);
         }
     }
     

@@ -54,6 +54,7 @@ typedef enum
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
     [super touchesBegan:touches withEvent:event];
    
     UITouch *touch = [touches anyObject];
@@ -64,6 +65,7 @@ typedef enum
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    
     [super touchesMoved:touches withEvent:event];
     
     if (self.state == UIGestureRecognizerStateFailed)

@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14A389" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21E258" minimumToolsVersion="Xcode 4.3" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="CalendarData" syncable="YES">
+        <attribute name="availableform" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="availbleTo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="themecolor" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Partner_AllocateEng" representedClassName="Partner_AllocateEng" syncable="YES">
         <attribute name="eng_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="eng_status" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,9 +52,10 @@
         <attribute name="user_role" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Partner_AllocateEng" positionX="-45" positionY="144" width="128" height="105"/>
         <element name="Partner_AllocateEngineer" positionX="-54" positionY="144" width="128" height="135"/>
         <element name="Partner_Job" positionX="-63" positionY="-18" width="128" height="420"/>
         <element name="Partner_UserDetails" positionX="-63" positionY="135" width="128" height="90"/>
-        <element name="Partner_AllocateEng" positionX="-45" positionY="144" width="128" height="105"/>
+        <element name="CalendarData" positionX="-54" positionY="144" width="128" height="74"/>
     </elements>
 </model>

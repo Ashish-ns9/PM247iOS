@@ -8,10 +8,12 @@
 #import "BaseTableCell.h"
 @interface PaymentDtlsCell : BaseTableCell
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *linkTextViewHeight;
+@property (weak, nonatomic) IBOutlet UITextView *linkTextView;
 @property (strong, nonatomic) IBOutlet UILabel *lblPayTaken;
 @property (strong, nonatomic) IBOutlet UILabel *lblPaydate;
 @property (strong, nonatomic) IBOutlet UILabel *lblPayAmt;
-@property (strong, nonatomic) IBOutlet UILabel *lblDes;
+//@property (strong, nonatomic) IBOutlet UILabel *lblDes;
 @property (strong, nonatomic) IBOutlet UIButton *btnAttachment;
 @property (strong, nonatomic) IBOutlet UILabel *lblTranID;
 @property (strong, nonatomic) IBOutlet UILabel *lblTranType;

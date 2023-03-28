@@ -40,6 +40,7 @@
 
 
 @implementation DSLCalendarDayView {
+    
     __strong NSCalendar *_calendar;
     __strong NSDate *_dayAsDate;
     __strong NSDateComponents *_day;
@@ -66,6 +67,7 @@
 #pragma mark Properties
 
 - (void)setSelectionState:(DSLCalendarDayViewSelectionState)selectionState {
+    
     _selectionState = selectionState;
     [self setNeedsDisplay];
 }
@@ -73,6 +75,7 @@
 
 
 - (void)setDay:(NSDateComponents *)day {
+    
     _calendar = [day calendar];
     _dayAsDate = [day date];
     _day = nil;
@@ -84,12 +87,14 @@
 }
 -(void)setEvent:(NSString *)Event
 {
+    
     _labelEvent=Event;
     //NSLog(@"%@",_labelEvent);
     
 }
 
 - (NSDateComponents*)day {
+    
     if (_day == nil) {
         _day = [_dayAsDate dslCalendarView_dayWithCalendar:_calendar];
     }
@@ -98,6 +103,7 @@
 }
 
 - (NSDate*)dayAsDate {
+    
     return _dayAsDate;
 }
 
@@ -123,8 +129,14 @@
 #pragma mark Drawing
 
 - (void)drawBackground {
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
+    {
+        
+    
     if (self.selectionState == DSLCalendarDayViewNotSelected) {
         if (self.isInCurrentMonth) {
+            
             
             [[UIColor colorWithWhite:245.0/255.0 alpha:1.0] setFill];
         }
@@ -135,6 +147,9 @@
     }
     else if(self.selectionState==DSLCalendarDayViewEventSelection)
     {
+        
+
+        
         [[UIColor colorWithRed:228/255.0 green:138/255.0 blue:24/255.0 alpha:1.0] setFill];
         
         
@@ -165,8 +180,130 @@
         }
     }
 }
+    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"]){
+        
+        
+        
+        if (self.selectionState == DSLCalendarDayViewNotSelected) {
+            if (self.isInCurrentMonth) {
+                
+                
+                [[UIColor colorWithWhite:245.0/255.0 alpha:1.0] setFill];
+            }
+            else {
+                [[UIColor colorWithWhite:225.0/255.0 alpha:1.0] setFill];
+            }
+            UIRectFill(self.bounds);
+        }
+        else if(self.selectionState==DSLCalendarDayViewEventSelection)
+        {
+            
+
+            
+            [[UIColor colorWithRed:228/255.0 green:138/255.0 blue:24/255.0 alpha:1.0] setFill];
+            
+            
+             UIRectFill(self.bounds);
+        }
+        
+        else {
+            switch (_selectionState) {
+                    
+                case DSLCalendarDayViewNotSelected:
+                    break;
+                    
+                case DSLCalendarDayViewStartOfSelection:
+                    [[[UIImage imageNamed:@"DSLCalendarDaySelection-left"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                    break;
+                    
+                case DSLCalendarDayViewEndOfSelection:
+                    [[[UIImage imageNamed:@"DSLCalendarDaySelection-right"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                    break;
+                    
+                case DSLCalendarDayViewWithinSelection:
+                    [[[UIImage imageNamed:@"DSLCalendarDaySelection-middle"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                    break;
+                    
+                case DSLCalendarDayViewWholeSelection:
+                    [[[UIImage imageNamed:@"DSLCalendarDaySelection"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                    break;
+            }
+        }
+    }
+    {
 
 
+    if (self.selectionState == DSLCalendarDayViewNotSelected) {
+        if (self.isInCurrentMonth) {
+
+            [[UIColor colorWithWhite:245.0/255.0 alpha:1.0] setFill];
+        }
+        else {
+            [[UIColor colorWithWhite:225.0/255.0 alpha:1.0] setFill];
+        }
+        UIRectFill(self.bounds);
+    }
+    else if(self.selectionState==DSLCalendarDayViewEventSelection)
+    {
+        
+    }
+//
+//
+//
+//        NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"EnggAvailabilityListResponse"];
+//
+//
+//
+//////        for (id object in themeColorArray)
+////        {
+////
+//////                    DLog(@"ThemeColor :%@",object);
+////            if ( [object  isEqual: @"Green"])
+////            {
+////
+////
+////                NSLog(@"ThemeColor :%@",object);
+////            }
+////           else if ( [object  isEqual: @"Red"])
+////            {
+////                [[UIColor colorWithRed:228/255.0 green:138/255.0 blue:24/255.0 alpha:1.0] setFill];
+////
+////                NSLog(@"ThemeColor :%@",object);
+////            }
+////        }
+////        [[UIColor colorWithRed:100/255.0 green:200/255.0 blue:2/255.0 alpha:5.0] setFill];
+//
+//
+//
+//         UIRectFill(self.bounds);
+//    }
+
+    else {
+        switch (_selectionState) {
+
+            case DSLCalendarDayViewNotSelected:
+                break;
+
+            case DSLCalendarDayViewStartOfSelection:
+                [[[UIImage imageNamed:@"DSLCalendarDaySelection-left"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                break;
+
+            case DSLCalendarDayViewEndOfSelection:
+                [[[UIImage imageNamed:@"DSLCalendarDaySelection-right"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                break;
+
+            case DSLCalendarDayViewWithinSelection:
+                [[[UIImage imageNamed:@"DSLCalendarDaySelection-middle"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                break;
+
+            case DSLCalendarDayViewWholeSelection:
+                [[[UIImage imageNamed:@"DSLCalendarDaySelection"] resizableImageWithCapInsets:UIEdgeInsetsMake(20, 20, 20, 20)] drawInRect:self.bounds];
+                break;
+        }
+    }
+}
+
+}
 
 - (void)drawBorders {
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -183,6 +320,7 @@
     
     CGContextSaveGState(context);
     if (self.isInCurrentMonth) {
+        
         CGContextSetStrokeColorWithColor(context, [UIColor colorWithWhite:205.0/255.0 alpha:1.0].CGColor);
     }
     else {
@@ -193,13 +331,16 @@
     CGContextAddLineToPoint(context, 0.0, self.bounds.size.height - 0.5);
     CGContextStrokePath(context);
     CGContextRestoreGState(context);
+    
 }
 
 
 
 
 - (void)drawDayNumber {
+    
     if (self.selectionState == DSLCalendarDayViewNotSelected) {
+        
         [[UIColor colorWithWhite:66.0/255.0 alpha:1.0] set];
     }
     else {

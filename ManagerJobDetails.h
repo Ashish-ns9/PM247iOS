@@ -41,6 +41,7 @@
     UIControl *bgVw;
     UIScrollView *popUpVW;
     
+    
     NSMutableDictionary *dicFE;
     NSMutableArray *arrMFE;
     UITextView *  txtvCancelNoteBody;
@@ -52,13 +53,15 @@
     UIActivityIndicatorView *_activity;
     NSMutableData *_responseData;
     NSURLConnection *connEnggSelection ;
+    NSInteger Count , etaCount;
     
     
    
     
     UITextField *txtTimeAllowancedropdown,*txtEnggCommision,*txtSubtotalValue;
     
-    UIDatePicker *datePicker;
+    UIDatePicker *datepicker,*timePicker;
+    id actvtextbox;
     UIToolbar* numberToolbar;
     
     NSMutableDictionary *dicAllocatedFE1;
@@ -66,7 +69,7 @@
     NSURLConnection *connRequestedFE;
     NSURLConnection *connAvailableEngg,*connEnggSendMail,*connSaveFixedPrice;
     
-    NSURLConnection *connActivateJobbyengineer;
+    NSURLConnection *connActivateJobbyengineer,*connlogin;
     
     BOOL IsAccepted;
     
@@ -248,7 +251,20 @@
 
 - (IBAction)pressGasCertList:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *btnGasCertList;
+@property (weak, nonatomic) IBOutlet UITextField *txtfdEnggEtATime;
+@property (strong, nonatomic) IBOutlet UITextField *txtfdManagerEtatime;
 
+
+@property (strong, nonatomic) IBOutlet UIView *txtvwETa;
+@property (weak, nonatomic) IBOutlet UITextField *txtfdsaveETAEnggTime;
+- (IBAction)SaveETabtn:(id)sender;
+
+//@property (weak, nonatomic) IBOutlet UITextField *txtfdMAnagerETAtime;
+//
+//
+//- (IBAction)managerETASavebtn:(id)sender;
+//
+//@property (strong, nonatomic) IBOutlet UIView *txtVWManagerETA;
 
 
 @end

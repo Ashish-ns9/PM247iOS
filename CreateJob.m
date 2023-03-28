@@ -51,9 +51,10 @@
 - (IBAction)jobSubmitPress:(id)sender
 {
 
+    
+    
+    
     if ([self ChkAllTextFlds]==YES) {
-        
-        
         
          [self SetupAddressDict];
         if (SelectedUserDic) {
@@ -104,6 +105,8 @@
 #pragma mark - Cancel Press Method
 - (IBAction)jobCancelPress:(id)sender
 {
+    
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -393,8 +396,11 @@
     
     
     
-    
-   
+//    
+//    NSString *Count = @"data";
+//    
+//    [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
     
     
     
@@ -1835,6 +1841,7 @@ replacementString: (NSString*) string
         if (sender.tag==11) {
             
             dicBillingAddress=[NSMutableDictionary dictionaryWithDictionary:dicJobAddress];
+            
             [dicBillingAddress setValue:@"1" forKey:@"copyJobAdrr"];
             selectedAddressDic=[dicBillingAddress mutableCopy];
             
@@ -2016,10 +2023,7 @@ replacementString: (NSString*) string
 {
     
    
-    
-    
-    
-    
+
     NSString *post =[NSString stringWithFormat:@""];
     DLog(@"post :%@",post);
     NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];

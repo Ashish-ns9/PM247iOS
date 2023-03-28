@@ -629,7 +629,7 @@ GlobalDirector *globe;
     [mainBg addSubview:btnCross];
     [UIView animateWithDuration:0.3 animations:^{
         bgVw.alpha=1.0f;
-        [self.view addSubview:mainBg];
+        [self.view addSubview:self->mainBg];
     }];
 }
 

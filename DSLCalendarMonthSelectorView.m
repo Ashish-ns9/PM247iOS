@@ -106,6 +106,8 @@
 #pragma mark - UIView methods
 
 - (void)drawRect:(CGRect)rect {
+    
+    
     [super drawRect:rect];
     
     if ([self isMemberOfClass:[DSLCalendarMonthSelectorView class]]) {

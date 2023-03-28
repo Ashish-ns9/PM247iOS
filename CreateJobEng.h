@@ -22,7 +22,8 @@
 @interface CreateJobEng : ViewController<AddSelPopupControllerDelegate,PostCodePopupControllerDelegate,UIGestureRecognizerDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSURLConnectionDelegate,NSURLConnectionDataDelegate,UITextViewDelegate,AddNotesDelegates,AddMaterialsDelegates,AddCostDelegates>
 {
     
-    NSString *searchText;
+    __weak IBOutlet UIButton *newupdateEta;
+    NSString *searchText,*JobID;
      UITextField *Activetxtfld,*ActvTextfldOthr;
     id actvtextbox;
     UITableView *tblView;
@@ -30,6 +31,7 @@
     
     UIDatePicker *datepicker,*timePicker;
      NSMutableDictionary *dicOwnerDetails,*dicLandLordDetails,*dicTenantDetails,*dicJobAddress,*dicBillingAddress,*dicLandLordAdress,*SelectedUserDic,*selectedAddressDic;
+    UIButton *btnUpdateEtaTime;
    
     AddNotes *addNote;
     AddMaterials *addMat;
@@ -42,7 +44,8 @@
     
     UIActivityIndicatorView *activityOnTextFields;
     NSMutableData *_responseData;
-    NSURLConnection *connPostNote;
+    NSURLConnection *connPostNote, *connLogin,*connForgetPass;
+;
     
     
     NSString *connIdentifier;
@@ -68,10 +71,12 @@
 
 
 
+
 //
 @property (strong, nonatomic) IBOutlet UIView *viewNotePopup;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *segNote;
 @property (strong, nonatomic) IBOutlet UITextView *txtNoteDesComplete;
+@property (weak, nonatomic) IBOutlet UIButton *newupdate;
 
 
 @property (strong, nonatomic) IBOutlet UITextField *txtPurchOrder;
@@ -166,10 +171,14 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnBillingAdress;
 @property (strong, nonatomic) IBOutlet UIButton *btnLandlordAdress;
 
+@property (weak, nonatomic) IBOutlet UITextField *txtfdETAtime;
+
+- (IBAction)btnSaveETATime:(UIButton *)sender;
 
 
+@property (strong, nonatomic) IBOutlet UIView *viewActivenote;
 
-
+@property (weak, nonatomic) IBOutlet UITextField *txtfdLastEtatime;
 
 
 

@@ -49,6 +49,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollVw;
 @property (strong, nonatomic) IBOutlet UILabel *lblAddMan;
 
+@property (strong, nonatomic) IBOutlet UIView *containerView;
 
 
 

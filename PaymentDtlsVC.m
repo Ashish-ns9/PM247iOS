@@ -8,7 +8,24 @@
 #import "GlobalDirector.h"
 #import "PaymentDtlsCell.h"
 #import "PaymentTransactionDtls.h"
-@interface PaymentDtlsVC ()
+#import "CreateCustomerVC.h"
+#import <SquareInAppPaymentsSDK/SQIPInAppPaymentsSDK.h>
+#import <SquareInAppPaymentsSDK/SQIPCardEntryViewController.h>
+#import <SquareInAppPaymentsSDK/SQIPTheme.h>
+
+#import "SquareUpPaymentDetailsVC.h"
+#import "SquareInAppPaymentsSDK/SQIPCardDetails.h"
+
+#import "SquareBuyerVerificationSDK/SQIPBuyerAction.h"
+#import "SquareBuyerVerificationSDK/SQIPContact.h"
+#import "SquareBuyerVerificationSDK/SQIPVerificationParameters.h"
+#import "SquareBuyerVerificationSDK/SQIPBuyerVerificationSDK.h"
+#import "SquareBuyerVerificationSDK/SQIPBuyerVerifiedDetails.h"
+#import "SquareBuyerVerificationSDK/SQIPMoney.h"
+
+
+
+@interface PaymentDtlsVC () < SQIPCardEntryViewControllerDelegate>
 {
     CGFloat currX;
 }
@@ -26,11 +43,63 @@
     _tblPayment.rowHeight = UITableViewAutomaticDimension;
     _tblPayment.estimatedRowHeight = 100.0;
     [self GetPaymentDetails];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+           selector:@selector(invoiceLinkGeneratedNotification:)
+           name:@"INVOICE_LINK_GENERATED_NOTIFICATION"
+           object:nil];
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc*********");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) invoiceLinkGeneratedNotification:(NSNotification *) notification
+{
+    
+    NSDictionary *userInfo = notification.userInfo;
+    NSString *invoiceLink = [userInfo objectForKey:@"invoice_link"];
+    
+    [self dismissViewControllerAnimated:NO completion:^{
+        if (invoiceLink != nil) {
+            
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = invoiceLink;
+            
+            NSArray* sharedObjects=[NSArray arrayWithObjects:invoiceLink,  nil];
+            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:sharedObjects applicationActivities:nil];
+            activityViewController.popoverPresentationController.sourceView = self.view;
+                
+          //  [self presentViewController:activityViewController animated:YES completion:nil];
+     
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Link Generated" message:[NSString stringWithFormat:@"Link has been generated successfully./n%@",invoiceLink] preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self dismissViewControllerAnimated:YES completion:NULL];
+            }];
+            
+            [alertController addAction:actionOk];
+            
+//            UIAlertAction *actionCopy = [UIAlertAction actionWithTitle:@"Copy Link" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+//                pasteboard.string = invoiceLink;
+//                [self dismissViewControllerAnimated:YES completion:NULL];
+//            }];
+            
+//            [alertController addAction:actionCopy];
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+            
+        }
+    }];
+    
+    
+    
 }
 
 - (IBAction)ClickBack:(UIButton *)sender {
@@ -44,6 +113,7 @@
 }
 
 - (IBAction)ClickSubmit:(UIButton *)sender {
+    
     
     NSCharacterSet *numbersOnly = [NSCharacterSet characterSetWithCharactersInString:@"0123456789."];
     NSCharacterSet *characterSetFromTextField = [NSCharacterSet characterSetWithCharactersInString:_txtAmt.text];
@@ -93,7 +163,8 @@
                 dtls.dictPaymentMethod = dictDtls;
                 dtls.arrImages=arrImages;
                 [self.navigationController pushViewController:dtls animated:YES];
-            }else{
+            }
+            else{
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle: @"info"
                                                                                     message:@"please allocate an invoice number to proceed with payment."
                                                                              preferredStyle: UIAlertControllerStyleAlert];
@@ -110,7 +181,25 @@
                 [self presentViewController: controller animated: YES completion: nil];
             }
             
-        }else{
+        }
+        else if ((_txtPayType.tag == 4)  && isEdit == NO) { // SQUARE UP LINK
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PaymentStoryboard" bundle: nil];
+            CreateCustomerVC * vc = [storyboard instantiateViewControllerWithIdentifier:@"CreateCustomerVC"];
+            //[[CreateCustomerVC alloc] initWithNibName:@"CreateCustomerVC" bundle:nil];
+            
+            NSMutableDictionary *dictDtls = [[NSMutableDictionary alloc] init];
+            [dictDtls setObject:[GlobalDirector ReplaceStringNull:_txtAmt.text] forKey:@"amount"];
+            [dictDtls setObject:_outStandingAmount forKey:@"DueAmount"];
+
+            vc.dictJob=dictJob;
+            vc.dictPaymentMethod = dictDtls;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+        else if ((_txtPayType.tag == 19)  && isEdit == NO) { // SQUARE UP CARD
+            [self showCardEntryViewController];
+        }
+        else{
             
             MBProgressHUD   *hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
             hudd.labelText=@"Please wait...";
@@ -201,7 +290,6 @@
                         
                         [self GetPaymentDetails];
                         
-                        
                         [hudd hide:YES];
                         
                     } @catch (NSException *exception) {
@@ -214,6 +302,25 @@
         
     }
 }
+
+- (void)showCardEntryViewController
+{
+    SQIPTheme *theme = [[SQIPTheme alloc] init];
+    //theme.errorColor = .red
+    //theme.keyboardAppearance = .light
+    //theme.messageColor = .magenta
+    theme.saveButtonTitle = @"Submit";
+    
+    SQIPCardEntryViewController *cardEntryForm = [[SQIPCardEntryViewController alloc] initWithTheme:theme];
+    cardEntryForm.collectPostalCode = true;
+    cardEntryForm.delegate = self;
+    
+    UINavigationController *navigationController =
+    [[UINavigationController alloc] initWithRootViewController:cardEntryForm];
+    
+    [self presentViewController:navigationController animated:YES completion:nil];
+}
+
 - (IBAction)CancelPicker:(UIButton *)sender {
     [popPicker dismiss:YES];
 }
@@ -248,17 +355,16 @@
             [hudd hide:YES];
             @try{
                 
-                strAmtDue = [NSString stringWithFormat:@"%.02f",[[GlobalDirector ReplaceStringNull:[result valueForKey:@"TotalPaymentDue"]] floatValue]];
-                
-                if ([strAmtDue intValue]>0) {
-                    _viewTakePayment.hidden=NO;
+                self->strAmtDue = self->_outStandingAmount;
+                self->desc = [self->dictJob valueForKey:@"JobDescription"];
+                if ([self->strAmtDue intValue]>0) {
+                    self->_viewTakePayment.hidden=NO;
                 }else{
-                    _viewTakePayment.hidden=YES;
+                    self->_viewTakePayment.hidden=YES;
                 }
                 
-                arrPayments = [result valueForKey:@"JobPayments"];
-                
-                [_tblPayment reloadData];
+                self->arrPayments = [result valueForKey:@"JobPayments"];
+                [self->_tblPayment reloadData];
                 
                 
             } @catch (NSException *exception) {
@@ -269,6 +375,94 @@
     }];
 }
 
+-(void) GetSquareUpInvoiceID
+{
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
+
+    GlobalDirector *globe = [GlobalDirector SharedDirector];
+    
+    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [globe SyncRequestGet:REQUEST_GetSquareUpInvoiceID withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        
+        NSLog(@"%@",result);
+        
+        
+        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            @try {
+                
+                
+                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
+                
+                if (strValue==1) {
+                    
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
+                    
+                }else{
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
+                }
+            } @catch (NSException *exception) {
+                // _txtPost.text=@"";
+                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
+            }
+        });
+    }];
+}
+
+
+-(void) GetInvoice:(NSString *)urlStr
+{
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:urlStr forKey:@"invoiceId"];
+
+    GlobalDirector *globe = [GlobalDirector SharedDirector];
+    
+    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [globe SyncRequestGet:REQUEST_GetInvoice withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        
+        NSLog(@"%@",result);
+        
+        
+        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            @try {
+                
+                
+                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
+                
+                if (strValue==1) {
+                    
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
+                    
+                }else{
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
+                }
+            } @catch (NSException *exception) {
+                // _txtPost.text=@"";
+                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
+            }
+        });
+    }];
+}
 
 -(IBAction)crossNoteDesc:(id)sender
 {
@@ -276,6 +470,11 @@
 }
 
 
+- (IBAction)ClickSquareUpStatus:(UIButton *)sender {
+    SquareUpPaymentDetailsVC *vc = [[SquareUpPaymentDetailsVC alloc] initWithNibName:@"SquareUpPaymentDetailsVC" bundle:nil];
+    vc.dictJob=dictJob;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 
 - (IBAction)ClickTakePayment:(UIButton *)sender {
@@ -294,6 +493,7 @@
     _txtPayType.text=@"";
     _txtVDes.text=@"";
     _txtAmt.text=strAmtDue;
+    _txtVDes.text = desc;
     MBProgressHUD   *hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hudd.labelText=@"Loading...";
     [hudd show:YES];
@@ -317,9 +517,37 @@
                 
                 NSDictionary *dict = @{@"DisplayText":@"Please select type of payment",@"Value":@"-1"};
                 
-                arrModeList = [NSMutableArray arrayWithObject:dict];
-                [arrModeList addObjectsFromArray:[result valueForKey:@"DataResponses"]] ;
+                self->arrModeList = [NSMutableArray arrayWithObject:dict];
+                [self->arrModeList addObjectsFromArray:[result valueForKey:@"DataResponses"]] ;
                 
+                
+                NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+
+                int i;
+                int u_Type = [[userdetails valueForKey:@"UserType"] intValue];
+                
+                for (i = 0; i<[self->arrModeList count]; i++) {
+                    NSDictionary *dictInner = self->arrModeList[i];
+                    if([dictInner[@"Value"]  isEqual: @"14"]){
+                        // Remove Card
+                        [self->arrModeList removeObjectAtIndex:i];
+                    }
+                    if(u_Type == 4 && [dictInner[@"Value"] isEqual:@"4"])
+                    {
+                        // Square up Link removed from Eng login
+                        [self->arrModeList removeObjectAtIndex:i];
+                    }
+                    
+                    if([dictInner[@"Value"] isEqual:@"15"])
+                    {
+                        // Dabit Square removed
+                        [self->arrModeList removeObjectAtIndex:i];
+                    }
+                }
+                
+
+                
+                //Remove payment link
                 
                 [hudd hide:YES];
                 
@@ -394,6 +622,277 @@
     return YES;
 }
 
+#pragma mark - SQIPCardEntryViewControllerDelegate
+
+- (void)cardEntryViewController:(nonnull SQIPCardEntryViewController *)cardEntryViewController
+          didCompleteWithStatus:(SQIPCardEntryCompletionStatus)status;
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)cardEntryViewController:(nonnull SQIPCardEntryViewController *)cardEntryViewController
+           didObtainCardDetails:(nonnull SQIPCardDetails *)cardDetails
+              completionHandler:(void (^_Nonnull)(NSError *_Nullable))completionHandler;
+{
+    double amountFloat = ([_txtAmt.text floatValue]);
+    NSNumber *finalAmount = [NSNumber numberWithLong:(long)(amountFloat * 100)];
+    NSInteger amountMoney = [finalAmount intValue];
+    
+    SQIPVerificationParameters *params = [self makeVerificationParameters:cardDetails.nonce buyerAction:[SQIPBuyerAction chargeActionWithMoney:[[SQIPMoney alloc] initWithAmount:amountMoney currency:SQIPCurrencyGBP]]];
+    
+    [SQIPBuyerVerificationSDK.shared verifyWithParameters:params theme:[self makeSquareTheme] viewController:cardEntryViewController success:^(SQIPBuyerVerifiedDetails * _Nonnull verifiedDetails) {
+        NSLog(@"nonce = %@", cardDetails.nonce);
+        NSLog(@"verificationToken = %@", verifiedDetails.verificationToken);
+        
+        [self squareUpPaymentAPI:cardDetails.nonce verificationTokenId: verifiedDetails.verificationToken completionHandler:^(NSString * paymentId) {
+            if (paymentId != nil) {
+                [self chargeAPI:paymentId verificationTokenId: verifiedDetails.verificationToken  completionHandler:^(NSError *error) {
+                    completionHandler(error);
+                }];
+            } else {
+                NSError * error = [NSError errorWithDomain:@"test" code:404 userInfo:nil];
+                completionHandler(error);
+            }
+        }];
+        
+//        completionHandler(nil);
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"Error: %@", error);
+        completionHandler(error);
+    }];
+    
+    /*
+    [self squareUpPaymentAPI:cardDetails.nonce completionHandler:^(NSString * paymentId) {
+        if (paymentId != nil) {
+            [self chargeAPI:paymentId completionHandler:^(NSError *error) {
+                completionHandler(error);
+            }];
+        } else {
+            NSError * error = [NSError errorWithDomain:@"test" code:404 userInfo:nil];
+            completionHandler(error);
+        }
+    }];
+     */
+}
+
+
+- (void) chargeAPI:(NSString *)paymentId verificationTokenId:(NSString *) verificationTokenId completionHandler: (void (^_Nonnull)(NSError *_Nullable))completionHandler;
+
+{
+    
+    MBProgressHUD   *hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hudd.labelText=@"Please wait...";
+    [hudd show:YES];
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:_txtVDes.text] forKey:@"description"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:_txtAmt.text] forKey:@"amount"];
+    [dict setObject:[NSString stringWithFormat:@"%ld",(long)_txtPayType.tag] forKey:@"paymentMethodId"];
+    [dict setObject:[NSString stringWithFormat:@"%ld",(long)jobPaymentId] forKey:@"jobPaymentId"];
+    
+    [dict setObject:paymentId forKey:@"transactionId"];
+    
+    NSString *base64String;
+    NSMutableArray *arrImgExit=[[NSMutableArray alloc] init];
+    
+    NSMutableArray *arrImageSrtrings=[[NSMutableArray alloc]init];
+    for (ImageViewCat *imgvw in arrImages)
+    {
+        if (imgvw.strURL.length==0) {
+            NSData *imageData = UIImageJPEGRepresentation(imgvw.image, 0.2);
+            base64String = [imageData base64EncodedStringWithOptions:0];
+            NSString *encodedImageString = [base64String stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+            [arrImageSrtrings addObject:encodedImageString];
+        }else{
+            
+            [arrImgExit addObject:imgvw.strURL];
+        }
+    }
+    
+    NSMutableDictionary *dicNotes = [[NSMutableDictionary alloc] init];
+    
+    if (arrImageSrtrings.count>0) {
+        [dicNotes setObject:arrImageSrtrings forKey:@"ImageUpload"];
+        [dicNotes setObject:@"jpg" forKey:@"ImageExtension"];
+    }
+    
+    
+    NSError *error;
+    NSArray *arrDic=[NSArray arrayWithObjects:dicNotes, nil];
+    
+    NSData *jsonAddress = [NSJSONSerialization dataWithJSONObject:arrDic
+                                                          options:0
+                                                            error:&error];
+    
+    
+    
+    NSString *note = [[NSString alloc] initWithBytes:[jsonAddress bytes] length:[jsonAddress length] encoding:NSUTF8StringEncoding];
+    
+    
+    [dict setObject:note forKey:@"note"];
+    NSString *exit=@"";
+    if ([arrImgExit count]>0) {
+        exit = [arrImgExit componentsJoinedByString:@","];
+    }
+    
+    [dict setObject:exit forKey:@"existingImagePaths"];
+    
+    GlobalDirector *globe= [GlobalDirector SharedDirector];
+    NSLog(@"Param %@",dict);
+//    NSLog(@"Url %@",REQUEST_SaveJobPayment);
+
+    [globe SyncRequestPostWithJson:REQUEST_SaveJobPayment withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        NSLog(@"%@",result);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            
+            @try{
+                
+                int code = [[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseCode"] intValue] ;
+                
+                if (code==0) {
+                    if (!self->isEdit) {
+                        //[self showAlert:@"Payment successful" withTitle:@"info"];
+                    }
+                    
+                    
+                }else{
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseMessages"]] withTitle:@"Error"];
+                }
+
+                [self GetPaymentDetails];
+                
+                
+                [hudd hide:YES];
+                
+                completionHandler(nil);
+                
+            } @catch (NSException *exception) {
+                completionHandler(error);
+                //[self showAlert:@"There are some problem right now, try again later. " withTitle:@"Sorry!"];
+            }
+        });
+        
+    }];
+}
+
+-(void)squareUpPaymentAPI:(NSString *)sourceId verificationTokenId:(NSString *)verificationTokenId completionHandler:(void (^_Nonnull)(NSString *_Nullable))completionHandler;
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        DLog(@"There IS NO internet connection");
+        [self showAlert:@"Check your Internet connection" withTitle:@"Connection Error!"];
+    } else {
+        
+        [self.dataTask cancel];
+        
+        DLog(@"There IS internet connection");
+        
+        
+        NSString *urlString;
+        
+        urlString=[NSString stringWithFormat:@"%s%@",squareUpBaseURL, @"payments"];
+        
+        NSString *authToken = [NSString stringWithFormat:@"Bearer %s", squareUpAccessToken];
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:urlString]];
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:authToken forHTTPHeaderField:@"Authorization"];
+        [request setValue:@"2022-10-19" forHTTPHeaderField:@"Square-Version"];
+        
+        NSMutableDictionary *body=[[NSMutableDictionary alloc]init];
+        NSString *uuid = [[NSUUID UUID] UUIDString];
+        [body setValue:uuid forKey:@"idempotency_key"];
+        NSMutableDictionary *amountMoney=[[NSMutableDictionary alloc]init];
+        double amountFloat = ([_txtAmt.text floatValue]);
+        NSNumber *finalAmount = [NSNumber numberWithLong:(long)(amountFloat * 100)];
+        [amountMoney setValue:finalAmount forKey:@"amount"];
+        [amountMoney setValue:@"GBP" forKey:@"currency"];
+        [body setValue:amountMoney forKey:@"amount_money"];
+        [body setValue:sourceId forKey:@"source_id"];
+        [body setValue:verificationTokenId forKey:@"verification_token"];
+        
+        NSLog(@"PARAMS = %@",body);
+        
+        NSData * postData = [NSJSONSerialization dataWithJSONObject:body options:NSJSONWritingFragmentsAllowed error:NULL];
+        
+        [request setHTTPBody:postData];
+        request.timeoutInterval = 300;
+        DLog(@"PostString=%@",request);
+        
+        //NSLog(@"%@", [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"]);
+        
+        MBProgressHUD * hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hudd.labelText=@"Loading...";
+        
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+        
+        NSURLSessionDataTask * _dataTask =[defaultSession dataTaskWithRequest:request
+                                     completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSString * text = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+            NSLog(@"Data = %@",text);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+                
+                if (data != nil) {
+                    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                    NSLog(@"%@", dict);
+                    NSString *paymentId = [dict valueForKeyPath:@"payment.id"];
+                    completionHandler(paymentId);
+                } else {
+                    completionHandler(nil);
+                }
+            });
+            
+        }];
+        [_dataTask resume];
+        
+    }
+}
+
+-(SQIPVerificationParameters *)makeVerificationParameters:(NSString *)paymentSourceID buyerAction:(SQIPBuyerAction *)buyerAction;
+{
+    SQIPContact *contact = [[SQIPContact alloc] init];
+    NSArray *users = [dictJob valueForKey:@"JobPeopleListResponse"];
+    NSDictionary * user = [users firstObject];
+    NSDictionary *jobAddr = [[dictJob valueForKey:@"JobAddrListResponse"] firstObject];
+    NSArray *addressLines = [[[jobAddr valueForKey:@"Address"] componentsSeparatedByString:@","] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+    NSString *city = [jobAddr valueForKey:@"City"];
+    NSString *postCode = [jobAddr valueForKey:@"PostCode"];
+    
+    contact.givenName = [user valueForKey:@"FirstName"];
+    contact.familyName = [user valueForKey:@"LastName"];
+    contact.email = [user valueForKey:@"EmailAddress"];
+    contact.addressLines = addressLines;
+    contact.city = city;
+    contact.country = SQIPCountryGB;
+    contact.postalCode = postCode;
+    contact.phone = [user valueForKey:@"ContactNumber"];
+
+    SQIPVerificationParameters *params = [[SQIPVerificationParameters alloc] initWithPaymentSourceID:paymentSourceID buyerAction:buyerAction locationID:@squareUpLocationId contact:contact];
+    return params;
+}
+
+-(SQIPTheme *)makeSquareTheme;
+{
+    SQIPTheme *theme = [[SQIPTheme alloc] init];
+    theme.errorColor = [UIColor redColor];
+    //theme.tintColor = Color.primaryAction
+    //theme.keyboardAppearance = .light
+    //theme.messageColor = Color.descriptionFont
+    return theme;
+}
 
 
 #pragma mark -  TableView Delegate Datasource
@@ -442,11 +941,15 @@
         
         NSString *des = [GlobalDirector ReplaceStringNull:[dic valueForKey:@"Description"]];
         if (des.length>0) {
-            cell.lblDes.hidden=NO;
-            cell.lblDes.text= [NSString stringWithFormat:@"Description: %@",[GlobalDirector ReplaceStringNull:[dic valueForKey:@"Description"]]] ;
+            cell.linkTextView.hidden=NO;
+            cell.linkTextView.text= [NSString stringWithFormat:@"Description: %@",[GlobalDirector ReplaceStringNull:[dic valueForKey:@"Description"]]] ;
+            cell.linkTextViewHeight.constant = 50.0;
+
         }else{
-            cell.lblDes.text=@"";
-            cell.lblDes.hidden=YES;
+            cell.linkTextViewHeight.constant = 0.0;
+
+            cell.linkTextView.text=@"";
+            cell.linkTextView.hidden=YES;
             
         }
         // cell.lblDes.text= [NSString stringWithFormat:@"Description: %@",[GlobalDirector ReplaceStringNull:[dic valueForKey:@"Description"]]] ;
@@ -499,6 +1002,7 @@
 {
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        //return
         // isEdit = YES;
         index=indexPath.row;
         NSDictionary *dic = [arrPayments objectAtIndex:indexPath.row];

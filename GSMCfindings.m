@@ -45,6 +45,7 @@
 #pragma mark - Submit Press Method
 - (IBAction)btnSubmitapped:(id)sender
 {
+    
     [_dicFindings setValue:[_segInstallationSafetouse titleForSegmentAtIndex:_segInstallationSafetouse.selectedSegmentIndex] forKey:@"InstallationSafetouse"];
     [_dicFindings setValue:[_segInstallationNo titleForSegmentAtIndex:_segInstallationNo.selectedSegmentIndex]  forKey:@"InstallationNo"];
     [_dicFindings setValue:[_segInstallationCnfirm titleForSegmentAtIndex:_segInstallationCnfirm.selectedSegmentIndex] forKey:@"InstallationCnfirm"];

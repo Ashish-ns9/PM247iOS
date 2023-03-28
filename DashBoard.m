@@ -102,6 +102,7 @@
         
         for (NSDictionary *dict in arrTemp) {
             
+            
             NSString *dateString = dict[@"JobStartDate"];
             if (![dateString isKindOfClass:[NSNull class]]||![dateString isEqualToString:@""]) {
                 
@@ -193,6 +194,7 @@
         NSMutableArray* arrresult = [NSMutableArray array];
         
         for (NSDictionary *dict in arrTemp) {
+            
             NSString *dateString = dict[@"JobStartDate"];
             if (![dateString isKindOfClass:[NSNull class]]||![dateString isEqualToString:@""]) {
                 NSArray *array = [dateString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -282,6 +284,7 @@
     }
     else if (_btnActiveAssigns.selected==YES)
     {
+        
         [self activePress:_btnActiveAssigns];
     }
     else if (_btnCompleteAssign.selected==YES)
@@ -302,6 +305,11 @@
 #pragma mark - Job Filter Method [Active / Book / Complete]
 -(IBAction)activePress:(UIButton *)sender
 {
+    self.activity.hidden=YES;
+    self.lblRefresh.hidden=YES;
+    [self.activity stopAnimating];
+    self.btnRefresh.hidden=NO;
+   
  
     NSPredicate *predicate;
     lblNoJobs.hidden=YES;
@@ -309,6 +317,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         _btnActiveAssigns.selected=YES;
         _btnAssigned.selected=NO;
         _btnCompleteAssign.selected=NO;
@@ -344,9 +353,11 @@
         }
         
     }
-    else if ((arrMActiveJobDetails.count==0) || (loadActivePageCount!=0)||(refreshPagecount==0))
+    else if ((arrMActiveJobDetails.count==0) || (loadActivePageCount!=0)||(refreshPagecount==0)||(SignAgreementCount==1))
     {
-     
+       
+        
+        SignAgreementCount=0;
         loadActivePageCount=0;
         _btnActive.selected=YES;
         _btnBooked.selected=NO;
@@ -357,18 +368,36 @@
         if (_btnNoAgreement.selected==YES)
         {
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,No_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else if (_btnSmallRepairAgreement.selected==YES)
         {
+            
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,Small_repair_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else if (_btnBothAgreement.selected==YES)
         {
+            
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,Both_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else
         {
             predicate = [NSPredicate predicateWithFormat:@"JobStatus == 2"];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
             
         }
         
@@ -393,19 +422,35 @@
             if (_btnNoAgreement.selected==YES)
             {
                 lblNoJobs.text=@"No Active jobs with no agreement";
+                self.activity.hidden=YES;
+                self.lblRefresh.hidden=YES;
+                [self.activity stopAnimating];
+                self.btnRefresh.hidden=NO;
             }
             else if (_btnSmallRepairAgreement.selected==YES)
             {
                 lblNoJobs.text=@"No Active jobs with small repair agreement";
+                self.activity.hidden=YES;
+                self.lblRefresh.hidden=YES;
+                [self.activity stopAnimating];
+                self.btnRefresh.hidden=NO;
                 
             }
             else if (_btnBothAgreement.selected==YES)
             {
                 lblNoJobs.text=@"No Active jobs with both agreement";
+                self.activity.hidden=YES;
+                self.lblRefresh.hidden=YES;
+                [self.activity stopAnimating];
+                self.btnRefresh.hidden=NO;
             }
             else
             {
                 lblNoJobs.text=@"";
+                self.activity.hidden=YES;
+                self.lblRefresh.hidden=YES;
+                [self.activity stopAnimating];
+                self.btnRefresh.hidden=NO;
             }
             lblNoJobs.numberOfLines=0;
             [lblNoJobs sizeToFit];
@@ -438,18 +483,35 @@
         {
             
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,No_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else if (_btnSmallRepairAgreement.selected==YES)
         {
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,Small_repair_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else if (_btnBothAgreement.selected==YES)
         {
             predicate = [NSPredicate predicateWithFormat:[NSString stringWithFormat:@"JobStatus == %d AND IsAgreementSign=%d",Active,Both_agreement_signed]];
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
         }
         else
         {
             predicate = [NSPredicate predicateWithFormat:@"JobStatus == 2"];
+            
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
             
         }
         
@@ -465,15 +527,24 @@
             arrMFilterJobsList=(NSMutableArray *)newArray;
             arrCFilterJoblist=arrMFilterJobsList;
             arrMActiveJobDetails=arrMFilterJobsList;
+            self.activity.hidden=YES;
+            self.lblRefresh.hidden=YES;
+            [self.activity stopAnimating];
+            self.btnRefresh.hidden=NO;
 
             
         }
        else if (loadActivePageCount==0)
        {
+           
            NSArray *newArray = [arrMActiveJobDetails filteredArrayUsingPredicate:predicate];
            DLog(@"%lu", (unsigned long)[newArray count]);
            arrMFilterJobsList=(NSMutableArray *)newArray;
            arrCFilterJoblist=arrMFilterJobsList;
+           self.activity.hidden=YES;
+           self.lblRefresh.hidden=YES;
+           [self.activity stopAnimating];
+           self.btnRefresh.hidden=NO;
         }
        
  
@@ -500,6 +571,7 @@
             [lblNoJobs sizeToFit];
             lblNoJobs.center=CGPointMake(CGRectGetWidth(Vwtbl.frame)/2.0f, CGRectGetHeight(Vwtbl.frame)/2.0f);
             lblNoJobs.hidden=NO;
+            
             
             
         }
@@ -768,6 +840,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
         _btnActive.selected=NO;
         _btnBooked.selected=NO;
         _btnComplete.selected=YES;
@@ -976,6 +1049,7 @@
     [conn cancel];
     conn=nil;
     [self.dataTask cancel];
+   
     
 }
 
@@ -993,6 +1067,7 @@
 #pragma mark - viewWillAppear Method
 -(void)viewWillAppear:(BOOL)animated
 {
+    
         [super viewWillAppear:YES];
     
     
@@ -1000,25 +1075,59 @@
     loadBookedPageCount=0;
     loadActivePageCount=0;
 
-
     loadCompletePageCount=0;
  
-   
-  
     if(_btnBooked.isSelected==YES)
     {
+        
+        
         BookedPage=0;
     refreshPagecount=0;
     loadActivePageCount2=0;
-        
+        SignAgreementCount1 = [[NSUserDefaults standardUserDefaults]
+              stringForKey:@"StringCount"];
+        if([SignAgreementCount1  isEqual: @"ndata"])
+        {
+
+//            _btnActive.selected=NO;
+              _btnNoAgreement.selected =NO;
+                _btnSmallRepairAgreement.selected=NO;
+                _btnBothAgreement.selected = NO;
+        arrMActiveJobDetails=nil;
+        arrMActiveFilterJobsList =nil;
+            NSString *Count = @"data";
+            
+            [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
 
     
     }
     if(_btnActive.isSelected==YES)
     {
+        
         ActivePage=0;
         refreshActivePagecount=0;
+        SignAgreementCount1 = [[NSUserDefaults standardUserDefaults]
+              stringForKey:@"StringCount"];
+        if([SignAgreementCount1  isEqual: @"ndata"])
+        {
         
+            SignAgreementCount=1;
+//        _btnActive.selected=NO;
+        _btnNoAgreement.selected =NO;
+          _btnSmallRepairAgreement.selected=NO;
+          _btnBothAgreement.selected = NO;
+         arrMActiveJobDetails=nil;
+        arrMActiveFilterJobsList =nil;
+         arrCFilterJoblist=nil;
+            NSString *Count = @"data";
+            
+            [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+        }
+    
 
     }
     if(_btnComplete.isSelected==YES)
@@ -1045,6 +1154,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
         [self fetchJobdetails];
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
@@ -1083,6 +1193,10 @@
     BookedPage=0;
     ActivePage=0;
     CompletePage=0;
+    NSString *Count = @"data";
+    
+    [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -1108,6 +1222,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+      
         [app.locationManager startUpdatingLocation];
     }
     
@@ -1313,6 +1428,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
         _vwtab.hidden=NO;
         _vwSubInvitations.hidden=YES;
         viewToDoList.backgroundColor=[UIColor clearColor];
@@ -1325,6 +1441,7 @@
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"reloadView" object:nil];
 }
+
 
 
 #pragma mark - RefershControlAction method
@@ -1472,7 +1589,7 @@
         NSString *urlString;
 
         NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
-        //DLog(@"%@",user);
+        DLog(@"%@",user);
         
         
         if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"cu"])
@@ -1482,6 +1599,7 @@
         }
         else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             
             if (isbtnAssignedClicked==YES)
             {
@@ -1497,8 +1615,10 @@
         }
         else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
         {
+            
             if(arrMJobDetails.count==0)
             {
+                
             urlString=[NSString stringWithFormat:@"%sManagerBookedJobList?userToken=%@&BookedPage=%ld",conn_url,(NSString *)[user valueForKey:@"UserToken"],(long)BookedPage];
                 refreshPagecount=1;
                 refreshCompletePagecount=1;
@@ -1506,12 +1626,14 @@
             }
             if((_btnBooked.selected ==YES && arrMBookedJobDetails.count==0)||(loadBookedPageCount!=0)||(refreshPagecount==0))
             {
+                
                 urlString=[NSString stringWithFormat:@"%sManagerBookedJobList?userToken=%@&BookedPage=%ld",conn_url,(NSString *)[user valueForKey:@"UserToken"],(long)BookedPage];
                 refreshPagecount=2;
         
             }
-            if((_btnActive.selected ==YES && arrMActiveJobDetails.count==0) || (loadActivePageCount!=0)||(refreshActivePagecount==0))
+            if((_btnActive.selected ==YES && arrMActiveJobDetails.count==0) || (loadActivePageCount!=0)||(refreshActivePagecount==0)|| (SignAgreementCount==1))
             {
+                
                 urlString=[NSString stringWithFormat:@"%sManagerActiveJobList?userToken=%@&ActivePage=%ld",conn_url,(NSString *)[user valueForKey:@"UserToken"],(long)ActivePage];
                 refreshActivePagecount=1;
             
@@ -1537,12 +1659,12 @@
             //  DLog(@"PostString=%@",urlString);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (error==nil) {
-                    _responseData=[data mutableCopy];
-                    [self connectionDidFinishLoading:conn];
+                    self->_responseData=[data mutableCopy];
+                    [self connectionDidFinishLoading:self->conn];
                 }
                 else
                 {
-                    [refreshControl endRefreshing];
+                    [self->refreshControl endRefreshing];
                 }
                 
             });
@@ -1579,6 +1701,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+    
     isLoadMore =NO;
     if (lblNoJobs==nil)
     {
@@ -1663,6 +1786,7 @@
                             }
                             else if (_btnActiveAssigns.selected==YES)
                             {
+                                
                                 [self activePress:_btnActiveAssigns];
                             }
                             else if (_btnCompleteAssign.selected==YES)
@@ -1685,6 +1809,7 @@
                         }
                         else if (_btnActive.selected==YES)
                         {
+                            
                             [self activePress:_btnActive];
                         }
                         else if (_btnComplete.selected==YES)
@@ -1731,6 +1856,7 @@
             
             else if ([[temp valueForKey:@"ResponseMessages"]rangeOfString:@"User is Expired"].location != NSNotFound)
             {
+               
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle: @"SessionExpired"
                                                                                     message: @"Please Login to Continue"
                                                                              preferredStyle: UIAlertControllerStyleAlert];
@@ -1811,6 +1937,8 @@
                     }
                     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
                     {
+                        
+                        
                         self.activity.hidden=YES;
                         self.lblRefresh.hidden=YES;
                         [self.activity stopAnimating];
@@ -1854,6 +1982,7 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible=NO;
     // [[[UIAlertView alloc]initWithTitle:@"Error" message:@"No network connection. Please try again later." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil]show];
@@ -1893,6 +2022,8 @@
 #pragma mark - Pop Up design for New/Recraete Job
 -(void)viewPopUPForm
 {
+    
+    
     mainBg = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
     mainBg.backgroundColor =[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.8];
     //[UIColor colorWithRed:142/255.0 green:142/255.0 blue:143/255.0 alpha:0.8];
@@ -1906,6 +2037,7 @@
     [bgVw.layer setBorderWidth: 0.5];
     [bgVw.layer setCornerRadius:4.0f];
     [bgVw.layer setMasksToBounds:YES];
+    
     bgVw.backgroundColor =[UIColor colorWithRed:238/255.0 green:239/255.0 blue:246/255.0 alpha:1.0];
     
     
@@ -1956,6 +2088,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         btnRecreateJob.frame = CGRectMake(30,100,220,50);
     }else{
         [bgVw addSubview:btnNewJob];
@@ -2270,6 +2403,7 @@
 }
 -(void)pressAcceptYes2:(id)sender
 {
+    
     UIButton *btn=(UIButton *)sender;
     DLog(@"tag :%ld",(long)btn.tag);
     [mainBg2 removeFromSuperview];
@@ -2284,6 +2418,7 @@
         }
         else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
         {
+            
             CreateJobEng *createJob;
             
             createJob=  [[CreateJobEng alloc]initWithNibName:@"CreateJobEng" bundle:nil];
@@ -2326,6 +2461,7 @@
 #pragma mark Detail Button Press Method
 -(void)pressDetails:(id)sender
 {
+    
     UIButton *btn=(UIButton *)sender;
     DLog(@"Selected IndexPath :%ld",(long)btn.tag);
     
@@ -2335,6 +2471,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
@@ -2620,6 +2757,7 @@
     }
     else
     {
+        
         imgvCellbg=[[UIImageView alloc] initWithFrame:CGRectMake(0,0, CGRectGetWidth(tabvToDoList.frame),155)];
         [imgvCellbg setImage:[UIImage imageNamed:@"jobBox_clearbg"]];
         [cell.contentView addSubview:imgvCellbg];
@@ -2679,6 +2817,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"cu"])
     {
+        
         btnMapLocation.userInteractionEnabled=NO;
         [btnMapLocation.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
         [btnMapLocation.layer setBorderWidth: 1.1];
@@ -2777,6 +2916,7 @@
             }
             else if ([IsEngAccept isEqualToString:@"1"]&&[IsEngAssign isEqualToString:@"0"])
             {
+                
                 //Invited
                 [btnDetails setBackgroundImage:[UIImage imageNamed:@"orangeman"] forState:UIControlStateNormal];
                 
@@ -2874,6 +3014,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+      
         btnMapLocation.frame = CGRectMake(0,0,110,120);
         btnMapLocation.center=CGPointMake(CGRectGetMinX(imgvCellbg.frame)+CGRectGetWidth(btnMapLocation.frame)/2.0f+5,CGRectGetHeight(btnMapLocation.frame)/2.0f+10);
         
@@ -3024,6 +3165,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
         UIButton *btnFMDetailsPage = [UIButton buttonWithType:UIButtonTypeCustom];
         btnFMDetailsPage.frame = CGRectMake(CGRectGetMaxX(btnMapLocation.frame)+5,CGRectGetMaxY(btnMapLocation.frame)-15,70,20);
         [btnFMDetailsPage setTitle:[NSString stringWithFormat:@"%@",[dicTemp objectForKey:@"job_statusname"]] forState:UIControlStateNormal];
@@ -3041,6 +3183,7 @@
         {
             if ([IsJobExpired isEqualToString:@"1"])
             {
+                
                 //Job Expired
                 imgvCellbg.image=nil;
                 imgvCellbg.backgroundColor=[UIColor orangeColor];
@@ -3072,6 +3215,7 @@
             }
             else if ([IsEngAccept isEqualToString:@"1"]&&[IsEngAssign isEqualToString:@"0"])
             {
+                
                 //Invited
                 [btnDetails setBackgroundImage:[UIImage imageNamed:@"orangeman"] forState:UIControlStateNormal];
                 
@@ -3509,6 +3653,7 @@
         
         if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             if ([PresentingJob valueForKey:@"Address"])
             {
                 lblAddress.text=[NSString stringWithFormat:@"%@,%@",[PresentingJob valueForKey:@"City"],[PresentingJob valueForKey:@"Address"]];
@@ -3555,6 +3700,7 @@
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         btnMapLocation.hidden=YES;
         
         //-----------------------------------------------  Job Description --------------------------------------------
@@ -3937,6 +4083,7 @@
     {
         
         
+        
         //------- INVOICE NUMBER ---------
         UILabel *invoiceNumber=[[UILabel alloc]init];
         invoiceNumber.frame=CGRectMake(CGRectGetWidth(imgvCellbg.frame),CGRectGetMinY(lblName.frame)+3,80,30);
@@ -4117,6 +4264,7 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
         if ([IsJobExpired isEqualToString:@"1"])
         {
             lblJobTitle.textColor=[UIColor darkGrayColor];
@@ -4183,6 +4331,7 @@
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
         
+        
         NSString *IsEngAssign=[NSString stringWithFormat:@"%@",[dicTemp objectForKey:@"IsEngAssign"]];
         
         if ([IsEngAssign isEqualToString:@"1"])
@@ -4240,6 +4389,7 @@
 #pragma mark - Change Page Method
 -(IBAction)changepage:(id)sender
 {
+    
     if (isPrevJobAvailable==YES)
     {
         page = pageControl.currentPage-1;
@@ -4364,6 +4514,7 @@
 #pragma mark Engineer Accept/Decline Details PopUp View
 -(void)ShowDetailJobPopUp:(NSDictionary *)dic
 {
+    
     mainBg33 = [[UIControl alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
     mainBg33.backgroundColor =[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.8];
     
@@ -4491,6 +4642,7 @@
     [bgVw22 addSubview:txtvAgreement];
     
     NSString *IsAccepted=[NSString stringWithFormat:@"%@",[dic objectForKey:@"IsAccepted"]];
+    
     DLog(@"jobdetails :%@",dic);
     DLog(@"IsAccepted :%@",IsAccepted);
     
@@ -4810,6 +4962,7 @@
 #pragma mark - Accept Agreement2 PopUp
 -(void)showPopUpAgreementPage22:(long)isSelectedRow22
 {
+    
     mainBg22 = [[UIControl alloc] initWithFrame:CGRectMake(0,0,self.view.frame.size.width,self.view.frame.size.height)];
     mainBg22.backgroundColor =[UIColor colorWithRed:0/255.0 green:0/255.0 blue:0/255.0 alpha:0.8];
     
@@ -4956,7 +5109,9 @@
 
 #pragma mark Calender View Method
 
--(void)FetchCalanderJobDates:(NSDate*)date{
+-(void)FetchCalanderJobDates:(NSDate*)date
+{
+    
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MM/dd/yyyy"];
@@ -4965,8 +5120,6 @@
     [formatter setTimeZone:[NSTimeZone timeZoneWithName:@"..."]];
     
     NSString *stringFromDate = [formatter stringFromDate:date];
-    
-    
     
     NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -4999,6 +5152,7 @@
             }@finally{
                 
                 if ([arrDates isKindOfClass:[NSArray class]]) {
+                    
                     [self UpdateCalenderViewWithJobs:arrDates];
                 }
                 
@@ -5016,6 +5170,7 @@
 
 -(void)UpdateCalenderViewWithJobs:(NSArray*)Jobs
 {
+    
     NSString *dateStr ;
     NSMutableDictionary *EventsDic=[[NSMutableDictionary alloc]init];
     
@@ -5048,6 +5203,7 @@
         
     }
     
+    
     //  NSDictionary *dic=@{@"29/10/2014" : @"Ev1", @"5/10/2014" : @"ev2", @"16/10/2014" : @"Event3",@"16/11/2014" : @"new Event",@"29/4/2015" : @"Ev1"};
     
     DLog(@"%@",EventsDic);
@@ -5057,8 +5213,11 @@
         cal.delegate=self;
         cal.frame=calFrame;
         cal.center=CGPointMake(CGRectGetWidth(ViewCalendar.frame)/2.0f, CGRectGetHeight(calFrame)/2.0f);
+     
+        
         [ViewCalendar addSubview:cal];
     }else{
+        
         NSDateComponents *visibleMon =  cal.visibleMonth;
         
         [cal removeFromSuperview];
@@ -5081,6 +5240,8 @@
 {
     if (btnListandCalender.tag==0)
     {
+        
+        
         // [btnListandCalender setTitle:@"To Do" forState:UIControlStateNormal];
         _imgVtoggleCalTodo.image=[UIImage imageNamed:@"todolist"];
         
@@ -5092,6 +5253,7 @@
     }
     else if (btnListandCalender.tag==1)
     {
+        
         
         //[btnListandCalender setTitle:@"Calender" forState:UIControlStateNormal];
         _imgVtoggleCalTodo.image=[UIImage imageNamed:@"calendar"];
@@ -5111,6 +5273,7 @@
 }
 -(void)PopUptableViewListingJobs
 {
+    
     bgView=[[UIControl alloc]initWithFrame:self.view.frame];
     bgView.backgroundColor=[UIColor colorWithWhite:0.1f alpha:1.0f];
     //[bgView addTarget:self action:@selector(removeBgAndPopUp:) forControlEvents:UIControlEventTouchUpInside];
@@ -5134,6 +5297,7 @@
     btncross.backgroundColor=[UIColor clearColor];
     [btncross setBackgroundImage:[UIImage imageNamed:@"e-Sigacros"] forState:UIControlStateNormal];
     [btncross clipsToBounds];
+    
     [btncross addTarget:self action:@selector(bgPopupTouched:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:jobs];
     [bgView addSubview:btncross];
@@ -5149,6 +5313,7 @@
 }
 -(IBAction)bgPopupTouched:(id)sender
 {
+    
     for (UIView *vw in [bgView subviews])
     {
         [vw removeFromSuperview];
@@ -5156,7 +5321,9 @@
     [bgView removeFromSuperview];
 }
 
--(void)fetchDayWiseJobs:(NSString*)date{
+-(void)fetchDayWiseJobs:(NSString*)date
+{
+    
     
     NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -5179,7 +5346,9 @@
                     JobsOnDate = [[NSMutableArray alloc] init];
                 }
                 
-            }@finally{
+            }
+            @finally{
+                
                 
                 if ([JobsOnDate isKindOfClass:[NSMutableArray class]]) {
                     [self PopUptableViewListingJobs];
@@ -5197,7 +5366,9 @@
     
     if (range != nil)
     {
+        
         NSArray *allKey = [calendarView.EventsDic allKeys];
+        
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"dd/MM/yyyy"];
         
@@ -5221,6 +5392,8 @@
 }
 - (DSLCalendarRange*)calendarView:(DSLCalendarView *)calendarView didDragToDay:(NSDateComponents *)day selectingRange:(DSLCalendarRange *)range
 {
+    
+    
     if (NO)
     { // Only select a single day
         return [[DSLCalendarRange alloc] initWithStartDay:day endDay:day];
@@ -5257,12 +5430,15 @@
     
 }
 
--(void)NewVisibleMonthWillCome:(NSDateComponents *)month {
+-(void)NewVisibleMonthWillCome:(NSDateComponents *)month
+{
+    
     
     [self FetchCalanderJobDates:month.date];
 }
 - (void)calendarView:(DSLCalendarView *)calendarView didChangeToVisibleMonth:(NSDateComponents *)month
 {
+    
     DLog(@"Now showing %@", month);
     
 }
@@ -5370,7 +5546,7 @@
         
         else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
           {
-    
+              
     page=0;
     loadBookedPageCount=0;
     loadActivePageCount=0;
@@ -5426,6 +5602,7 @@
     {
         
         
+        
         if (_btnJobsInvitation.selected==YES)
         {
             [self jobsInvitationPress:_btnJobsInvitation];
@@ -5447,8 +5624,10 @@
     
     
     
+    
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         
         if (isNxtJobAvailable == YES)
         {
@@ -5470,6 +5649,7 @@
         
         if (_btnBooked.isSelected==YES)
         {
+            
             if(page==0)
             {
             page=page+1;
@@ -5529,15 +5709,10 @@
                 arrMActiveJobDetails=NULL;
             }
             }
-//            if(ActivePage==0&&refreshBookedPagecount!=1)
-//            {
-//                arrMActiveJobDetails=NULL;
-//
-//            }
+
             if(refreshActiveloadmorePagecount==1)
             {
                 arrMActiveJobDetails=NULL;
-//
             }
             
             [arrMJobDetails addObjectsFromArray:arrMActiveJobDetails];
@@ -5550,7 +5725,7 @@
             
             loadActivePageCount = loadActivePageCount+1;
             loadActivePageCount2=1;
-//
+
          
             [self fetchJobdetails];
 

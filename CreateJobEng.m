@@ -5,6 +5,8 @@
 
 
 #import "CreateJobEng.h"
+
+
 @class AddSelPopupController;
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
@@ -12,6 +14,7 @@
 @interface CreateJobEng ()
 {
     GlobalDirector *globe;
+    
     
 }
 
@@ -25,15 +28,16 @@
 #pragma mark - ViewDidLoad
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
-   // [self registerForKeyboardNotifications];
+
     globe = [GlobalDirector SharedDirector];
     //add tool bar to completed process note
     searchText = @"";
     UIToolbar* numberTool = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
     numberTool.barStyle = UIBarStyleBlackTranslucent;
     numberTool.items = [NSArray arrayWithObjects:
-                           [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(Cancel:)],
+                        [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(Cancel:)],
                            [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
                            [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(Complete:)],
                            nil];
@@ -116,6 +120,8 @@
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
+        
         _vwMatCostNoteBottomBar.hidden=YES;
         [_btnsubmit setFrame:CGRectMake(CGRectGetMinX(_btnsubmit.frame), CGRectGetMinY(_btnsubmit.frame)-CGRectGetHeight(_vwMatCostNoteBottomBar.frame), CGRectGetWidth(_btnsubmit.frame), CGRectGetHeight(_btnsubmit.frame))];
            [_btnCancel setFrame:CGRectMake(CGRectGetMinX(_btnCancel.frame), CGRectGetMinY(_btnCancel.frame)-CGRectGetHeight(_vwMatCostNoteBottomBar.frame), CGRectGetWidth(_btnCancel.frame), CGRectGetHeight(_btnCancel.frame))];
@@ -136,12 +142,11 @@
     _txtstartdate.inputAccessoryView = numberToolbar;
     _txtStartTime.inputAccessoryView=numberToolbar;
     _txtEndTime.inputAccessoryView=numberToolbar;
-
+    _txtfdETAtime.inputAccessoryView=numberToolbar;
+    _txtfdLastEtatime.inputAccessoryView=numberToolbar;
     _txtMainConNumber.inputAccessoryView=numberToolbar;
     _txtContactNumber.inputAccessoryView=numberToolbar;
-    
     _txtTelephoneNo.inputAccessoryView=numberToolbar;
-    
     arrMSavedContactNumber=[[NSMutableArray alloc] init];
     
     dicOwnerDetails=[[NSMutableDictionary alloc]init];
@@ -189,13 +194,28 @@
         [self btnBillingAdressTapped:_btnBillingAdress];
         
     }
- 
+    
+    btnUpdateEtaTime =[[UIButton alloc]initWithFrame:CGRectMake(265, 277, 100, 18)];
+    [btnUpdateEtaTime setBackgroundColor:[UIColor systemGreenColor]];
+
+    [btnUpdateEtaTime addTarget:self action:@selector(btnClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [btnUpdateEtaTime setTitle:@"Update" forState:UIControlStateNormal];
+    btnUpdateEtaTime.backgroundColor=[UIColor colorWithRed:132/255.0f green:172/255.0f blue:75/255.0f alpha:1];
+    [btnUpdateEtaTime setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.scrollVw addSubview:btnUpdateEtaTime];
+    btnUpdateEtaTime.hidden=true;
+    _txtfdLastEtatime.enabled =  NO;
+    
+
+
     
 }
 
 
 
--(void)PopulateUserDetailsDic:(NSDictionary *)Dic{
+-(void)PopulateUserDetailsDic:(NSDictionary *)Dic
+{
+    
     
     NSMutableDictionary *userdetails=[Dic mutableCopy];
     
@@ -239,11 +259,6 @@
         }else{
             [dicOwnerDetails setValue:@"0" forKey:@"CustID"];
         }
-        
-        
-        
-        
-        
         
         
         [dicOwnerDetails setValue:[userdetails valueForKey:@"Notes"] forKey:@"Notes"];
@@ -493,6 +508,7 @@
 {
     
     
+    
     if ([[dicJobDetails valueForKey:@"JobStartDate"]length]>9)
     {
         NSString *strStartDate =[NSString stringWithFormat:@"%@",[dicJobDetails valueForKey:@"JobStartDate"]];
@@ -531,12 +547,20 @@
     
     if ([jobstatusShown isEqualToString:@"1"])
     {
+        
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Booked"];
         
+        _txtfdLastEtatime.enabled =  NO;
+        btnUpdateEtaTime.hidden=true;
     }
     else if ([jobstatusShown isEqualToString:@"2"])
     {
+        
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Active"];
+        
+        _txtfdLastEtatime.hidden = false;
+        _txtLastname.enabled=YES;
+        _txtfdLastEtatime.text=[dicJobDetails valueForKey:@"JobEtaTime"];
     }
     else if ([jobstatusShown isEqualToString:@"3"])
     {
@@ -546,8 +570,14 @@
         if (strComp.length>0) {
             strComp = [NSString stringWithFormat:@"Completed-%@",strComp];
             _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,strComp];
+            _txtfdLastEtatime.enabled =  NO;
+            
         }else{
            _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Completed"];
+            _txtfdLastEtatime.hidden=true;
+            btnUpdateEtaTime.hidden=true;
+ 
+          
         }
         
        
@@ -557,6 +587,9 @@
     {
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Cancelled"];
       _txtJobStatus.userInteractionEnabled=YES;
+        _txtfdLastEtatime.enabled =NO;
+        btnUpdateEtaTime.hidden=true;
+//        _txtLastname.enabled=NO;
         
     }
     
@@ -578,6 +611,7 @@
             NSInteger cust = [[GlobalDirector ReplaceStringNull:[dic valueForKey:@"CustID"] ]integerValue];
             
             if (cust>0) {
+                
                 customerID=cust;
                 _txtSelectCustomer.text=[NSString stringWithFormat:@"%@(%@)",[dic valueForKey:@"FullName"],[dic valueForKey:@"EmailAddress"]];
                 mainCustomer=1;
@@ -598,6 +632,7 @@
             NSInteger cust = [[GlobalDirector ReplaceStringNull:[dic valueForKey:@"CustID"] ]integerValue];
             
             if (cust>0) {
+                
                 customerID=cust;
                 _txtSelectCustomer.text=[NSString stringWithFormat:@"%@(%@)",[dic valueForKey:@"FullName"],[dic valueForKey:@"EmailAddress"]];
                  mainCustomer=2;
@@ -644,6 +679,7 @@
     
     NSArray *arrAddr=[dicJobDetails objectForKey:@"JobAddrListResponse"];
     for (NSMutableDictionary *dic in arrAddr) {
+        
        
         
         if ([[dic valueForKey:@"TypeOfAddress"]integerValue]==1) {
@@ -684,6 +720,7 @@
 
 -(void)cancel
 {
+    
     isContactsave=NO;
     UITextField *txtfld=(UITextField *)actvtextbox;
     [txtfld resignFirstResponder];
@@ -692,11 +729,13 @@
 
 -(void)Next
 {
+    
      UITextField *txtfld=(UITextField *)actvtextbox;
     if (txtfld==_txtstartdate) {
         txtfld=_txtStartTime;
         
     }
+    
     else if (txtfld==_txtStartTime){
         txtfld=_txtEndTime;
         
@@ -717,6 +756,15 @@
         txtfld=_txtCountry;
         
     }
+    else if (txtfld==_txtCountry){
+        txtfld=_txtfdETAtime;
+        
+    }
+    else if (txtfld==_txtfdETAtime){
+        txtfld=_txtfdLastEtatime;
+        
+    }
+    
     
     [txtfld becomeFirstResponder];
    
@@ -812,6 +860,8 @@
     [timePicker addTarget:self action:@selector(timeUpdated:) forControlEvents:UIControlEventValueChanged];
     timePicker.minuteInterval = 5;
       _txtEndTime.inputView=timePicker;
+    _txtfdETAtime.inputView=timePicker;
+    _txtfdLastEtatime.inputView=timePicker;
 
     
     
@@ -828,8 +878,10 @@
 }
 
 - (void) timeUpdated:(UIDatePicker *)datePicker {
+    
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm"];
+    [formatter setDateFormat:@"HH:mm:ss"];
     
     UITextField *actvfld=(UITextField *)actvtextbox;
     
@@ -933,7 +985,8 @@ replacementString: (NSString*) string
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-     actvtextbox=textField;
+    
+    actvtextbox=textField;
     if (textField ==_txtOrganizationName) {
         int valueJob = [[dicJobAddress valueForKey:@"TypeofOrganisation"] intValue];
         int valueBill = [[dicBillingAddress valueForKey:@"TypeofOrganisation"] intValue];
@@ -964,7 +1017,20 @@ replacementString: (NSString*) string
         [formatter setDateFormat:@"dd/MM/yyyy"];
         _txtstartdate.text=[formatter stringFromDate:[NSDate date]];
     }
-    
+    if (textField ==_txtfdETAtime)
+    {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"HH:mm:ss"];
+        _txtfdETAtime.text=[formatter stringFromDate:[NSDate date]];
+    }
+    if (textField ==_txtfdLastEtatime)
+    {
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"HH:mm:ss"];
+        _txtfdLastEtatime.text=[formatter stringFromDate:[NSDate date]];
+    }
     if (textField == _txtStartTime)
     {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -1659,8 +1725,16 @@ replacementString: (NSString*) string
         [selectedAddressDic setValue:[NSString stringWithFormat:@"%ld",(long)indexPath.row] forKey:@"JobStatus"];
         _txtJobStatus.tag=[[tempDic valueForKey:@"Value"]integerValue];
         [selectedAddressDic setValue:[NSString stringWithFormat:@"%@",Activetxtfld.text] forKey:@"JobStatusText"];
+        if ([Activetxtfld.text isEqualToString:@"Active"]) {
+            
+            
+            if([_txtfdLastEtatime.text  isEqual:@""])
+            {
+            [self ShowPopupActive];
+            }
+        }
         
-        if ([Activetxtfld.text isEqualToString:@"Complete"]) {
+       else if ([Activetxtfld.text isEqualToString:@"Complete"]) {
             
             [self ShowPopupComplete];
         }else if ([Activetxtfld.text isEqualToString:@"Job Cancelled"]) {
@@ -1677,6 +1751,7 @@ replacementString: (NSString*) string
 
 -(void)FetchCustomerDetails:(NSInteger)CustomerId
 {
+    
     
    
     NSString *post =[NSString stringWithFormat:@""];
@@ -1754,14 +1829,14 @@ replacementString: (NSString*) string
                            
                             
                           
-                            [self btnBillingAdressTapped:_btnBillingAdress];
+                            [self btnBillingAdressTapped:self->_btnBillingAdress];
                             
                             NSLog(@"temp :%@",temp);
                             NSString *str=[GlobalDirector ReplaceStringNull:[temp valueForKey:@"Mobile"]];
                             NSLog(@"str :%@",str);
                             
                             if (str.length>0) {
-                                 [arrMSavedContactNumber addObject:str];
+                                [self->arrMSavedContactNumber addObject:str];
                             }
                            
                             
@@ -1908,18 +1983,18 @@ replacementString: (NSString*) string
                                                        style:UIAlertActionStyleDefault
                                                      handler:^(UIAlertAction * _Nonnull action) {
                                                          
-                                                          isNewAddress=NO;
+        self->isNewAddress=NO;
                                                          
-                                                         dicJobAddress = [[NSMutableDictionary alloc] initWithDictionary:[dicBillingAddress mutableCopy]];
-                                                         [dicJobAddress setValue:@"1" forKey:@"TypeOfAddress"];
+        self->dicJobAddress = [[NSMutableDictionary alloc] initWithDictionary:[self->dicBillingAddress mutableCopy]];
+        [self->dicJobAddress setValue:@"1" forKey:@"TypeOfAddress"];
                                                          
-                                                          if (_isJobEdited==YES) {
-                                                          [dicJobAddress setValue:@"0" forKey:@"JobAddressID"];
+        if (self->_isJobEdited==YES) {
+            [self->dicJobAddress setValue:@"0" forKey:@"JobAddressID"];
                                                           }
                                                          
-                                                          selectedAddressDic=[dicJobAddress mutableCopy];
+        self->selectedAddressDic=[self->dicJobAddress mutableCopy];
                                                          
-                                                          [self FetchAddressDicValue:dicJobAddress];
+        [self FetchAddressDicValue:self->dicJobAddress];
                                                          
                                                          
                                                          
@@ -1933,8 +2008,8 @@ replacementString: (NSString*) string
                                                        handler:^(UIAlertAction * _Nonnull action) {
                                                            
                                                            
-                                                           if (_txtSelectCustomer.text.length>0) {
-                                                              isNewAddress=NO;
+        if (self->_txtSelectCustomer.text.length>0) {
+                                                               self->isNewAddress=NO;
                                                                 [self performSelector:@selector(ShowAddressPopUp) onThread:[NSThread mainThread] withObject:nil waitUntilDone:YES];
                                                                
                                                            }else{
@@ -1949,7 +2024,7 @@ replacementString: (NSString*) string
                                                         style:UIAlertActionStyleDefault
                                                       handler:^(UIAlertAction * _Nonnull action) {
                                                           
-                                                          isNewAddress=YES;
+        self->isNewAddress=YES;
                                                           [self performSelector:@selector(ShowPostCodePopUp) onThread:[NSThread mainThread] withObject:nil waitUntilDone:YES];
                                                           
                                                       }];
@@ -1989,6 +2064,7 @@ replacementString: (NSString*) string
 
 
 -(void)ShowAddressPopUp{
+    
 
     AddSelPopupController *post = [[AddSelPopupController alloc] initWithNibName:@"AddSelPopupController" bundle:nil];
     post.customerId = [NSString stringWithFormat:@"%ld",(long)customerID];
@@ -2063,6 +2139,7 @@ replacementString: (NSString*) string
 #pragma mark Add Job Material
 - (IBAction)btnJobMatTapped:(id)sender
 {
+    
     addMat.strHeading=@"Add Materials";
    // addMat.Materials=arradditionalMaterials;
      addMat.jobID=(NSString *)[_jobDic valueForKey:@"JobID"];
@@ -2085,6 +2162,7 @@ replacementString: (NSString*) string
 #pragma mark Add Notes
 - (IBAction)btnJobNoteTapped:(id)sender
 {
+    
     addNote.strHeading=@"Add Notes";
    // addNote.Notes=arradditionalNotes;
     addNote.jobID=(NSString *)[_jobDic valueForKey:@"JobID"];
@@ -2401,14 +2479,26 @@ replacementString: (NSString*) string
         
     }else
     {
+        
         [self showAlert:@"Please check all fields" withTitle:@"Wait"];
         
     }
+    
+        
+        
+       
+        NSString *Count = @"ndata";
+
+        [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+
 }
 
 
 -(IBAction)cancelPress:(id)sender
 {
+    
    [self.navigationController popViewControllerAnimated:YES];
 }
 -(IBAction)backPress:(id)sender
@@ -2424,10 +2514,11 @@ replacementString: (NSString*) string
     {
         if ([txtfield isKindOfClass:[UITextField class]])
         {
+            
             UITextField *txtfld=(UITextField *)txtfield;
             
             
-            if ([txtfld.text isEqualToString:@""]&&(txtfld!=_txtOrganizationName)&&(txtfld!=_txtOrganizationType)&&(txtfld!=_txtTelephoneNo)&&(txtfld!=_txtEmailAddress)&&(txtfld!=_txtContactNumber)&&(txtfld!=_txtCustomerTitle)&&(txtfld!=_txtFirstname)&&(txtfld!=_txtLastname)&&(txtfld!=_txtPurchOrder)&&(txtfld!=_txtMainConNumber)) {
+            if ([txtfld.text isEqualToString:@""]&&(txtfld!=_txtOrganizationName)&&(txtfld!=_txtOrganizationType)&&(txtfld!=_txtTelephoneNo)&&(txtfld!=_txtEmailAddress)&&(txtfld!=_txtContactNumber)&&(txtfld!=_txtCustomerTitle)&&(txtfld!=_txtFirstname)&&(txtfld!=_txtLastname)&&(txtfld!=_txtPurchOrder)&&(txtfld!=_txtMainConNumber)&&(txtfld!=_txtfdLastEtatime)) {
                 
                
                         [self ShowErrorAtTextField:txtfld alert:@" *Field Should not be blanked"];
@@ -2500,18 +2591,18 @@ replacementString: (NSString*) string
         
         dispatch_async(dispatch_get_main_queue(), ^(){
             
-            [MBProgressHUD hideAllHUDsForView:Activetxtfld animated:YES];
+            [MBProgressHUD hideAllHUDsForView:self->Activetxtfld animated:YES];
             
           
             
             if(![arrData isKindOfClass:[NSNull class]])  {
                 
-                arrFeedTblPopup=arrData;
-                [tblView reloadData];
+                self->arrFeedTblPopup=arrData;
+                [self->tblView reloadData];
                 [self.dataTask cancel];
                 
             }else{
-                arrFeedTblPopup = [[NSArray alloc] init];
+                self->arrFeedTblPopup = [[NSArray alloc] init];
             }
             
         });
@@ -2535,6 +2626,8 @@ replacementString: (NSString*) string
 
 -(void)PostJob
 {
+    
+    
    
     NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
     
@@ -2615,7 +2708,8 @@ replacementString: (NSString*) string
     {
         jsonCost = [NSJSONSerialization dataWithJSONObject:arradditionalCost
                                                            options:0
-                                                             error:&error];
+
+                                                     error:&error];
 
     }
    
@@ -2674,6 +2768,7 @@ replacementString: (NSString*) string
     NSLog(@"_txtSelectCustomer tag:%ld",(long)_txtSelectCustomer.tag);
     
     if (_txtSelectCustomer.tag==0) {
+        
         _txtSelectCustomer.tag=customerID;
     }
     
@@ -2886,7 +2981,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
               DLog(@"Inside No error if ");
             if ([[dicTemp valueForKey:@"ResponseMessages"]isEqualToString:@"SUCCESS"])
             {
-                 DLog(@"Success ");
+              
+                DLog(@"Success ");
                
                 if (_isJobEdited==YES) {
                       DLog(@"job edited ");
@@ -2935,7 +3031,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
                 
                  DLog(@"This is  value for res msg %@",[dicTemp valueForKey:@"ResponseMessages"]);
                 UIAlertController *controller = [UIAlertController alertControllerWithTitle: @""
-                                                                                    message:[NSString stringWithFormat:@"%@",[dicTemp valueForKey:@"ResponseMessages"]]
+                                                                                    message:[NSString stringWithFormat:@"%s","SUCCESS"]
                                                                              preferredStyle: UIAlertControllerStyleAlert];
                 
                 UIAlertAction *alertAction = [UIAlertAction actionWithTitle: @"OK"
@@ -3039,7 +3135,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
                 [dicJobAddress setValue:@"Small Organisation" forKey:@"TypeofOrganisationText"];
                 [dicJobAddress setValue:com forKey:@"NameofOrganisation"];
                 
-            }else{
+            }else
+            {
                 [dicJobAddress setValue:@"3" forKey:@"TypeofOrganisation"];
                 [dicJobAddress setValue:@"Residential" forKey:@"TypeofOrganisationText"];
                 [dicJobAddress setValue:@"" forKey:@"NameofOrganisation"];
@@ -3244,12 +3341,27 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
 
 - (IBAction)Cancel:(UIButton *)sender {
     
+    
    //  [KLCPopup dismissAllPopups];
     _txtNoteDesComplete.text=@"";
     _segNote.enabled=YES;
 }
 
 
+-(void)ShowPopupActive{
+    
+    
+    _txtfdETAtime.text=@"";
+    _txtfdETAtime.layer.borderColor=[[UIColor clearColor]CGColor];
+  [_txtfdETAtime becomeFirstResponder];
+  
+   
+    KLCPopup *pop=    [KLCPopup popupWithContentView:_viewActivenote showType:KLCPopupShowTypeGrowIn dismissType:KLCPopupDismissTypeGrowOut maskType:KLCPopupMaskTypeDimmed dismissOnBackgroundTouch:NO dismissOnContentTouch:NO];
+   
+   
+   [pop show];
+    
+}
 
 -(void)ShowPopupComplete{
     
@@ -3318,7 +3430,8 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
         [KLCPopup dismissAllPopups];
         
         
-    }else{
+    }else
+    {
         
         _txtVCancelNote.layer.cornerRadius=8.0f;
         _txtVCancelNote.layer.masksToBounds=YES;
@@ -3329,6 +3442,94 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite{
     
 }
 
+
+- (IBAction)btnSaveETATime:(UIButton *)sender {
+    
+    
+    if (_txtfdETAtime.text.length>0 ) {
+        [_txtfdETAtime resignFirstResponder];
+        
+        _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Active"];
+        [KLCPopup dismissAllPopups];
+        
+        NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+      
+       JobID = [_jobDic valueForKey:@"JobID"];
+        NSString *post =[NSString stringWithFormat:@""];
+        NSString*EtaTime = _txtfdETAtime.text;
+        NSString *urlString=[NSString stringWithFormat:@"%sEtaTimeJobUpdate?UserToken=%@&EtaTime=%@&JobID=%@",conn_url,[userdetails valueForKey:@"UserToken"],EtaTime,JobID];
+        
+
+        DLog(@"PostString=%@",urlString);
+        NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+        NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:urlString]];
+        [request setHTTPMethod:@"GET"];
+        [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+        [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+        [request setHTTPBody:postData];
+        request.timeoutInterval = 300;
+        DLog(@"PostString=%@",request);
+
+        connLogin = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+        [connLogin start];
+        
+        _txtfdLastEtatime.hidden=false;
+        btnUpdateEtaTime.hidden=true;
+        _txtfdLastEtatime.text=_txtfdETAtime.text;
+        
+        
+        
+    }else{
+        
+        _txtfdETAtime.layer.cornerRadius=8.0f;
+        _txtfdETAtime.layer.masksToBounds=YES;
+        _txtfdETAtime.layer.borderColor=[[UIColor redColor]CGColor];
+        _txtfdETAtime.layer.borderWidth= 1.0f;
+        
+    }
+}
+
+
+
+- (IBAction)btnClicked:(id)sender
+{
+   
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+   JobID = [_jobDic valueForKey:@"JobID"];
+    NSString *post =[NSString stringWithFormat:@""];
+    NSString*EtaTime = _txtfdLastEtatime.text;
+    NSString *urlString=[NSString stringWithFormat:@"%sEtaTimeJobUpdate?UserToken=%@&EtaTime=%@&JobID=%@",conn_url,[userdetails valueForKey:@"UserToken"],EtaTime,JobID];
+    
+
+    DLog(@"PostString=%@",urlString);
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    DLog(@"PostString=%@",request);
+
+    connLogin = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    [connLogin start];
+    
+}
+    
+    
+
+
+    
+
+ 
+
+
+    
+    
 
 @end
 

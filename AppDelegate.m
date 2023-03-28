@@ -7,6 +7,8 @@
 
 #import "SWRevealViewController.h"
 
+#import <SquareInAppPaymentsSDK/SQIPInAppPaymentsSDK.h>>
+
 #if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 @import UserNotifications;
 #endif
@@ -44,6 +46,8 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    SQIPInAppPaymentsSDK.squareApplicationID = [NSString stringWithFormat:@"%s", squareUpApplicationId];
     
     //******************** Fire base notification setup
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
@@ -264,6 +268,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         [locationManager stopUpdatingLocation];
         [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
         [locationManager setDistanceFilter:kCLDistanceFilterNone];
@@ -294,6 +299,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         [locationManager stopUpdatingLocation];
         locationManager.distanceFilter = kCLDistanceFilterNone;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -637,6 +643,7 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
     // [self performSelector:@selector(UpdateEngineerLocation) withObject:nil];
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"LocationUpdate" object:self userInfo:nil];
     }
     

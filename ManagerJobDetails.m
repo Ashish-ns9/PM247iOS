@@ -22,24 +22,32 @@ AppDelegate *app;
 -(IBAction)pressJobactivationbyEngineer:(id)sender
 {
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+   if (Count==0 )
+   {
+    [self ShowPopupActive];
+  
+   }
     
+    else if (Count==1)
+    {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
     NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
     //DLog(@"dicManagerJobDetails >>>>>>>>>>>>>>>>>>>>>>>%@",dicManagerJobDetails);
-    
+
     NSString *post =[NSString stringWithFormat:@""];
     NSString *urlString;
-    
-    
+
+
     urlString=[NSString stringWithFormat:@"%ssetJobStatusActive?userToken=%@&jobId=%@&userId=%@",conn_url,(NSString *)[user valueForKey:@"UserToken"],(NSString *)[dicManagerJobDetails valueForKey:@"JobID"],(NSString *)[user valueForKey:@"UserID"]];
-    
-    
-    
+
+
+
     urlString=[urlString stringByRemovingPercentEncoding];
     //DLog(@"PostString=%@",urlString);
     urlString=[urlString stringByReplacingOccurrencesOfString:@"" withString:@"%20"];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    
+
     NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:urlString]];
@@ -49,13 +57,13 @@ AppDelegate *app;
     [request setHTTPBody:postData];
     request.timeoutInterval = 300;
     DLog(@"PostString=%@",request);
-    
-    
+
+
     connActivateJobbyengineer = [[NSURLConnection alloc]init];
     [self getDataFromServerWithUrl:urlString finishLoading:^(NSData *data, NSURLResponse *response, NSError *error){
-        
+
         DLog(@"PostString=%@",urlString);
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error==nil) {
                 _responseData=[data mutableCopy];
@@ -63,12 +71,33 @@ AppDelegate *app;
             }
             else
             {
-                
+
             }
-            
+
         });
-        
+
     }];
+        Count=0;
+        
+    }
+    
+}
+
+-(void)ShowPopupActive{
+    
+    
+    etaCount =0;
+//    _txtfdManagerEtatime.text=_txtfdsaveETAEnggTime.text;
+    _txtfdsaveETAEnggTime.text=@"";
+    _txtfdsaveETAEnggTime.layer.borderColor=[[UIColor clearColor]CGColor];
+  [_txtfdsaveETAEnggTime becomeFirstResponder];
+  
+   
+    KLCPopup *pop=    [KLCPopup popupWithContentView:_txtvwETa
+                                            showType:KLCPopupShowTypeGrowIn dismissType:KLCPopupDismissTypeGrowOut maskType:KLCPopupMaskTypeDimmed dismissOnBackgroundTouch:NO dismissOnContentTouch:NO];
+   
+   
+   [pop show];
     
 }
 
@@ -114,6 +143,9 @@ AppDelegate *app;
     NSString *strStartDate =[NSString stringWithFormat:@"%@",[dicManagerJobDetails valueForKey:@"JobStartDate"]];
     NSString *strEndTime =[NSString stringWithFormat:@"%@",[dicManagerJobDetails valueForKey:@"JobEndTime"]];
     
+    NSString *jobEtaTime =[NSString stringWithFormat:@"%@",[dicManagerJobDetails valueForKey:@"JobEtaTime"]];
+    
+    
     if (strStartDate.length>0) {
         NSArray* foo = [strStartDate componentsSeparatedByString: @" "];
         
@@ -122,6 +154,9 @@ AppDelegate *app;
         NSArray* foo1 = [strEndTime componentsSeparatedByString: @" "];
         
         strEndTime=[foo1 objectAtIndex:0];
+        NSArray* foo2 = [jobEtaTime componentsSeparatedByString: @" "];
+        
+        jobEtaTime=[foo2 objectAtIndex:0];
 
     }
     
@@ -133,16 +168,21 @@ AppDelegate *app;
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
         
+        
         NSString *name= [GlobalDirector ReplaceStringNull:[dicManagerJobDetails valueForKey:@"EngineerName"]];
         
-        if (name.length>0) {
+        if (name.length>0)
+        {
             _btnjobTypeSms.hidden=NO;
             _btnEngCall.hidden=NO;
             _txtMainContactNumber.text=[NSString stringWithFormat:@"Engineer Allocated: %@",[GlobalDirector ReplaceStringNull:[dicManagerJobDetails valueForKey:@"EngineerName"]]];
-        }else{
+        }
+        else{
             _btnjobTypeSms.hidden=YES;
             _btnEngCall.hidden=YES;
             _txtMainContactNumber.text=[NSString stringWithFormat:@" %@:\t%@",@"Engineer Allocated",@""];
+            _txtfdManagerEtatime.text=[NSString stringWithFormat:@" %@:\t%@ ",_txtfdManagerEtatime.placeholder,[dicManagerJobDetails valueForKey:@"JobEtaTime"]];
+            _txtfdEnggEtATime.text=[NSString stringWithFormat:@" %@:\t%@ ",_txtfdEnggEtATime.placeholder,[dicManagerJobDetails valueForKey:@"JobEtaTime"]];
             
         }
     }
@@ -152,6 +192,11 @@ AppDelegate *app;
     _txtDatejobPost.text=[NSString stringWithFormat:@" %@:\t%@ %@",_txtDatejobPost.placeholder,strStartDate,[dicManagerJobDetails valueForKey:@"JobStartTime"]];
     
     _txtEndtime.text=[NSString stringWithFormat:@" %@:\t%@ ",_txtEndtime.placeholder,[dicManagerJobDetails valueForKey:@"JobEndTime"]];
+    _txtfdEnggEtATime.text=[NSString stringWithFormat:@" %@:\t%@ ",_txtfdEnggEtATime.placeholder,[dicManagerJobDetails valueForKey:@"JobEtaTime"]];
+    _txtfdManagerEtatime.text=[NSString stringWithFormat:@" %@:\t%@ ",_txtfdManagerEtatime.placeholder,[dicManagerJobDetails valueForKey:@"JobEtaTime"]];
+    
+    
+
     
     _txtNatureOfJob.text=[NSString stringWithFormat:@" %@:\t%@",_txtNatureOfJob.placeholder,[dicManagerJobDetails valueForKey:@"NatureofJob"]];
     _txtAdvertisingChannel.text=[NSString stringWithFormat:@" %@:\t%@",_txtAdvertisingChannel.placeholder,[dicManagerJobDetails valueForKey:@"AdvertisingChannel"]];
@@ -182,11 +227,28 @@ AppDelegate *app;
     
     if ([jobstatusShown isEqualToString:@"1"])
     {
+        
+        
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Booked"];
+        _txtfdEnggEtATime.hidden = true;
+        _txtfdManagerEtatime.hidden = true;
+        CGRect oldTextfieldframe = _txtJobStatus.frame;
+        
+          oldTextfieldframe.origin.y = 324;
+        CGRect oldTextfieldframe1 = _txtNatureOfJob.frame;
+        oldTextfieldframe1.origin.y = 353;
+        
+        
     }
     else if ([jobstatusShown isEqualToString:@"2"])
     {
+        
+        
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Active"];
+           
+        _txtfdEnggEtATime.hidden = false;
+        _txtfdManagerEtatime.hidden = false;
+        
     }
     else if ([jobstatusShown isEqualToString:@"3"])
     {
@@ -197,6 +259,7 @@ AppDelegate *app;
             strComp = [NSString stringWithFormat:@"Completed-%@",strComp];
             _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,strComp];
         }else{
+            
             _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Completed"];
         }
         
@@ -205,6 +268,7 @@ AppDelegate *app;
     }
     else if ([jobstatusShown isEqualToString:@"12"])
     {
+        
         _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Cancelled"];
     }
     
@@ -357,7 +421,8 @@ AppDelegate *app;
     [recognizer1 setDirection:UISwipeGestureRecognizerDirectionRight];
     [[self view] addGestureRecognizer:recognizer1];
     [[self view] addGestureRecognizer:recognizer];
-    
+    Count=0;
+    etaCount=0;
     
     for (UITextField *txtfield in [_scrolVw subviews])
     {
@@ -385,16 +450,36 @@ AppDelegate *app;
     
     
     [self UpdateViewDidLoad];
+    [self initializeTextFieldInputView];
     
+
+    _txtfdManagerEtatime.hidden = true;
+    CGRect oldTextfieldframe = _txtJobStatus.frame;
+    
+      oldTextfieldframe.origin.y = 324;
+    [self Timepicker:nil];
+    [self DatePicker:nil];
+   
+    
+    NSDateFormatter *formatter;
+    NSString        *timestring;
+    formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    timestring = [formatter stringFromDate:[NSDate date]];
+    
+    NSAttributedString *str2 = [[NSAttributedString alloc] initWithString:timestring attributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
+        self->_txtfdsaveETAEnggTime.attributedPlaceholder = str2;
+    
+    
+
+    
+    [self GetSquareUpInvoiceID];
     
 }
 
 
 
 -(void)UpdateViewDidLoad{
-    
-    
-    
     _btnChkAvl.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:13.0];
     _btnChkAvl.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _btnChkAvl.titleLabel.numberOfLines = 2;
@@ -417,6 +502,8 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
+        
         _btnJobactivationbyEngineer.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Bold" size:17.0];
         
         if ([jobstatus isEqualToString:@"1"])
@@ -429,6 +516,7 @@ AppDelegate *app;
         }
         else if([jobstatus isEqualToString:@"2"])
         {
+            
             btnFinancial=[[UIButton alloc] init];
             _btnJobactivationbyEngineer.hidden=YES;
             [_vwBeforeAllocation setHidden:YES];
@@ -468,6 +556,7 @@ AppDelegate *app;
             }
             else
             {
+                
                 [_btnAgrrement setTitle:@"Small Repair Agreement" forState:UIControlStateNormal];
                 _btnAgrrement.hidden=NO;
                 [self activeButton:_btnAgrrement];
@@ -510,6 +599,7 @@ AppDelegate *app;
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
         
+        
         if ([jobstatus intValue]>1) {
             _btnjobTypeSms.hidden=NO;
         }else{
@@ -525,6 +615,7 @@ AppDelegate *app;
         
         if ([jobstatus isEqualToString:@"1"]&&[IsEngAssign isEqualToString:@"1"])
         {
+            
             _btnJobactivationbyEngineer.hidden=NO;
             [_vwBeforeAllocation setHidden:YES];
             [_vwAfterAllocation setHidden:YES];
@@ -574,6 +665,7 @@ AppDelegate *app;
             }
             else
             {
+                
                 _btnAgrrement.hidden=NO;
                 [_btnAgrrement setTitle:@"Small Repair Agreement" forState:UIControlStateNormal];
                 [self activeButton:_btnAgrrement];
@@ -732,6 +824,47 @@ AppDelegate *app;
 -(void)UpdateButton:(UIButton*)sender{
     
     [self animateToActiveButton:sender image:_selected];
+}
+
+
+-(void) GetSquareUpInvoiceID
+{
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[dicManagerJobDetails valueForKey:@"JobID"]] forKey:@"jobId"];
+    
+    GlobalDirector *globe = [GlobalDirector SharedDirector];
+    
+    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [globe SyncRequestGet:REQUEST_GetSquareUpInvoiceID withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        NSLog(@"%@",result);
+        
+        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            @try {
+                
+                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
+                
+                if (strValue==1) {
+                    
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
+                    
+                }else{
+                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
+                }
+            } @catch (NSException *exception) {
+                // _txtPost.text=@"";
+                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
+            }
+        });
+        
+    }];
 }
 
 #pragma mark - People Related Button Press Method
@@ -1008,18 +1141,28 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVCEng" bundle:nil];
         financial.jobDic=dicManagerJobDetails;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
+        if (@available(iOS 13.0, *)) {
+            [nav setModalPresentationStyle: UIModalPresentationFullScreen];
+         }
         [self presentViewController:nav animated:YES completion:nil];
         
         
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+        
+        
         FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVC" bundle:nil];
         financial.jobDic=dicManagerJobDetails;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
+        if (@available(iOS 13.0, *)) {
+            [nav setModalPresentationStyle: UIModalPresentationFullScreen];
+         }
+        
         [self presentViewController:nav animated:YES completion:nil];
         
         
@@ -1031,6 +1174,10 @@ AppDelegate *app;
 
 - (IBAction)btnEditJobPressed:(id)sender
 {
+    
+    
+    
+    
     CreateJobEng *createJob;
     CGSize screenSize=[[UIScreen mainScreen]bounds].size;
     
@@ -1045,7 +1192,8 @@ AppDelegate *app;
     
     else
     {
-        //iPad
+        
+     
     }
     [createJob setIsJobEdited:YES];
     createJob.jobDic=dicManagerJobDetails;
@@ -1058,6 +1206,7 @@ AppDelegate *app;
 }
 
 -(void)FinancialDetailsAdded:(BOOL)isAdded{
+    
     
     if (isAdded==YES) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -1152,15 +1301,18 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+       
         
         NSString *jobstatus=[NSString stringWithFormat:@"%@",[dicManagerJobDetails objectForKey:@"JobStatus"]];
         if (![jobstatus isEqualToString:@"3"])
         {
+            
             UIButton *btnAddFIxedPrice=[UIButton buttonWithType:UIButtonTypeCustom];
             btnAddFIxedPrice.frame=CGRectMake(20,CGRectGetHeight(popUpVW.frame)/2.0f+10,240,40);
             [btnAddFIxedPrice setTitle:@"Add Fixed Price" forState:UIControlStateNormal];
             if ([[dicManagerJobDetails valueForKey:@"FixedPrice"]integerValue]>0)
             {
+                
                 [btnAddFIxedPrice setTitle:@"Edit fixed Price" forState:UIControlStateNormal];
             }
             [btnAddFIxedPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -1181,10 +1333,12 @@ AppDelegate *app;
         btnGenerateInvoice.frame=CGRectMake(20,CGRectGetHeight(popUpVW.frame)/2.0f-40,240,40);
         if ([jobstatus isEqualToString:@"3"])
         {
+            
             [btnGenerateInvoice setTitle:@"Edit/Regenerate Invoice" forState:UIControlStateNormal];
         }
         else
         {
+            
             [btnGenerateInvoice setTitle:@"Generate Invoice" forState:UIControlStateNormal];
         }
         [btnGenerateInvoice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -1213,6 +1367,7 @@ AppDelegate *app;
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         UIButton *btnGenerateInvoice=[UIButton buttonWithType:UIButtonTypeCustom];
         btnGenerateInvoice.frame=CGRectMake(20,CGRectGetHeight(popUpVW.frame)/2.0f-40,240,40);
         [btnGenerateInvoice setTitle:@"Generate Invoice" forState:UIControlStateNormal];
@@ -1246,6 +1401,7 @@ AppDelegate *app;
 
 -(IBAction)addFixedPrice:(id)sender
 {
+    
     [self bgPopupTouched:nil];
     
     bgVw =[[UIControl alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -1312,6 +1468,7 @@ AppDelegate *app;
     
     
     if ([dicManagerJobDetails valueForKey:@"JobTotalNote"]&&[[dicManagerJobDetails valueForKey:@"FixedPrice"]integerValue]!=0) {
+        
         txtvNoteBodyPriceQoute.text=[[dicManagerJobDetails valueForKey:@"JobTotalNote"]isKindOfClass:[NSNull class]]?@"":[NSString stringWithFormat:@"%@",[dicManagerJobDetails valueForKey:@"JobTotalNote"]];
     }
     
@@ -1350,15 +1507,12 @@ AppDelegate *app;
     
 }
 
--(void)cancel
-{
-    [Activetxtfld resignFirstResponder];
-    
-}
+
 
 
 -(IBAction)SaveFixedPrice:(id)sender
 {
+    
     
     if ([txtvNoteBodyPriceQoute.text length]==0)
     {
@@ -1400,8 +1554,13 @@ AppDelegate *app;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (error==nil) {
-                    _responseData=[data mutableCopy];
-                    [self connectionDidFinishLoading:connSaveFixedPrice];
+                    self->_responseData=[data mutableCopy];
+                    [self connectionDidFinishLoading:self->connSaveFixedPrice];
+                    
+                    NSString *Count = @"ndata";
+                    
+                    [[NSUserDefaults standardUserDefaults] setObject:Count forKey:@"StringCount"];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
                 else
                 {
@@ -1444,6 +1603,7 @@ AppDelegate *app;
     if (![[dic valueForKey:@"ContactNumber"]isEqualToString:@""]) {
         if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             _txtContactNo.text=[dic valueForKey:@"ContactNumber"];
         }
         else
@@ -1534,6 +1694,7 @@ AppDelegate *app;
         
         if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             _txtAdressContactNo.text=[dic valueForKey:@"ContactNo"];
         }
         else
@@ -1563,6 +1724,7 @@ AppDelegate *app;
         
         else if ([[dic valueForKey:@"IsSmallOrganisation"]boolValue]==1)
         {
+            
             typeOfOrganisation=@"Small Organisation";
             
         }
@@ -1754,8 +1916,18 @@ AppDelegate *app;
                     [[NSUserDefaults standardUserDefaults]setObject:mutableCopy forKey:@"arrEditedJobDic"];
                     [[NSUserDefaults standardUserDefaults]synchronize];
                     
-                    
-                    [self.navigationController popViewControllerAnimated:YES];
+                    if(etaCount==0)
+                    {
+        
+                        etaCount=1;
+                    }
+                    else
+                    {
+
+                        
+                        [self.navigationController popViewControllerAnimated:YES];
+                        
+                    }
                 }
                 else if (connection==connSaveFixedPrice)
                 {
@@ -1768,8 +1940,9 @@ AppDelegate *app;
                     [mutableCopy addObject:[dicManagerJobDetails valueForKey:@"JobID"]];
                     [[NSUserDefaults standardUserDefaults]setObject:mutableCopy forKey:@"arrEditedJobDic"];
                     [[NSUserDefaults standardUserDefaults]synchronize];
-                    
-                    [self.navigationController popViewControllerAnimated:YES];
+                 
+                        [self.navigationController popViewControllerAnimated:YES];
+                     
                     
                 }
                 [MBProgressHUD hideAllHUDsForView:popUpVW animated:YES];
@@ -2051,6 +2224,7 @@ AppDelegate *app;
             
             if ([jobstatus isEqualToString:@"2"])
             {
+                
                 //Active
             }
         }
@@ -2102,10 +2276,12 @@ AppDelegate *app;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         lblMessage.text=@"Would you like to un assign yourself from this job?";
     }
     else if([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
+       
         
         lblMessage.text=@"Would you like to un assign the engineer from this job?";
     }
@@ -2456,6 +2632,14 @@ AppDelegate *app;
             [self showAlert:@"Select User type to get user list " withTitle:nil];
             
         }
+        else if (textField==_txtfdsaveETAEnggTime)
+        {
+            
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateFormat:@"HH:mm"];
+            _txtfdsaveETAEnggTime.text=[formatter stringFromDate:[NSDate date]];
+            
+        }
         else
         {
             [arrSelectedRecipients removeAllObjects];
@@ -2589,10 +2773,13 @@ AppDelegate *app;
     {
         if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
         {
+            
+            
             arrFeedTblPopup=@[@"Customer",@"Manager",@"Engineer",@"Admin"];
         }
         else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
         {
+            
             arrFeedTblPopup=@[@"Manager",@"Admin"];
         }
         else
@@ -4266,4 +4453,168 @@ AppDelegate *app;
    
     [self.navigationController pushViewController:createJob animated:YES];
 }
+
+
+- (void) initializeTextFieldInputView {
+
+    
+ 
+   
+    
+
+   
+
+    
+    
+}
+- (void) timeUpdated:(UIDatePicker *)datePicker {
+    
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    
+    UITextField *actvfld= _txtfdsaveETAEnggTime;
+    
+    actvfld.text = [formatter stringFromDate:datePicker.date];
+}
+- (IBAction)SaveETabtn:(id)sender
+{
+    
+    Count=1;
+    _txtfdManagerEtatime.text = _txtfdsaveETAEnggTime.text;
+        if (_txtfdsaveETAEnggTime.text.length>0 ) {
+            [_txtfdsaveETAEnggTime resignFirstResponder];
+            
+            _txtJobStatus.text=[NSString stringWithFormat:@" %@:\t%@",_txtJobStatus.placeholder,@"Active"];
+            [KLCPopup dismissAllPopups];
+            
+            NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+          
+            NSString *JobID = [dicManagerJobDetails valueForKey:@"JobID"];
+            NSString *post =[NSString stringWithFormat:@""];
+            NSString*EtaTime = _txtfdsaveETAEnggTime.text;
+            NSString *urlString=[NSString stringWithFormat:@"%sEtaTimeJobUpdate?UserToken=%@&EtaTime=%@&JobID=%@",conn_url,[userdetails valueForKey:@"UserToken"],EtaTime,JobID];
+
+            
+ 
+            DLog(@"PostString=%@",urlString);
+            NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+            NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+            [request setURL:[NSURL URLWithString:urlString]];
+            [request setHTTPMethod:@"GET"];
+            [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+            [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+            [request setHTTPBody:postData];
+            request.timeoutInterval = 300;
+            DLog(@"PostString=%@",request);
+
+            connActivateJobbyengineer = [[NSURLConnection alloc]init];
+            [self getDataFromServerWithUrl:urlString finishLoading:^(NSData *data, NSURLResponse *response, NSError *error){
+
+                DLog(@"PostString=%@",urlString);
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (error==nil) {
+                        self->_responseData=[data mutableCopy];
+                        [self connectionDidFinishLoading:connActivateJobbyengineer];
+                    }
+                    else
+                    {
+
+                    }
+
+                });
+
+            }];
+
+            
+
+
+            
+            
+            
+        }else{
+            
+            _txtfdsaveETAEnggTime.layer.cornerRadius=8.0f;
+            _txtfdsaveETAEnggTime.layer.masksToBounds=YES;
+            _txtfdsaveETAEnggTime.layer.borderColor=[[UIColor redColor]CGColor];
+            _txtfdsaveETAEnggTime.layer.borderWidth= 1.0f;
+            
+        }
+   
+    
+
+
+}
+#pragma mark - Date Picker Method
+-(void)DatePicker:(id)sender
+{
+    if (numberToolbar==nil) {
+        numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0,310, 320, 50)];
+    }
+//    numberToolbar.barStyle = UIBarStyleBlackTranslucent;
+//    numberToolbar.barTintColor=[UIColor lightGrayColor];
+//    numberToolbar.items = [NSArray arrayWithObjects:
+//                           [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)],
+//                           [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+//                           [[UIBarButtonItem alloc]initWithTitle:@"OK" style:UIBarButtonItemStyleDone target:self action:@selector(OK)],
+//                           nil];
+    [numberToolbar sizeToFit];
+    //[mainBg addSubview:numberToolbar];
+    _txtfdsaveETAEnggTime.inputAccessoryView=numberToolbar;
+  
+;
+    
+    datepicker = [[UIDatePicker alloc] initWithFrame:CGRectZero];
+    datepicker.datePickerMode = UIDatePickerModeDate;
+    datepicker.backgroundColor = [UIColor whiteColor];
+    [datepicker addTarget:self action:@selector(dateUpdated:) forControlEvents:UIControlEventValueChanged];
+    //txtStarDate.inputView = datepicker;
+}
+
+#pragma mark - Time Picker Method
+-(void)Timepicker:(id)sender
+{
+    
+    if (numberToolbar==nil) {
+        numberToolbar = [[UIToolbar alloc]initWithFrame:CGRectMake(0,320, 310, 50)];
+    }
+    numberToolbar.barStyle = UIBarStyleBlackTranslucent;
+    numberToolbar.barTintColor=[UIColor lightGrayColor];
+    numberToolbar.items = [NSArray arrayWithObjects:
+                           [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)],
+                           [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil],
+                           [[UIBarButtonItem alloc]initWithTitle:@"OK" style:UIBarButtonItemStyleDone target:self action:@selector(OK)],
+                           nil];
+    [numberToolbar sizeToFit];
+  
+    _txtfdsaveETAEnggTime.inputAccessoryView=numberToolbar;
+    //[mainBg addSubview:numberToolbar];
+    
+    timePicker= [[UIDatePicker alloc] initWithFrame:CGRectZero];
+    timePicker.datePickerMode = UIDatePickerModeTime;
+    timePicker.backgroundColor = [UIColor whiteColor];
+    [timePicker addTarget:self action:@selector(timeUpdated:) forControlEvents:UIControlEventValueChanged];
+    timePicker.minuteInterval = 5;
+    _txtfdsaveETAEnggTime.inputView=timePicker;
+}
+#pragma mark - Ok / cancel
+-(void)cancel
+{
+    
+    [_txtfdsaveETAEnggTime resignFirstResponder];
+    
+    
+}
+-(void)OK
+{
+    
+    
+    [_txtfdsaveETAEnggTime resignFirstResponder];
+    
+    
+     }
+
+
 @end

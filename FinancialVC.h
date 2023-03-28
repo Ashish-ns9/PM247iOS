@@ -16,7 +16,8 @@
     UITextField *Activetxtfld;
     UIView *popUpVW;
     NSArray *arrFeedTblPopup;
-    
+    NSMutableArray *arrPayments;
+
     NSURLConnection *connFinancialDetails;
     NSString *strIdentifier;
     NSMutableData *_responseData;
@@ -74,6 +75,7 @@
 //- (IBAction)pressCalculate:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnSubmit;
+@property (strong, nonatomic) IBOutlet UIButton *btnPaymentDetail;
 
 //- (IBAction)pressSubmit:(id)sender;
 - (IBAction)MoreNoteClick:(UIButton *)sender;

@@ -48,10 +48,13 @@
 
 @property (nonatomic, weak)IBOutlet id<DSLCalendarViewDelegate>delegate;
 @property (nonatomic, weak)IBOutlet id<DSLCalendarViewDataSource>datasource;
+
 @property (nonatomic, copy) NSDateComponents *visibleMonth;
 @property (nonatomic, strong) DSLCalendarRange *selectedRange;
 @property (nonatomic, assign) BOOL showDayCalloutView;
 @property(retain,nonatomic)NSDictionary *EventsDic;
+
+
 
 
 
@@ -61,6 +64,8 @@
 + (Class)dayViewClass;
 
 -(DSLCalendarView *)initWithDatesWithEvent:(NSDictionary *)dic;
+
+-(DSLCalendarView *)initWithDatesWithcolor:(NSDictionary *)dic1;
 
 
 - (void)setVisibleMonth:(NSDateComponents *)visibleMonth animated:(BOOL)animated;
@@ -79,7 +84,8 @@
 - (void)calendarView:(DSLCalendarView *)calendarView willChangeToVisibleMonth:(NSDateComponents*)month duration:(NSTimeInterval)duration;
 - (void)calendarView:(DSLCalendarView *)calendarView didChangeToVisibleMonth:(NSDateComponents*)month;
 - (DSLCalendarRange*)calendarView:(DSLCalendarView*)calendarView didDragToDay:(NSDateComponents*)day selectingRange:(DSLCalendarRange*)range;
-- (BOOL)calendarView:(DSLCalendarView *)calendarView shouldAnimateDragToMonth:(NSDateComponents*)month;
+- (BOOL)calendarView:(DSLCalendarView *)calendarView
+shouldAnimateDragToMonth:(NSDateComponents*)month;
 -(void)NewVisibleMonthWillCome:(NSDateComponents*)month;
 @end
 

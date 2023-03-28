@@ -237,6 +237,7 @@
 #pragma mark - Submit Press Method
 - (IBAction)btnSubmitapped:(id)sender
 {
+    
     [_dicApplianceData setValue:_txtLocation.text forKey:@"Location"];
     [_dicApplianceData setValue:_txtApplianceType.text forKey:@"ApplianceType"];
     [_dicApplianceData setValue:_txtApplianceMake.text forKey:@"ApplianceMake"];

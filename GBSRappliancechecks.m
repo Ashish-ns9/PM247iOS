@@ -101,6 +101,7 @@
 #pragma mark - Submit Press Method
 - (IBAction)btnSubmitTapped:(id)sender
 {
+    
     [_dicAppliaceChk setValue:[_segPC1 titleForSegmentAtIndex:_segPC1.selectedSegmentIndex] forKey:@"flueAtmospheric"];
     [_dicAppliaceChk setValue:[_segPC2 titleForSegmentAtIndex:_segPC2.selectedSegmentIndex] forKey:@"ventilationSize"];
     [_dicAppliaceChk setValue:[_segPC3 titleForSegmentAtIndex:_segPC3.selectedSegmentIndex] forKey:@"waterFuelSound"];

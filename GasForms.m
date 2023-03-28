@@ -339,6 +339,7 @@
 
 -(IBAction)acceptPressPaperwork:(UIButton *)sender
 {
+    
     UIAlertController *controller = [UIAlertController alertControllerWithTitle: @""
                                                                         message:@"Do you accept this agreement via paperwork ?"
                                                                  preferredStyle: UIAlertControllerStyleAlert];
@@ -806,6 +807,7 @@
         [bgVwNoteDesc addSubview:btnDropbox];
     }else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
        [bgVwNoteDesc addSubview:btnDropbox];
     }else{
        [bgVwNoteDesc addSubview:btnEmail];

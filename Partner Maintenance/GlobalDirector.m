@@ -35,7 +35,8 @@ static GlobalDirector *singletonObject = nil;
 
 #pragma mark- Send simple request with prams
 
--(void)SyncRequestPostWithJson:(int)reqID withPrams:(NSMutableDictionary*)dictPrams andCompletionHandler:(void (^)(NSDictionary *result))completionHandler{
+-(void)SyncRequestPostWithJson:(int)reqID withPrams:(NSMutableDictionary*)dictPrams andCompletionHandler:(void (^)(NSDictionary *result))completionHandler
+{
     
     // [ProgressHUD show:@"Please wait..." Interaction:NO];
     
@@ -610,7 +611,23 @@ static GlobalDirector *singletonObject = nil;
         case REQUEST_paRes:
             return [NSString stringWithFormat:@"%sSecure3D?",conn_url];
             break;
+            
+        case REQUEST_SaveSquarePaymentDetailAndSendSms:
+            return [NSString stringWithFormat:@"%sSaveSquarePaymentDetailAndSendSms?",conn_url];
+            break;
+            
+        case REQUEST_GetSquareUpInvoiceID:
+            return [NSString stringWithFormat:@"%sGetSquareUpInvoiceID?",conn_url];
+            break;
+            
+        case REQUEST_GetSquareUpPaymentDetails:
+            return [NSString stringWithFormat:@"%sGetSquareUpPaymentDetails?",conn_url];
+            break;
      
+        case REQUEST_GetInvoice:
+            return [NSString stringWithFormat:@"%sGetInvoice?",conn_url];
+            break;
+            
         default:
             return @"";
             break;
@@ -624,7 +641,8 @@ static GlobalDirector *singletonObject = nil;
 
 
 #pragma mark String Checking null
-+(NSString*)ReplaceStringNull:(id)str{
++(NSString*)ReplaceStringNull:(id)str
+{
     
     NSString *st=[NSString stringWithFormat:@"%@",str];
     

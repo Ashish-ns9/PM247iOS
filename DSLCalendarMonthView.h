@@ -30,12 +30,13 @@
  */
 
 #import <UIKit/UIKit.h>
-
+#import "HelpWidgetVC.h"
 @class DSLCalendarDayView;
 @class DSLCalendarRange;
 
 
 @interface DSLCalendarMonthView : UIView
+
 
 @property (nonatomic, copy, readonly) NSDateComponents *month;
 @property (nonatomic, strong, readonly) NSSet *dayViews;

@@ -45,8 +45,18 @@
 
 
 @implementation DSLCalendarMonthView {
+    
     CGFloat _dayViewHeight;
     __strong Class _dayViewClass;
+    int *count;
+    int *i;
+    int *nextcount;
+    NSString *previouskey;
+    NSString *previousdata;
+    NSString *key1;
+    NSInteger*navigationCount;
+  
+    
 }
 
 
@@ -58,9 +68,12 @@
 
 // Designated initialiser
 - (id)initWithMonth:(NSDateComponents*)month width:(CGFloat)width dayViewClass:(Class)dayViewClass dayViewHeight:(CGFloat)dayViewHeight WithEvents:(NSDictionary *)EventsInfo{
+    
+    
+    
     self = [super initWithFrame:CGRectMake(0, 0, width, dayViewHeight)];
     if (self != nil) {
-        // Initialise properties
+
         _month = [month copy];
         _dayViewHeight = dayViewHeight;
         _dayViewsDictionary = [[NSMutableDictionary alloc] init];
@@ -76,98 +89,256 @@
 
 
 - (void)createDayViewsWithEvents:(NSDictionary*)Events {
-    NSInteger const numberOfDaysPerWeek = 7;
     
-    NSDateComponents *day = [[NSDateComponents alloc] init];
-    day.calendar = self.month.calendar;
-    day.day = 1;
-    day.month = self.month.month;
-    day.year = self.month.year;
     
-    NSDate *firstDate = [day.calendar dateFromComponents:day];
-    day = [firstDate dslCalendarView_dayWithCalendar:self.month.calendar];
     
-
-    NSInteger numberOfDaysInMonth = [day.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:[day date]].length;
     
-
-    NSInteger startColumn = day.weekday - day.calendar.firstWeekday;
-    if (startColumn < 0) {
-        startColumn += numberOfDaysPerWeek;
-    }
-
-    NSArray *columnWidths = [self calculateColumnWidthsForColumnCount:numberOfDaysPerWeek];
-    CGPoint nextDayViewOrigin = CGPointZero;
-    for (NSInteger column = 0; column < startColumn; column++) {
-        nextDayViewOrigin.x += [[columnWidths objectAtIndex:column] floatValue];
-    }
-
-    do {
-        for (NSInteger column = startColumn; column < numberOfDaysPerWeek; column++) {
-            if (day.month == self.month.month) {
-                CGRect dayFrame = CGRectZero;
-                dayFrame.origin = nextDayViewOrigin;
-                dayFrame.size.width = [[columnWidths objectAtIndex:column] floatValue];
-                dayFrame.size.height = _dayViewHeight;
-                
-                DSLCalendarDayView *dayView = [[DSLCalendarDayView alloc] initWithFrame:dayFrame];
-                dayView.day = day;
-                
-                  //NSLog(@"%@",Events);
-                for (NSString *key in [Events allKeys]) {
-                  //  NSLog(@"%@",key);
-                    if ([key isEqualToString:[NSString stringWithFormat:@"%ld/%ld/%ld",(long)day.day,(long)day.month,(long)day.year]]) {
-                        dayView.Event=[NSString stringWithFormat:@"%@",[Events valueForKey:key]];
-                        dayView.backgroundColor=[UIColor redColor];
-                        dayView.selectionState=DSLCalendarDayViewEventSelection;
-                        
-                        
-                    }
-                  
-                    
-                }
-                
-              //  NSLog(@"%@",dayView.day);
+    NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"calenderthemecolordetail"];
+    UIButton*btnJobDetail;
+    
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
+    {
         
-                switch (column) {
-                    case 0:
-                        dayView.positionInWeek = DSLCalendarDayViewStartOfWeek;
-                        break;
-                        
-                    case numberOfDaysPerWeek - 1:
-                        dayView.positionInWeek = DSLCalendarDayViewEndOfWeek;
-                        break;
-                        
-                    default:
-                        dayView.positionInWeek = DSLCalendarDayViewMidWeek;
-                        break;
-                }
-                
-                [self.dayViewsDictionary setObject:dayView forKey:[self dayViewKeyForDay:day]];
-                [self addSubview:dayView];
-            }
-            
-            day.day = day.day + 1;
-            
+        NSInteger const numberOfDaysPerWeek = 7;
+        
+        NSDateComponents *day = [[NSDateComponents alloc] init];
+        day.calendar = self.month.calendar;
+        day.day = 1;
+        day.month = self.month.month;
+        day.year = self.month.year;
+        
+        NSDate *firstDate = [day.calendar dateFromComponents:day];
+        day = [firstDate dslCalendarView_dayWithCalendar:self.month.calendar];
+        
+
+        NSInteger numberOfDaysInMonth = [day.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:[day date]].length;
+        
+
+        NSInteger startColumn = day.weekday - day.calendar.firstWeekday;
+        if (startColumn < 0) {
+            startColumn += numberOfDaysPerWeek;
+        }
+
+        NSArray *columnWidths = [self calculateColumnWidthsForColumnCount:numberOfDaysPerWeek];
+        CGPoint nextDayViewOrigin = CGPointZero;
+        for (NSInteger column = 0; column < startColumn; column++) {
             nextDayViewOrigin.x += [[columnWidths objectAtIndex:column] floatValue];
         }
-        
-        nextDayViewOrigin.x = 0;
-        nextDayViewOrigin.y += _dayViewHeight;
-        startColumn = 0;
-    } while (day.day <= numberOfDaysInMonth);
-    
-    CGRect fullFrame = CGRectZero;
-    fullFrame.size.height = nextDayViewOrigin.y;
-    for (NSNumber *width in columnWidths) {
-        fullFrame.size.width += width.floatValue;
-    }
-    self.frame = fullFrame;
-}
 
+        do {
+            for (NSInteger column = startColumn; column < numberOfDaysPerWeek; column++) {
+                if (day.month == self.month.month) {
+                    CGRect dayFrame = CGRectZero;
+                    dayFrame.origin = nextDayViewOrigin;
+                    dayFrame.size.width = [[columnWidths objectAtIndex:column] floatValue];
+                    dayFrame.size.height = _dayViewHeight;
+                    
+                    DSLCalendarDayView *dayView = [[DSLCalendarDayView alloc] initWithFrame:dayFrame];
+                    dayView.day = day;
+                    
+                      NSLog(@"%@",Events);
+                    for (NSString *key in [Events allKeys]) {
+                        NSLog(@"%@",key);
+                        
+                        if ([key isEqualToString:[NSString stringWithFormat:@"%ld/%ld/%ld",(long)day.day,(long)day.month,(long)day.year]]) {
+                            dayView.Event=[NSString stringWithFormat:@"%@",[Events valueForKey:key]];
+                            dayView.backgroundColor=[UIColor redColor];
+                            dayView.selectionState=DSLCalendarDayViewEventSelection;
+                            
+                            
+                        }
+                      
+                        
+                    }
+                    
+                  //  NSLog(@"%@",dayView.day);
+            
+                    switch (column) {
+                        case 0:
+                            dayView.positionInWeek = DSLCalendarDayViewStartOfWeek;
+                            break;
+                            
+                        case numberOfDaysPerWeek - 1:
+                            dayView.positionInWeek = DSLCalendarDayViewEndOfWeek;
+                            break;
+                            
+                        default:
+                            dayView.positionInWeek = DSLCalendarDayViewMidWeek;
+                            break;
+                    }
+                    
+                    [self.dayViewsDictionary setObject:dayView forKey:[self dayViewKeyForDay:day]];
+                    [self addSubview:dayView];
+                }
+                
+                day.day = day.day + 1;
+                
+                nextDayViewOrigin.x += [[columnWidths objectAtIndex:column] floatValue];
+            }
+            
+            nextDayViewOrigin.x = 0;
+            nextDayViewOrigin.y += _dayViewHeight;
+            startColumn = 0;
+        } while (day.day <= numberOfDaysInMonth);
+        
+        CGRect fullFrame = CGRectZero;
+        fullFrame.size.height = nextDayViewOrigin.y;
+        for (NSNumber *width in columnWidths) {
+            fullFrame.size.width += width.floatValue;
+        }
+        self.frame = fullFrame;
+    }
+    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
+    {
+        
+        
+        
+        NSInteger const numberOfDaysPerWeek = 7;
+        
+        NSDateComponents *day = [[NSDateComponents alloc] init];
+        day.calendar = self.month.calendar;
+        day.day = 1;
+        day.month = self.month.month;
+        day.year = self.month.year;
+            
+        
+        NSDate *firstDate = [day.calendar dateFromComponents:day];
+        day = [firstDate dslCalendarView_dayWithCalendar:self.month.calendar];
+        
+
+        NSInteger numberOfDaysInMonth = [day.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:[day date]].length;
+        
+
+        NSInteger startColumn = day.weekday - day.calendar.firstWeekday;
+        if (startColumn < 0) {
+            startColumn += numberOfDaysPerWeek;
+        }
+
+        NSArray *columnWidths = [self calculateColumnWidthsForColumnCount:numberOfDaysPerWeek];
+        CGPoint nextDayViewOrigin = CGPointZero;
+        for (NSInteger column = 0; column < startColumn; column++) {
+            nextDayViewOrigin.x += [[columnWidths objectAtIndex:column] floatValue];
+        }
+
+        do {
+            for (NSInteger column = startColumn; column < numberOfDaysPerWeek; column++) {
+                if (day.month == self.month.month) {
+                    
+                    
+                    
+                    CGRect dayFrame = CGRectZero;
+                    dayFrame.origin = nextDayViewOrigin;
+                    dayFrame.size.width = [[columnWidths objectAtIndex:column] floatValue];
+                    dayFrame.size.height = _dayViewHeight;
+                    
+                    DSLCalendarDayView *dayView = [[DSLCalendarDayView alloc] initWithFrame:dayFrame];
+                    dayView.day = day;
+                    
+                    NSMutableArray* colorArray = [[NSMutableArray alloc] init];
+                    NSMutableArray* colorArray2 = [[NSMutableArray alloc] init];
+                    if ( count == 0)
+                    {
+                        
+                    }
+
+                    else
+                    {
+                        colorArray =  colorArray2;
+                    }
+                    
+                    btnJobDetail=[UIButton buttonWithType:UIButtonTypeCustom];
+                    btnJobDetail.frame=CGRectMake(2, 2, 18, 18);
+
+                    [btnJobDetail setBackgroundImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
+                    [btnJobDetail addTarget:self action:@selector(jobDetail:) forControlEvents:UIControlEventTouchUpInside];
+                    
+              
+               
+         for (NSString *key in [Events allKeys])
+             
+                    {
+                        
+                        NSMutableDictionary *Eventsdic1  =  [key substringWithRange:NSMakeRange(0,8)];
+                        NSMutableDictionary *Eventsdic2  =  [key substringWithRange:NSMakeRange(0,9)];
+                        NSString *prefixdata = Eventsdic1;
+                        NSString *prefixdata2= Eventsdic2;
+                    
+                        if ([prefixdata isEqualToString:[NSString stringWithFormat:@"%ld/%ld/%ld",(long)day.day,(long)day.month,(long)day.year]]) {
+                            dayView.Event=[NSString stringWithFormat:@"%@",[Events valueForKey:key]];
+                
+                            dayView.backgroundColor=[UIColor orangeColor];
+                            dayView.selectionState=DSLCalendarDayViewEventSelection;
+                            
+                            
+                        }
+                        
+                        if ([prefixdata2 isEqualToString:[NSString stringWithFormat:@"%ld/%ld/%ld",(long)day.day,(long)day.month,(long)day.year]]) {
+                            dayView.Event=[NSString stringWithFormat:@"%@",[Events valueForKey:key]];
+                
+                            dayView.backgroundColor=[UIColor orangeColor];
+                            dayView.selectionState=DSLCalendarDayViewEventSelection;
+                            
+                            
+                        }
+                      
+                        
+                    }
+                      
+                        
+                         
+               
+            
+                    switch (column) {
+                        case 0:
+                            dayView.positionInWeek = DSLCalendarDayViewStartOfWeek;
+                            break;
+                            
+                        case numberOfDaysPerWeek - 1:
+                            dayView.positionInWeek = DSLCalendarDayViewEndOfWeek;
+                            break;
+                            
+                        default:
+                            dayView.positionInWeek = DSLCalendarDayViewMidWeek;
+                            break;
+                    }
+                    
+                    [self.dayViewsDictionary setObject:dayView forKey:[self dayViewKeyForDay:day]];
+                    [self addSubview:dayView];
+                }
+                
+                day.day = day.day + 1;
+                
+                nextDayViewOrigin.x += [[columnWidths objectAtIndex:column] floatValue];
+            }
+            
+            nextDayViewOrigin.x = 0;
+            nextDayViewOrigin.y += _dayViewHeight;
+            startColumn = 0;
+        } while (day.day <= numberOfDaysInMonth);
+        
+        CGRect fullFrame = CGRectZero;
+        fullFrame.size.height = nextDayViewOrigin.y;
+        for (NSNumber *width in columnWidths) {
+            fullFrame.size.width += width.floatValue;
+        }
+        self.frame = fullFrame;
+    }
+    
+    }
+
+
+-(void)jobDetail:(UIButton *)sender
+{
+    UIEvent* event;
+//    [self createDayViewsWithEvents:(NSDictionary *)event];
+
+    
+}
 
 - (void)updateDaySelectionStatesForRange:(DSLCalendarRange*)range andEvents:(NSDictionary *)Events
 {
+    
     for (DSLCalendarDayView *dayView in self.dayViews) {
         if ([range containsDate:dayView.dayAsDate]) {
             BOOL isStartOfRange = [range.startDay isEqual:dayView.day];
@@ -189,9 +360,7 @@
         
         else {
             
-          
-            
-            
+ 
             NSDateComponents *day = [[NSDateComponents alloc] init];
             day.calendar = self.month.calendar;
             day.day = 1;
@@ -213,10 +382,7 @@
                 NSLog(@"%d/%d/%d",(int)day.day,(int)day.month,(int)day.year);
                 
                 if ([key isEqualToString:[NSString stringWithFormat:@"%d/%d/%d",(int)day.day,(int)day.month,(int)day.year]]) {
-                    
-                    
-                   
-                    
+           
                     dayView.selectionState=DSLCalendarDayViewEventSelection;
                     
                   

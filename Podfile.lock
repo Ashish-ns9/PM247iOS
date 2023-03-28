@@ -60,10 +60,14 @@ PODS:
   - SDWebImage (3.8.3):
     - SDWebImage/Core (= 3.8.3)
   - SDWebImage/Core (3.8.3)
+  - SquareBuyerVerificationSDK (1.3.0)
+  - SquareInAppPaymentsSDK (1.3.0)
 
 DEPENDENCIES:
   - Firebase/Messaging
   - SDWebImage (~> 3.8)
+  - SquareBuyerVerificationSDK
+  - SquareInAppPaymentsSDK
 
 SPEC REPOS:
   trunk:
@@ -79,6 +83,8 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - SDWebImage
+    - SquareBuyerVerificationSDK
+    - SquareInAppPaymentsSDK
 
 SPEC CHECKSUMS:
   Firebase: c23a36d9e4cdf7877dfcba8dd0c58add66358999
@@ -93,7 +99,9 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   Protobuf: 7327d4444215b5f18e560a97f879ff5503c4581c
   SDWebImage: a72e880a8fe0f7fc31efe15aaed443c074d2a80c
+  SquareBuyerVerificationSDK: 6a73cc3b073d8e613cb1fe8643600ff9ac4d6373
+  SquareInAppPaymentsSDK: 0cc9fd96e99710a3158362dabb2577416cf8e379
 
-PODFILE CHECKSUM: feac808b2089789f8ca621dcd4854b5dbace32fb
+PODFILE CHECKSUM: c3c3454093c6da46202ab73b726d2ad2bf03d8e7
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3

@@ -36,6 +36,7 @@
 #pragma mark - Submit Press  Method
 - (IBAction)btnSubmitapped:(id)sender
 {
+    
     [_dicWarningDetails setValue:[_segGasEscape titleForSegmentAtIndex:_segGasEscape.selectedSegmentIndex] forKey:@"GasEscape"];
     [_dicWarningDetails setValue:_txtLocation.text  forKey:@"Location"];
     [_dicWarningDetails setValue:_txtApplianceType.text  forKey:@"ApplianceType"];

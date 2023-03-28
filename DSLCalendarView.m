@@ -55,6 +55,7 @@
 
 @implementation DSLCalendarView
 {
+    
     CGFloat _dayViewHeight;
     NSDateComponents *_visibleMonth;
 }
@@ -90,6 +91,8 @@
 
 -(DSLCalendarView *)initWithDatesWithEvent:(NSDictionary *)dic{
     
+    
+    
     _EventsDic=dic;
     
     if (self == [super initWithFrame:CGRectMake(0, 100, 322, 284)]) {
@@ -103,18 +106,9 @@
 }
 
 
+
 - (void)commonInit {
-    
-    
-   
-    
-    
-     // NSLog(@"Commes from view controller ::-%@",_EventsDic);
-    
-    
-//    if ([_datasource respondsToSelector:@selector(EventsForCalendarMonth)]) {
-//       _EventsDic=[_datasource EventsForCalendarMonth];
-//    }
+
     
     _datasource=nil;
     _delegate=nil;
@@ -132,6 +126,7 @@
     _showDayCalloutView = YES;
     
     self.monthSelectorView = [[[self class] monthSelectorViewClass] view];
+    
     self.monthSelectorView.backgroundColor = [UIColor clearColor];
     self.monthSelectorView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
     [self addSubview:self.monthSelectorView];
@@ -163,6 +158,7 @@
 }
 
 - (void) setDatasource:(id<DSLCalendarViewDataSource>)datasource{
+    
     if (datasource != _datasource){ // Add breakpoint here to see when set is called.
         datasource = datasource;
     }
@@ -173,6 +169,7 @@
 
 
 -(void)setEventsDic:(NSDictionary *)EventsDic{
+    
     
     _EventsDic=EventsDic;
     
@@ -193,13 +190,18 @@
 }
 
 + (Class)dayViewClass {
+    
     return [DSLCalendarDayView class];
 }
 
+
 - (void)setSelectedRange:(DSLCalendarRange *)selectedRange {
+    
+    
     _selectedRange = selectedRange;
     
     for (DSLCalendarMonthView *monthView in self.monthViews.allValues) {
+        
         NSLog(@"monthView :%@",monthView);
         //[monthView updateDaySelectionStatesForRange:self.selectedRange andEvents:_EventsDic];
     }
@@ -239,6 +241,7 @@
 - (void)setVisibleMonth:(NSDateComponents *)visibleMonth animated:(BOOL)animated
 {
     
+    
     NSDateComponents *fromMonth = [_visibleMonth copy];
     _visibleMonth = [visibleMonth.date dslCalendarView_monthWithCalendar:self.visibleMonth.calendar];
 
@@ -247,6 +250,7 @@
     
     
 }
+
 
 
 #pragma mark - Events
@@ -262,8 +266,10 @@
 
 - (void)didTapMonthForward:(id)sender {
     
+    
     NSDateComponents *newMonth = self.visibleMonth;
     newMonth.month++;
+    
      [self.delegate NewVisibleMonthWillCome:newMonth];
     [self setVisibleMonth:newMonth animated:YES];
 }
@@ -272,6 +278,7 @@
 #pragma mark - 
 
 - (void)updateMonthLabelMonth:(NSDateComponents*)month {
+    
     
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -295,6 +302,7 @@
 
 - (DSLCalendarMonthView*)cachedOrCreatedMonthViewForMonth:(NSDateComponents*)month {
     
+    
     month = [month.calendar components:NSCalendarUnitCalendar | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday fromDate:month.date];
 
     NSString *monthViewKey = [self monthViewKeyForMonth:month];
@@ -304,8 +312,10 @@
     // NSLog(@"Month view called ::-%@",_EventsDic);
     
     if (monthView == nil) {
+        _EventsDic;
         
         monthView = [[[[self class] monthViewClass] alloc] initWithMonth:month width:self.bounds.size.width dayViewClass:[[self class] dayViewClass] dayViewHeight:_dayViewHeight WithEvents:_EventsDic];
+        
         [self.monthViews setObject:monthView forKey:monthViewKey];
         [self.monthContainerViewContentView addSubview:monthView];
 
@@ -320,6 +330,7 @@
 
 
 - (void)positionViewsForMonth:(NSDateComponents*)month fromMonth:(NSDateComponents*)fromMonth animated:(BOOL)animated {
+    
     
     fromMonth = [fromMonth copy];
     month = [month copy];
@@ -337,6 +348,7 @@
     // Create and position the month views for the target month and those around it
     for (NSInteger monthOffset = -2; monthOffset <= 2; monthOffset += 1)
     {
+        
         
         NSDateComponents *offsetMonth = [month copy];
         offsetMonth.month = offsetMonth.month + monthOffset;
@@ -470,6 +482,7 @@
 
 - (BOOL)monthStartsOnFirstDayOfWeek:(NSDateComponents*)month {
     
+    
     // Make sure we have the components we need to do the calculation
     month = [month.calendar components:NSCalendarUnitCalendar | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday fromDate:month.date];
     
@@ -479,11 +492,16 @@
 
 #pragma mark - Touches
 
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
+    
+    
     DSLCalendarDayView *touchedView = [self dayViewForTouches:touches];
+    
     if (touchedView == nil) {
+        
         self.draggingStartDay = nil;
         return;
     }
@@ -492,26 +510,44 @@
     self.draggingFixedDay = touchedView.day;
     self.draggedOffStartDay = NO;
     
+//    unsigned int flags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+//    NSCalendar* calendar = [NSCalendar currentCalendar];
+//    NSDateComponents* components = [calendar components:flags fromDate:date];
+//    NSDate* dateOnly = [calendar dateFromComponents:components];
+    
   
     NSDateComponents *components = [[NSDateComponents alloc] init];
     [components setDay: _draggingStartDay.day];
+    
     [components setMonth: _draggingStartDay.month];
     [components setYear: _draggingStartDay.year];
     [components setHour: [_draggingStartDay hour]];
     [components setMinute: _draggingStartDay.minute];
+    [components setMinute: _draggingStartDay.second];
+    
+    
     
     NSLog(@"Value of prettyVersion = %ld", (long)_draggingStartDay.day);
     NSLog(@"Value of prettyVersion = %ld", (long)_draggingStartDay.month);
     NSLog(@"Value of prettyVersion = %ld", (long)_draggingStartDay.year);
-    NSString *strJobID1  = [NSString stringWithFormat:@"%ld/%ld/%ld  ",(long) _draggingStartDay.day, _draggingStartDay.month,_draggingStartDay.year];
+    NSString *strJobID1  = [NSString stringWithFormat:@"%ld/%ld/%ld",(long) _draggingStartDay.day, _draggingStartDay.month,_draggingStartDay.year];
     NSLog(@"Value of prettyVersion = %@", strJobID1);
-    NSString *valueToSave = strJobID1;
-    [[NSUserDefaults standardUserDefaults] setObject:valueToSave forKey:@"preferenceName"];
+//    NSString *valueToSave = strJobID1;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd/MM/yyyy"];
+    NSDate *date  = [dateFormatter dateFromString:strJobID1];
+
+    // Convert to new Date Format
+    [dateFormatter setDateFormat:@"dd/MM/yyyy"];
+    NSString *newDate = [dateFormatter stringFromDate:date];
+    [[NSUserDefaults standardUserDefaults] setObject:newDate forKey:@"preferenceName"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     
     DSLCalendarRange *newRange = self.selectedRange;
     if (self.selectedRange == nil) {
+        
         newRange = [[DSLCalendarRange alloc] initWithStartDay:touchedView.day endDay:touchedView.day];
     }
     else if (![self.selectedRange.startDay isEqual:touchedView.day] && ![self.selectedRange.endDay isEqual:touchedView.day]) {
@@ -526,6 +562,7 @@
     
     if ([self.delegate respondsToSelector:@selector(calendarView:didDragToDay:selectingRange:)]) {
         
+        
         newRange = [self.delegate calendarView:self didDragToDay:touchedView.day selectingRange:newRange];
     }
     self.selectedRange = newRange;
@@ -536,6 +573,8 @@
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    
     if (self.draggingStartDay == nil) {
         return;
     }
@@ -556,6 +595,7 @@
     }
 
     if ([self.delegate respondsToSelector:@selector(calendarView:didDragToDay:selectingRange:)]) {
+        
         newRange = [self.delegate calendarView:self didDragToDay:touchedView.day selectingRange:newRange];
     }
     self.selectedRange = newRange;
@@ -618,6 +658,7 @@
 
 - (DSLCalendarDayView*)dayViewForTouches:(NSSet*)touches {
     
+
     if (touches.count != 1) {
         return nil;
     }
@@ -631,6 +672,7 @@
     
     // Work out which day view was touched. We can't just use hit test on a root view because the month views can overlap
     for (DSLCalendarMonthView *monthView in self.monthViews.allValues) {
+        
         
         UIView *view = [monthView hitTest:[touch locationInView:monthView] withEvent:nil];
         if (view == nil) {
@@ -654,7 +696,11 @@
 
 - (void)positionCalloutViewForDayView:(DSLCalendarDayView*)dayView {
     
+    
+    
     if (dayView == nil) {
+        
+        
         [self.dayCalloutView removeFromSuperview];
     }
     else if([self showDayCalloutView]){
@@ -670,9 +716,11 @@
         [self.dayCalloutView configureForDay:dayView.day];
         
         if (self.dayCalloutView.superview == nil) {
+            
             [self addSubview:self.dayCalloutView];
         }
         else {
+            
             [self bringSubviewToFront:self.dayCalloutView];
         }
     }

@@ -67,6 +67,7 @@ AppDelegate *app;
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         return 6;
     }
     else{
@@ -210,6 +211,7 @@ AppDelegate *app;
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
         
+        
         if (row == 0)
         {
             cell.textLabel.text = @"                                Dashboard";
@@ -226,9 +228,9 @@ AppDelegate *app;
         }
         else if (row == 2)
         {
-            
+
             cell.textLabel.text = @"                            EngineerCalendar Availability";
-            
+
             [imgvIcon setFrame:CGRectMake(88,14,23,23)];
             [imgvIcon setImage:[UIImage imageNamed:@"calendar"]];
         }
@@ -721,6 +723,7 @@ AppDelegate *app;
     }
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+        
         if (row == 0)
         {
             
@@ -783,13 +786,13 @@ AppDelegate *app;
                 EngineerCalenderAvialabiltyVC *setavialbilityViewController=[[EngineerCalenderAvialabiltyVC alloc] initWithNibName:@"EngineerCalenderAvialabiltyVC" bundle:Nil];
                 UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:setavialbilityViewController];
                 [revealController setFrontViewController:navigationController animated:YES];
-                
+
             }
             else
             {
                 [revealController revealToggle:self];
             }
-            
+
         }
         else if (row == 3)
         {

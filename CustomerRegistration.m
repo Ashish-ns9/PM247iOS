@@ -14,6 +14,7 @@
 @synthesize btnSlideMenu;
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //_containerView.frame = [self view].frame;
     // Do any additional setup after loading the view from its nib.
     arrFeedTblPopup = [[NSArray alloc] init];
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap)];

@@ -46,6 +46,13 @@
 		18F4D6151B7CA40300F88F1D /* WarningNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18F4D6131B7CA40300F88F1D /* WarningNotice.xib */; };
 		5168F31A27DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5168F31827DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m */; };
 		5168F31B27DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5168F31927DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib */; };
+		AC1809FA291D6FB20043BE2C /* PaymentStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC1809F9291D6FB20043BE2C /* PaymentStoryboard.storyboard */; };
+		AC180A02291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC180A01291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m */; };
+		AC7B2223291D82970062F1D5 /* CreateCustomerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7B2222291D82970062F1D5 /* CreateCustomerVC.m */; };
+		AC7B2226291D84DC0062F1D5 /* CreateOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7B2225291D84DC0062F1D5 /* CreateOrderVC.m */; };
+		AC7B2229291D88010062F1D5 /* CreateInvoiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7B2228291D88010062F1D5 /* CreateInvoiceVC.m */; };
+		AC9CAF05292A931600749F7B /* SquareUpPaymentDetailsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC9CAF02292A931400749F7B /* SquareUpPaymentDetailsVC.m */; };
+		AC9CAF06292A931600749F7B /* SquareUpPaymentDetailsVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC9CAF03292A931500749F7B /* SquareUpPaymentDetailsVC.xib */; };
 		C20EF1F71D6445B60061484F /* CustomerRegistration.m in Sources */ = {isa = PBXBuildFile; fileRef = C20EF1F51D6445B60061484F /* CustomerRegistration.m */; };
 		C20EF1F81D6445B60061484F /* CustomerRegistration.xib in Resources */ = {isa = PBXBuildFile; fileRef = C20EF1F61D6445B60061484F /* CustomerRegistration.xib */; };
 		C20FF1A21E239CA00006B616 /* CreateJobEng.xib in Resources */ = {isa = PBXBuildFile; fileRef = C20FF1A11E239CA00006B616 /* CreateJobEng.xib */; };
@@ -339,6 +346,18 @@
 		5168F31827DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EngineerCalenderAvialabiltyVC.m; sourceTree = "<group>"; };
 		5168F31927DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EngineerCalenderAvialabiltyVC.xib; sourceTree = "<group>"; };
 		7061F5DABE1BD3E9466625FF /* Pods-PM247.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PM247.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PM247/Pods-PM247.debug.xcconfig"; sourceTree = "<group>"; };
+		AC1809F9291D6FB20043BE2C /* PaymentStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PaymentStoryboard.storyboard; sourceTree = "<group>"; };
+		AC180A00291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratePaymentLinkInvoiceVC.h; sourceTree = "<group>"; };
+		AC180A01291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneratePaymentLinkInvoiceVC.m; sourceTree = "<group>"; };
+		AC7B2221291D82970062F1D5 /* CreateCustomerVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateCustomerVC.h; sourceTree = "<group>"; };
+		AC7B2222291D82970062F1D5 /* CreateCustomerVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateCustomerVC.m; sourceTree = "<group>"; };
+		AC7B2224291D84DC0062F1D5 /* CreateOrderVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateOrderVC.h; sourceTree = "<group>"; };
+		AC7B2225291D84DC0062F1D5 /* CreateOrderVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateOrderVC.m; sourceTree = "<group>"; };
+		AC7B2227291D88010062F1D5 /* CreateInvoiceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateInvoiceVC.h; sourceTree = "<group>"; };
+		AC7B2228291D88010062F1D5 /* CreateInvoiceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateInvoiceVC.m; sourceTree = "<group>"; };
+		AC9CAF02292A931400749F7B /* SquareUpPaymentDetailsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SquareUpPaymentDetailsVC.m; sourceTree = "<group>"; };
+		AC9CAF03292A931500749F7B /* SquareUpPaymentDetailsVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SquareUpPaymentDetailsVC.xib; sourceTree = "<group>"; };
+		AC9CAF04292A931600749F7B /* SquareUpPaymentDetailsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SquareUpPaymentDetailsVC.h; sourceTree = "<group>"; };
 		B151F83DA53A580D4C2DE149 /* libPods-PM247.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PM247.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C201BB19204EDF2300D0F79B /* PM247-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PM247-Bridging-Header.h"; sourceTree = "<group>"; };
 		C20EF1F41D6445B60061484F /* CustomerRegistration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerRegistration.h; sourceTree = "<group>"; };
@@ -828,6 +847,33 @@
 				B151F83DA53A580D4C2DE149 /* libPods-PM247.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AC1809F6291D6EB30043BE2C /* New */ = {
+			isa = PBXGroup;
+			children = (
+				AC9CAF01292A930600749F7B /* SquareUp Payment Details */,
+				AC1809F9291D6FB20043BE2C /* PaymentStoryboard.storyboard */,
+				AC180A00291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.h */,
+				AC180A01291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m */,
+				AC7B2221291D82970062F1D5 /* CreateCustomerVC.h */,
+				AC7B2222291D82970062F1D5 /* CreateCustomerVC.m */,
+				AC7B2224291D84DC0062F1D5 /* CreateOrderVC.h */,
+				AC7B2225291D84DC0062F1D5 /* CreateOrderVC.m */,
+				AC7B2227291D88010062F1D5 /* CreateInvoiceVC.h */,
+				AC7B2228291D88010062F1D5 /* CreateInvoiceVC.m */,
+			);
+			name = New;
+			sourceTree = "<group>";
+		};
+		AC9CAF01292A930600749F7B /* SquareUp Payment Details */ = {
+			isa = PBXGroup;
+			children = (
+				AC9CAF04292A931600749F7B /* SquareUpPaymentDetailsVC.h */,
+				AC9CAF02292A931400749F7B /* SquareUpPaymentDetailsVC.m */,
+				AC9CAF03292A931500749F7B /* SquareUpPaymentDetailsVC.xib */,
+			);
+			name = "SquareUp Payment Details";
 			sourceTree = "<group>";
 		};
 		C20EF1F31D6445570061484F /* CustomerRegistration */ = {
@@ -1475,6 +1521,7 @@
 		F4B095741C9000E500DB4A5D /* CUSTOM-THIRDPARTY-CLASS */ = {
 			isa = PBXGroup;
 			children = (
+				AC1809F6291D6EB30043BE2C /* New */,
 				18A006891C059078004D6347 /* Financial_details */,
 				F442A0D81D3F52A200F94663 /* SSKeychain */,
 				F4538D601D38B6AA00F7038F /* Map-Annotation */,
@@ -1751,6 +1798,7 @@
 				F4D86AAA19EBC01C00AE90D6 /* Sources */,
 				F4D86AAB19EBC01C00AE90D6 /* Frameworks */,
 				F4D86AAC19EBC01C00AE90D6 /* Resources */,
+				0B83FA56A05DC80A2260BDAF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1841,6 +1889,7 @@
 				C2CB1C17205285320029A78C /* card_bg@3x.png in Resources */,
 				18F4D6151B7CA40300F88F1D /* WarningNotice.xib in Resources */,
 				F4526EC51DDDF539001AD226 /* icon-72.png in Resources */,
+				AC9CAF06292A931600749F7B /* SquareUpPaymentDetailsVC.xib in Resources */,
 				C2F6429B1FB4362D0040F4AA /* cvc.png in Resources */,
 				F409718B1A8B941C0030766F /* ReCreateJob.xib in Resources */,
 				C2C5130E1D914B200096384F /* ProfileEdit.xib in Resources */,
@@ -1914,6 +1963,7 @@
 				C2B6D61B1D87F22200471CAC /* GasFormcell.xib in Resources */,
 				F4FE328E1A1A004E004E84AE /* DSLCalendarDaySelection-left.png in Resources */,
 				F421ADF01B7DDFF9006403E6 /* GSMCappliancedetails.xib in Resources */,
+				AC1809FA291D6FB20043BE2C /* PaymentStoryboard.storyboard in Resources */,
 				C2CB1C15205285320029A78C /* card_bg.png in Resources */,
 				F40AA88A1A9B22E8008AAAE3 /* AcceptDecline_Agree2.html in Resources */,
 				F4526EC71DDDF539001AD226 /* icon-76.png in Resources */,
@@ -1993,6 +2043,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0B83FA56A05DC80A2260BDAF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PM247/Pods-PM247-frameworks.sh",
+				"${PODS_ROOT}/SquareBuyerVerificationSDK/SquareInAppPaymentsSDKs.framework/SquareBuyerVerificationSDK.framework",
+				"${PODS_ROOT}/SquareInAppPaymentsSDK/SquareInAppPaymentsSDKs.framework/SquareInAppPaymentsSDK.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SquareBuyerVerificationSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SquareInAppPaymentsSDK.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PM247/Pods-PM247-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		BDE939702ADF4E9F78724C59 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2046,6 +2116,7 @@
 				C29D450E1E2F7B5E002C82C6 /* ImageViewCat.m in Sources */,
 				18F4D6001B7C76E700F88F1D /* GasFormAdress.m in Sources */,
 				F4FE32781A1A0032004E84AE /* NSDate+DSLCalendarView.m in Sources */,
+				AC9CAF05292A931600749F7B /* SquareUpPaymentDetailsVC.m in Sources */,
 				F4FE32761A1A0032004E84AE /* DSLCalendarRange.m in Sources */,
 				F410A3341A8A135F006C64DB /* MyAnnotation.m in Sources */,
 				18F4D60F1B7CA3F700F88F1D /* ServicingRecord.m in Sources */,
@@ -2062,6 +2133,7 @@
 				F442A0D71D3F4A3200F94663 /* SSKeychain.m in Sources */,
 				F421AE0C1B7E0EDC006403E6 /* GBSRappliancechecks.m in Sources */,
 				18099ED91AAD7DA400E21486 /* MBProgressHUD.m in Sources */,
+				AC7B2223291D82970062F1D5 /* CreateCustomerVC.m in Sources */,
 				F421AE111B7E0EE9006403E6 /* GBSRfaults.m in Sources */,
 				18F4D60A1B7CA3E600F88F1D /* MaintainanceCheklist.m in Sources */,
 				F421AE071B7E0ECD006403E6 /* GBSRappliancedetails.m in Sources */,
@@ -2087,6 +2159,7 @@
 				C20EF1F71D6445B60061484F /* CustomerRegistration.m in Sources */,
 				183EE5161B4524C8005A985B /* Reachability.m in Sources */,
 				C247D5DB1D6DC91600895EFB /* BaseTableCell.m in Sources */,
+				AC7B2229291D88010062F1D5 /* CreateInvoiceVC.m in Sources */,
 				F4D86ADB19EBC06E00AE90D6 /* Login.m in Sources */,
 				C2B43ACA1E0933E30043D772 /* KLCPopup.m in Sources */,
 				18A97EF31AC2E96E00F10BAD /* ProfileEdit.m in Sources */,
@@ -2097,8 +2170,10 @@
 				F4D86AEA19EBD41A00AE90D6 /* SWRevealViewController.m in Sources */,
 				F43B58011B7CDC2800B5EFF6 /* GasForms.m in Sources */,
 				F421ADFE1B7DE022006403E6 /* GSMCfindings.m in Sources */,
+				AC7B2226291D84DC0062F1D5 /* CreateOrderVC.m in Sources */,
 				F421ADF41B7DE008006403E6 /* GSMCappliancechecks.m in Sources */,
 				C2F1E279200F274D00F0C54F /* PJRSignatureView.m in Sources */,
+				AC180A02291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m in Sources */,
 				F42110C41DDF2C0D00A1C68D /* Customer_EngineerJobDetails.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2207,7 +2282,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.34;
+				MARKETING_VERSION = 2.0.65;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;
 				PROVISIONING_PROFILE = "";
@@ -2358,7 +2433,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.34;
+				MARKETING_VERSION = 2.0.65;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;
 				PROVISIONING_PROFILE = "";
@@ -2394,7 +2469,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.34;
+				MARKETING_VERSION = 2.0.65;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;
 				PROVISIONING_PROFILE = "";

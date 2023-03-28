@@ -15,13 +15,17 @@
 {
    
     NSMutableDictionary *dicUserDetails;
-    UIView *viewForgotPassword;
-    UIButton *btnOk,*btnCancel;
-    UILabel *lblPopUpTitle;
+    NSMutableDictionary *dicUserDetailsafterotp;
+    UIView *viewForgotPassword,*viewTwoFactorAuthentication;
+    UIButton *btnOk,*btnCancel,*btnOk1;
+    UILabel *lblPopUpTitle,*lblPopUpTitle1;
     UITextField *txtPopUpEmailAddress;
-  
+    NSInteger*count;
+    NSString *returnvalue;
+    NSString *userPhoneNumber;
      NSMutableData *_responseData;
     NSURLConnection *connLogin,*connForgetPass;
+    int timeLeft;
     
     UIView *mainBg;
     
@@ -29,6 +33,8 @@
 }
 @property (strong, nonatomic) IBOutlet UILabel *lblUsernamebg;
 @property (strong, nonatomic) IBOutlet UILabel *lblpasswordbg;
+@property (nonatomic, strong) NSTimer *timer;
+
 
 
 @property (strong, nonatomic) IBOutlet UIButton *btnLogin;

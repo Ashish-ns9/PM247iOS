@@ -3,7 +3,6 @@
 //  DefaultSettings.h
 //  Partner Maintenance
 
-
 #ifndef Partner_Maintenance_DefaultSettings_h
 #define Partner_Maintenance_DefaultSettings_h
 
@@ -11,9 +10,29 @@
 // #define conn_url  "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/"
 
 //Stage new azure API
-//#define conn_url "http://0df1-42-111-16-54.ngrok.io/PartnersService.svc/"
-//
+//    #define conn_url "http://218d-103-46-239-130.ngrok.io/PartnersService.svc/"
+
 #define conn_url  "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/"
+
+//#define squareUpBaseURL "https://connect.squareupsandbox.com/v2/"
+//#define squareUpLocationId  "LWYFCYNQJYDV7"
+//#define squareUpApplicationId "sandbox-sq0idb-rgcfZO8hRkKZR8EDOpNuCQ"
+//#define squareUpAccessToken  "EAAAEOWCQg-JI7_vsquofTRkiH5P6bYvjWMnTw1eUTqAFdjzlShzLR5ocaZezZ-A"
+
+
+//Test Mahendra Account
+#define squareUpBaseURL "https://connect.squareupsandbox.com/v2/"
+#define squareUpLocationId  "LN3B806FJJ5CY"
+#define squareUpApplicationId "sandbox-sq0idb-Z5IEv4BrecUJhwCf-9d1zw"
+#define squareUpAccessToken  "EAAAEGbNeznS0jzWJKSgIc7qSVI2bfPGxOr0b9tNZZ7But1qvULid3acsM2CIxM4"
+
+
+//Live Square Up Client
+//#define squareUpBaseURL  "https://connect.squareup.com/v2/"
+//#define squareUpLocationId  "LH5DF4N9CFZPK"
+//#define squareUpApplicationId "sq0idp-3Znix2LDK_rDkwql1fBarg"
+//#define squareUpAccessToken  "EAAAFM2j-JVMj0UtbvZpFPHCD_BVmISy3aCp5HobcqYfFllqgmjv0bJ0j2napQuC"
+
 
 // API Names
 #define REQUEST_ValidateMobileNumber 1
@@ -47,6 +66,12 @@
 #define REQUEST_GetNoteTypeForEngineers 29
 #define REQUEST_paRes 30
 
+#define REQUEST_SaveSquarePaymentDetailAndSendSms 31
+#define REQUEST_GetSquareUpInvoiceID 32
+#define REQUEST_GetSquareUpPaymentDetails 33
+#define REQUEST_GetInvoice 34
+
+
 typedef enum jobStaus
 {
     Book = 1,
@@ -62,8 +87,7 @@ typedef enum jobStaus
     ContinueWithoutAuthorization = 11,
     JobCancelled = 12,
     AbroadJob = 13
-    
-} jobStatus;
+                                      } jobStatus;
 
 typedef enum AgreementSatus {
     
@@ -106,27 +130,26 @@ typedef enum AgreementSatus {
 //#define transactions "transactions"
 
 //term url for stage (3d secure redirect term url for payment)
-#define term_url_segpayresponse "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
-#define sageMerchantSessionKey  "merchant-session-keys"
-#define sagecard_identifiers "card-identifiers"
-#define transactions "transactions"
+    #define term_url_segpayresponse "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
+    #define sageMerchantSessionKey  "merchant-session-keys"
+    #define sagecard_identifiers "card-identifiers"
+    #define transactions "transactions"
 
 
 //Basic profile test (payment test account)
-
-#define Sageconn_url  "https://pi-test.sagepay.com/api/v1/"  //test sage pay url
-#define vendorName "pm247ltd"
-#define integrationKey "E0l8iFAkS0nehVSUrx5AnrrlVWtwjXUDuS93sOJw1uulmsKRxy"
-
-#define integrationPassword "tjnjHmrLIz8QGSRbE2LTHGvzf1TG9xDt2zsyN55fKN58msuFPSNPy1dVJd6qclfem"
-
+//
+//#define Sageconn_url  "https://pi-test.sagepay.com/api/v1/"  //test sage pay url
+//#define vendorName "pm247ltd"
+//#define integrationKey "E0l8iFAkS0nehVSUrx5AnrrlVWtwjXUDuS93sOJw1uulmsKRxy"
+//
+//#define integrationPassword "tjnjHmrLIz8QGSRbE2LTHGvzf1TG9xDt2zsyN55fKN58msuFPSNPy1dVJd6qclfem"
 
 
 //Basic profile test (payment live account)
-//#define Sageconn_url  "https://pi-live.sagepay.com/api/v1/" //test sage pay url
-//#define vendorName "pm247ltd"
-//#define integrationKey "9v7fmp14s7safQjrC7QxfLXtRg9wyF3VqBbbEf8mwPuJ8IOGwF"
-//#define integrationPassword "wAioONamdHXb4ylATCCh09LHDajYjZNJJgfgCSFxdMrYmjAGOE6VpsOpo6jtowvMN"
+#define Sageconn_url  "https://pi-live.sagepay.com/api/v1/" //test sage pay url
+#define vendorName "pm247ltd"
+#define integrationKey "9v7fmp14s7safQjrC7QxfLXtRg9wyF3VqBbbEf8mwPuJ8IOGwF"
+#define integrationPassword "wAioONamdHXb4ylATCCh09LHDajYjZNJJgfgCSFxdMrYmjAGOE6VpsOpo6jtowvMN"
 
 
 

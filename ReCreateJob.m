@@ -514,6 +514,7 @@
 
 -(void)pressRecreateOroceed:(UIButton *)sender
 {
+    
    // [mainBg removeFromSuperview];
     UIButton *btn=(UIButton *)sender;
     
@@ -562,9 +563,11 @@
     else
     {
         
+        
         NSDictionary *user = [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
         
        
+        
         
         NSString *strjobidd=[NSString stringWithFormat:@"%ld",(long)btn.tag];
         
@@ -628,11 +631,14 @@
 -(void)cancel
 {
     
+    
    [self.view endEditing:YES];
     
 }
 -(void)OK
 {
+    
+    
    [self.view endEditing:YES];
     
      }
@@ -707,6 +713,7 @@
 #pragma mark - Time Updated Method
 - (void) timeUpdated:(UIDatePicker *)datePicker
 {
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"HH:mm"];
     
@@ -873,6 +880,7 @@
 #pragma mark NSURLConnection Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
+    
     _responseData = [[NSMutableData alloc] init];
 }
 
@@ -880,6 +888,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    
     [_responseData appendData:data];
 }
 
@@ -887,6 +896,7 @@
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse
 {
+    
     return nil;
 }
 
@@ -918,6 +928,8 @@
                 
                 if (connection==connRecreateConfirmation)
                 {
+                    
+                    
                     UIAlertController *controller = [UIAlertController alertControllerWithTitle: @""
                                                         message:@"New Job Re-Created successfully"
                                                                                  preferredStyle: UIAlertControllerStyleAlert];
@@ -979,6 +991,7 @@
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
+    
     [_spinner stopAnimating];
     [_spinner setHidesWhenStopped:YES];
     
@@ -1011,8 +1024,6 @@
         tblView.dataSource=self;
         [scrollviewbg addSubview:tblView];
         
-        
-        
         [tblView.layer setBorderColor: [[UIColor lightGrayColor] CGColor]];
         [tblView.layer setBorderWidth: 2.0];
         [tblView.layer setCornerRadius:3.0f];
@@ -1022,7 +1033,7 @@
                               delay:0.0
                             options: UIViewAnimationOptionCurveEaseOut
                          animations:^{
-                             CGRect frame = tblView.frame;
+            CGRect frame = self->tblView.frame;
                              frame.size.height = self.view.frame.size.height/4.0f;
                              tblView.frame = frame;
                          }
@@ -1032,6 +1043,7 @@
     }
     
 }
+
 -(NSArray *)GetDataForPoppup:(UITextField *)fld
 {
     
@@ -1106,10 +1118,10 @@
         
         dispatch_async(dispatch_get_main_queue(), ^(){
             
-            [MBProgressHUD hideAllHUDsForView:Activetxtfld animated:YES];
+            [MBProgressHUD hideAllHUDsForView:self->Activetxtfld animated:YES];
             
-            arrFeedTblPopup=arrData;
-            [tblView reloadData];
+            self->arrFeedTblPopup=arrData;
+            [self->tblView reloadData];
             
         });
         
