@@ -622,11 +622,8 @@ NSString *const kGCMMessageIDKey = @"gcm.message_id";
         
         
         [self.viewController presentViewController: controller animated: YES completion: nil];
-        
-        
-        
-        
     }
+    
     // The user has not enabled any location services. Request background authorization.
     else if (status == kCLAuthorizationStatusNotDetermined) {
         [self.locationManager requestAlwaysAuthorization];

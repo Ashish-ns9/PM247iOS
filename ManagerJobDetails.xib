@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManagerJobDetails">
             <connections>
                 <outlet property="btnAddFixedPrice" destination="mxE-pK-Vjk" id="jtY-tS-pP2"/>
+                <outlet property="btnAddNote" destination="Xc0-1n-XM5" id="AF7-p0-e1m"/>
                 <outlet property="btnAgrrement" destination="Ry9-tb-h4W" id="MDP-hy-J85"/>
                 <outlet property="btnBillingAdress" destination="1g8-9E-Zqd" id="nLR-LY-ciV"/>
                 <outlet property="btnCall" destination="yVY-6d-uPQ" id="k9z-Xa-ncK"/>
@@ -29,6 +30,7 @@
                 <outlet property="btnNotes" destination="fzg-4Q-fPS" id="zcl-aA-HJE"/>
                 <outlet property="btnOwner" destination="PK0-8e-Xa3" id="Ggf-B0-kUT"/>
                 <outlet property="btnOwnerEmailSend" destination="BSM-Js-4Mq" id="jIj-GM-1Z0"/>
+                <outlet property="btnShowTime" destination="d8C-9X-cdc" id="7ma-22-7Se"/>
                 <outlet property="btnSlideMenu" destination="DUR-t6-d7g" id="aZc-rK-sKb"/>
                 <outlet property="btnTenant" destination="SOB-6X-g7E" id="ZQ5-rx-0wW"/>
                 <outlet property="btnchkAvlCopy" destination="48f-rz-gYB" id="hGJ-Xq-KGp"/>
@@ -621,20 +623,61 @@
                         <action selector="pressJobactivationbyEngineer:" destination="-1" eventType="touchUpInside" id="Nd7-zc-KAQ"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="101" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uP9-YL-I67">
-                    <rect key="frame" x="10" y="1755" width="75" height="75"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                    <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
-                    <state key="normal" title="Availabilty" backgroundImage="Requested">
-                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="btnchkAvailTapped:" destination="-1" eventType="touchUpInside" id="bDu-8S-LTn"/>
-                    </connections>
-                </button>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="MzN-LC-n0r">
+                    <rect key="frame" x="10" y="1757" width="75" height="75"/>
+                    <subviews>
+                        <button hidden="YES" opaque="NO" clipsSubviews="YES" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d8C-9X-cdc">
+                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="75" id="Of3-Mo-uaX"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Show Time" backgroundImage="ready">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnShowTimeAction:" destination="-1" eventType="touchUpInside" id="SaK-Cf-XZC"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xc0-1n-XM5">
+                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="75" id="nKd-4J-beR"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
+                            <state key="normal" title="Add Note" backgroundImage="note">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnAddNoteOuterAction:" destination="-1" eventType="touchUpInside" id="BIM-Uh-1jI"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uP9-YL-I67">
+                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="75" id="eVa-xZ-0ou"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
+                            <state key="normal" title="Availabilty" backgroundImage="Requested">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnchkAvailTapped:" destination="-1" eventType="touchUpInside" id="bDu-8S-LTn"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="75" id="iD9-5o-238"/>
+                    </constraints>
+                </stackView>
                 <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="48f-rz-gYB">
                     <rect key="frame" x="242" y="1680" width="75" height="75"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -649,9 +692,8 @@
                         <action selector="btnchkAvailTapped:" destination="-1" eventType="touchUpInside" id="hOl-fV-5B1"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Yz-vX-sL1">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Yz-vX-sL1">
                     <rect key="frame" x="0.0" y="1832" width="320" height="50"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fzg-4Q-fPS">
                             <rect key="frame" x="0.0" y="0.0" width="79" height="50"/>
@@ -731,9 +773,19 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="g2A-mH-dsc"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="9Yz-vX-sL1" secondAttribute="trailing" id="ECH-fS-FIv"/>
+                <constraint firstItem="9Yz-vX-sL1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QrG-em-uVi"/>
+                <constraint firstItem="9Yz-vX-sL1" firstAttribute="top" secondItem="MzN-LC-n0r" secondAttribute="bottom" id="SIx-2V-g1w"/>
+                <constraint firstAttribute="bottom" secondItem="9Yz-vX-sL1" secondAttribute="bottom" id="WiZ-2z-b18"/>
+                <constraint firstItem="MzN-LC-n0r" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="mAu-WK-BLn"/>
+            </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -786,8 +838,10 @@
         <image name="gsformcert" width="32" height="32"/>
         <image name="images-2" width="108" height="116.5"/>
         <image name="nav_bar" width="320" height="44"/>
+        <image name="note" width="75" height="75"/>
         <image name="owneremailsend" width="32" height="32"/>
         <image name="pound" width="32" height="32"/>
+        <image name="ready" width="75" height="75"/>
         <image name="slideIcon" width="47.5" height="46"/>
         <image name="sms" width="24" height="24"/>
     </resources>

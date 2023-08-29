@@ -6,13 +6,10 @@
 #ifndef Partner_Maintenance_DefaultSettings_h
 #define Partner_Maintenance_DefaultSettings_h
 
-//LIVE azure API
-// #define conn_url  "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/"
 
 //Stage new azure API
 //    #define conn_url "http://218d-103-46-239-130.ngrok.io/PartnersService.svc/"
 
-#define conn_url  "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/"
 
 //#define squareUpBaseURL "https://connect.squareupsandbox.com/v2/"
 //#define squareUpLocationId  "LWYFCYNQJYDV7"
@@ -20,6 +17,8 @@
 //#define squareUpAccessToken  "EAAAEOWCQg-JI7_vsquofTRkiH5P6bYvjWMnTw1eUTqAFdjzlShzLR5ocaZezZ-A"
 
 
+//Testing Url
+#define conn_url  "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/"
 //Test Mahendra Account
 #define squareUpBaseURL "https://connect.squareupsandbox.com/v2/"
 #define squareUpLocationId  "LN3B806FJJ5CY"
@@ -27,7 +26,9 @@
 #define squareUpAccessToken  "EAAAEGbNeznS0jzWJKSgIc7qSVI2bfPGxOr0b9tNZZ7But1qvULid3acsM2CIxM4"
 
 
-//Live Square Up Client
+//LIVE azure API
+// #define conn_url  "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/"
+////Live Square Up Client
 //#define squareUpBaseURL  "https://connect.squareup.com/v2/"
 //#define squareUpLocationId  "LH5DF4N9CFZPK"
 //#define squareUpApplicationId "sq0idp-3Znix2LDK_rDkwql1fBarg"
@@ -70,6 +71,20 @@
 #define REQUEST_GetSquareUpInvoiceID 32
 #define REQUEST_GetSquareUpPaymentDetails 33
 #define REQUEST_GetInvoice 34
+
+#define REQUEST_SetEngineerTimer 35
+#define REQUEST_GetEngineerTimer 36
+
+#define REQUEST_GetEngineerList 37
+#define REQUEST_UpdateEngineerCurrentAddressDtl 38
+#define REQUEST_UpdateEngineerProfileDtl 39
+#define REQUEST_GetEngineerProfileDtl 40
+#define REQUEST_SendInvitation 41
+#define REQUEST_UpdateEngLocation 42
+#define REQUEST_GetEngineerByDistance 43
+
+
+
 
 
 typedef enum jobStaus

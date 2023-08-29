@@ -19,9 +19,10 @@
 #import "Map_show.h"
 #import "SignAgreement.h"
 #import "HelpWidgetVC.h"
+#import "PostCodePopupController.h"
 
 
-@interface DashBoard : ViewController<SWRevealViewControllerDelegate,DSLCalendarViewDelegate,DSLCalendarViewDataSource,UIGestureRecognizerDelegate,NSURLConnectionDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface DashBoard : ViewController<SWRevealViewControllerDelegate,DSLCalendarViewDelegate,DSLCalendarViewDataSource,UIGestureRecognizerDelegate,NSURLConnectionDelegate,UITableViewDataSource,UITableViewDelegate, PostCodePopupControllerDelegate>
 
 {
     NSTimer *blinkTimer;
@@ -68,7 +69,7 @@
     UISwipeGestureRecognizer *gestureL,*gestureR;
     NSInteger selectedIndex;
     UIView *myView;
-    NSMutableData *_responseData;
+    NSMutableData *_responseData, *_responseEngineerAvailability;
     
     IBOutlet UILabel *lblNotifications;
     
@@ -77,7 +78,7 @@
     NSMutableDictionary *dicStatusJobid;
     NSMutableArray *JobsOnDate;
     
-    NSURLConnection *connAccept,*connReject;
+    NSURLConnection *connAccept,*connReject, *connGetAvailability;
     
     UIButton *btnActiveSubCategory,*btnActiveCategory;
     CGFloat yOffset;
@@ -109,11 +110,9 @@
     UIPageControl *pageControl;
     UILabel *lblNoJobs;
     
-    
-    
     IBOutlet UIView *Vwtbl;
     DSLCalendarView *cal;
-    
+    NSString *engineerStaffId;
     
     
 }
@@ -143,6 +142,7 @@
 - (IBAction)HelpWidget:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *HelpWidgetBtn;
 
+@property (weak, nonatomic) IBOutlet UIButton *btnOnlineOffline;
 
 
 @property (strong, nonatomic) IBOutlet UIView *vwtab;
@@ -155,12 +155,14 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *btnListandCalender;
 @property (strong, nonatomic) IBOutlet UIImageView *imgVtoggleCalTodo;
+@property (weak, nonatomic) IBOutlet UISwitch *onlineOfflineswitch;
 
 
 -(void)fetchJobdetails;
 
 
 -(IBAction)listandCalenderPress:(id)sender;
+-(IBAction)onlineOfflineSwitchAction:(UISwitch*)sender;
 
 
 @property (strong, nonatomic) IBOutlet UIView *viewUpperSelectionTab;
@@ -214,7 +216,7 @@
 - (IBAction)btnNoAgreementPress:(id)sender;
 - (IBAction)btnSmallRepairAgreementPress:(id)sender;
 - (IBAction)btnBothAgreementPress:(id)sender;
-
+- (IBAction)btnOnlineOfflineAction:(id)sender;
 
 
 

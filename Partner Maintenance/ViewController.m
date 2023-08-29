@@ -213,10 +213,6 @@ CGFloat animatedDistance;
 
 }
 
-
-
-
-
 -(void)getDataFromServerWithUrl:(NSString *)urlString finishLoading:(completed)complete{
     
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -264,11 +260,6 @@ CGFloat animatedDistance;
     
     [_dataTask resume];
 }
-
-
-
-
-
 
 -(void)getAgreement:(NSString *)agreementType loadingCompleted:(finishedLoadingAgrr)finish{
     

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,23 +25,25 @@
                 <outlet property="btnCompleteAssign" destination="mIZ-LM-rf0" id="4LV-3z-ZSP"/>
                 <outlet property="btnCurrent" destination="Fqi-tM-uDN" id="AHh-NC-z2l"/>
                 <outlet property="btnJobsInvitation" destination="r98-oA-Gdc" id="XDr-Y7-8Fn"/>
-                <outlet property="btnListandCalender" destination="tAW-DD-BY1" id="Lre-Fi-WlI"/>
+                <outlet property="btnListandCalender" destination="dtr-1T-2xY" id="lGU-ly-sLv"/>
                 <outlet property="btnLoadMore" destination="aOm-Fu-fL3" id="6C2-39-Hxi"/>
                 <outlet property="btnMessage" destination="vH1-XY-5FJ" id="2Wl-DH-K7H"/>
                 <outlet property="btnNewInvitation" destination="Mgy-c9-Vs0" id="YOp-R0-1wn"/>
                 <outlet property="btnNext" destination="b16-I1-NEa" id="z7S-zy-JSu"/>
                 <outlet property="btnNoAgreement" destination="0aT-ga-eJL" id="tEH-gN-d5h"/>
                 <outlet property="btnNotification" destination="mht-1B-cvZ" id="i9n-zM-Qws"/>
+                <outlet property="btnOnlineOffline" destination="b9K-T6-pT1" id="MPz-aR-zHT"/>
                 <outlet property="btnPrevious" destination="q8E-m9-V8O" id="PFu-0e-GVA"/>
                 <outlet property="btnRefresh" destination="PZm-G7-aHe" id="29c-yz-zqn"/>
                 <outlet property="btnSlideMenu" destination="Z3a-xO-o6G" id="1BO-Jq-GGf"/>
                 <outlet property="btnSmallRepairAgreement" destination="DuZ-mC-OcR" id="N8R-hc-jYI"/>
                 <outlet property="btnaddjob" destination="b9K-T6-pT1" id="9Ay-ob-uO8"/>
-                <outlet property="imgVtoggleCalTodo" destination="YhY-bI-LDe" id="FzI-pD-20g"/>
+                <outlet property="imgVtoggleCalTodo" destination="peY-bx-CXx" id="nPI-rm-ggK"/>
                 <outlet property="lblMesseges" destination="mkH-kI-zp4" id="hLr-bO-Trb"/>
                 <outlet property="lblNotifications" destination="v6U-YM-axs" id="BkT-Ir-Qyo"/>
                 <outlet property="lblRefresh" destination="ZZD-Gt-ReH" id="EEP-kl-475"/>
                 <outlet property="lblTitle" destination="vkv-38-2ng" id="9hx-pp-tx8"/>
+                <outlet property="onlineOfflineswitch" destination="fMq-zL-YdN" id="rmq-i3-kAM"/>
                 <outlet property="selected" destination="bxT-zf-kf9" id="1qv-DJ-x5g"/>
                 <outlet property="selectedEngineer" destination="V1Y-H9-0Sf" id="O8Z-j0-Umi"/>
                 <outlet property="tabvToDoList" destination="SXb-9e-Tg2" id="qdI-gR-wQR"/>
@@ -58,7 +60,7 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X4y-xW-hS3">
@@ -515,8 +517,20 @@
                     <rect key="frame" x="13" y="29" width="20" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hOp-SK-QfM">
+                    <rect key="frame" x="323" y="649" width="60" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="60" id="8MF-gh-oIy"/>
+                        <constraint firstAttribute="height" constant="60" id="UfD-O1-Kes"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <inset key="contentEdgeInsets" minX="-3" minY="-3" maxX="0.0" maxY="0.0"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b9K-T6-pT1">
-                    <rect key="frame" x="252" y="337" width="60" height="60"/>
+                    <rect key="frame" x="325" y="709" width="60" height="60"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="60" id="KJq-gZ-jfK"/>
@@ -528,13 +542,14 @@
                     </state>
                     <connections>
                         <action selector="AddJob:" destination="-1" eventType="touchUpInside" id="ky5-Vt-vBR"/>
+                        <action selector="btnOnlineOfflineAction:" destination="-1" eventType="touchUpInside" id="Zoq-YM-rUs"/>
                     </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Y0t-OY-NgT">
-                    <rect key="frame" x="0.0" y="399" width="320" height="81"/>
+                    <rect key="frame" x="0.0" y="771" width="393" height="81"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aOm-Fu-fL3">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="30"/>
                             <color key="backgroundColor" red="0.9072265625" green="0.30023233259999998" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="beu-eg-gqr"/>
@@ -547,9 +562,9 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="53U-N1-Lpg">
-                            <rect key="frame" x="0.0" y="31" width="320" height="50"/>
+                            <rect key="frame" x="0.0" y="31" width="393" height="50"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="YhY-bI-LDe">
+                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="YhY-bI-LDe">
                                     <rect key="frame" x="142" y="11" width="28" height="27"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
@@ -591,7 +606,7 @@
                                     <rect key="frame" x="39" y="10" width="26" height="29"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tAW-DD-BY1">
+                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tAW-DD-BY1">
                                     <rect key="frame" x="103" y="5" width="107" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
@@ -627,10 +642,76 @@
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="tj5-gf-dX9">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dxg-wj-dre">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="50"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="peY-bx-CXx">
+                                                    <rect key="frame" x="183.66666666666666" y="11.666666666666629" width="26" height="27"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="peY-bx-CXx" secondAttribute="height" multiplier="26:27" id="ChR-CN-Jxi"/>
+                                                        <constraint firstAttribute="width" constant="26" id="skl-z3-F0l"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dtr-1T-2xY" userLabel="calender">
+                                                    <rect key="frame" x="15" y="3" width="363" height="44"/>
+                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <state key="normal">
+                                                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="listandCalenderPress:" destination="-1" eventType="touchUpInside" id="a2B-LZ-qiL"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="dtr-1T-2xY" firstAttribute="leading" secondItem="Dxg-wj-dre" secondAttribute="leading" constant="15" id="046-tw-WAy"/>
+                                                <constraint firstItem="peY-bx-CXx" firstAttribute="centerY" secondItem="Dxg-wj-dre" secondAttribute="centerY" id="2Yg-9Z-pn0"/>
+                                                <constraint firstItem="dtr-1T-2xY" firstAttribute="top" secondItem="Dxg-wj-dre" secondAttribute="top" constant="3" id="DQb-3O-h78"/>
+                                                <constraint firstAttribute="trailing" secondItem="dtr-1T-2xY" secondAttribute="trailing" constant="15" id="i7H-Kn-Ycl"/>
+                                                <constraint firstItem="peY-bx-CXx" firstAttribute="centerX" secondItem="Dxg-wj-dre" secondAttribute="centerX" id="iuA-eq-WaA"/>
+                                                <constraint firstAttribute="bottom" secondItem="dtr-1T-2xY" secondAttribute="bottom" constant="3" id="qUS-Aw-dc5"/>
+                                            </constraints>
+                                        </view>
+                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lPv-pC-stD">
+                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="50"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="clV-Mc-xM0">
+                                                    <rect key="frame" x="10" y="25" width="0.0" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" title="Online" preferredStyle="sliding" translatesAutoresizingMaskIntoConstraints="NO" id="fMq-zL-YdN">
+                                                    <rect key="frame" x="-24.666666666666668" y="9.6666666666666288" width="51.333333333333336" height="31"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="49" id="YJo-Yi-MtQ"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <action selector="onlineOfflineSwitchAction:" destination="-1" eventType="valueChanged" id="M6o-8f-n57"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="fMq-zL-YdN" firstAttribute="centerX" secondItem="lPv-pC-stD" secondAttribute="centerX" id="5bh-x5-ysf"/>
+                                                <constraint firstItem="clV-Mc-xM0" firstAttribute="leading" secondItem="lPv-pC-stD" secondAttribute="leading" constant="10" id="LuZ-rr-49M"/>
+                                                <constraint firstItem="clV-Mc-xM0" firstAttribute="centerY" secondItem="lPv-pC-stD" secondAttribute="centerY" id="MhF-fz-lRI"/>
+                                                <constraint firstItem="fMq-zL-YdN" firstAttribute="centerY" secondItem="lPv-pC-stD" secondAttribute="centerY" id="YX2-N6-WTz"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </stackView>
                             </subviews>
                             <color key="backgroundColor" red="0.13725490200000001" green="0.13725490200000001" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
+                                <constraint firstItem="tj5-gf-dX9" firstAttribute="leading" secondItem="53U-N1-Lpg" secondAttribute="leading" id="Aky-cB-tcY"/>
+                                <constraint firstItem="tj5-gf-dX9" firstAttribute="top" secondItem="53U-N1-Lpg" secondAttribute="top" id="Aux-6C-bvk"/>
+                                <constraint firstAttribute="trailing" secondItem="tj5-gf-dX9" secondAttribute="trailing" id="eMH-Ty-eEm"/>
                                 <constraint firstAttribute="height" constant="50" id="rAx-Bk-aZ1"/>
+                                <constraint firstAttribute="bottom" secondItem="tj5-gf-dX9" secondAttribute="bottom" id="u3e-v8-h1h"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -642,7 +723,9 @@
                 <constraint firstAttribute="bottom" secondItem="Y0t-OY-NgT" secondAttribute="bottom" id="GFg-8W-1Ve"/>
                 <constraint firstAttribute="trailing" secondItem="Y0t-OY-NgT" secondAttribute="trailing" id="Hbe-tu-Q5g"/>
                 <constraint firstItem="Y0t-OY-NgT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="NeK-7Z-lVg"/>
+                <constraint firstAttribute="trailing" secondItem="hOp-SK-QfM" secondAttribute="trailing" constant="10" id="Reg-GJ-bkq"/>
                 <constraint firstAttribute="trailing" secondItem="b9K-T6-pT1" secondAttribute="trailing" constant="8" id="fDT-qX-BEm"/>
+                <constraint firstItem="b9K-T6-pT1" firstAttribute="top" secondItem="hOp-SK-QfM" secondAttribute="bottom" id="tRh-mM-5Uc"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
@@ -654,11 +737,11 @@
                 <viewControllerLayoutGuide type="bottom" id="QNM-1X-c7Q"/>
             </layoutGuides>
             <view key="view" contentMode="scaleToFill" id="QuH-9n-df3">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zc8-Rt-33a">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                         <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </webView>
                 </subviews>
@@ -675,11 +758,11 @@
     </objects>
     <resources>
         <image name="ButtonAdd" width="70" height="70"/>
-        <image name="calendar" width="64" height="64"/>
+        <image name="calendar" width="85.333335876464844" height="85.333335876464844"/>
         <image name="email_icon5.png" width="29" height="19"/>
         <image name="nav_bar" width="320" height="44"/>
         <image name="notify_icon5.png" width="28" height="31"/>
-        <image name="slideIcon" width="47.5" height="46"/>
+        <image name="slideIcon" width="47" height="45.666667938232422"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

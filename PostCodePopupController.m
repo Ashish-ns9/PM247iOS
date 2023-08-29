@@ -352,6 +352,12 @@
 
 -(void)AddressActionSelection:(NSArray*)arr
 {
+    if(_isComeFromOnlineOffline){
+        [arraddresses removeAllObjects];
+        [arraddresses addObjectsFromArray:arr];
+        [_tblView reloadData];
+        return;
+    }
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Postcode"
                                                                              message:nil

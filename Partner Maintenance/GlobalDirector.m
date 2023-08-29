@@ -628,6 +628,37 @@ static GlobalDirector *singletonObject = nil;
             return [NSString stringWithFormat:@"%sGetInvoice?",conn_url];
             break;
             
+        case REQUEST_SetEngineerTimer:
+            return [NSString stringWithFormat:@"%sSetEngineerTimer?",conn_url];
+            break;
+            
+        case REQUEST_GetEngineerTimer:
+            return [NSString stringWithFormat:@"%sGetEngineerTimer?",conn_url];
+            break;
+            
+        case REQUEST_GetEngineerList:
+            return [NSString stringWithFormat:@"%sGetEngineerList?",conn_url];
+            break;
+        case REQUEST_UpdateEngineerCurrentAddressDtl:
+            return [NSString stringWithFormat:@"%sUpdateEngineerCurrentAddressDtl?",conn_url];
+            break;
+        case REQUEST_UpdateEngineerProfileDtl:
+            return [NSString stringWithFormat:@"%sUpdateEngineerProfileDtl?",conn_url];
+            break;
+        case REQUEST_GetEngineerProfileDtl:
+            return [NSString stringWithFormat:@"%sGetEngineerProfileDtl?",conn_url];
+            break;
+        case REQUEST_SendInvitation:
+            return [NSString stringWithFormat:@"%sSendInvitation?",conn_url];
+            break;
+        case REQUEST_UpdateEngLocation:
+            return [NSString stringWithFormat:@"%sUpdateEngineerCurrentAddressDtl?",conn_url];
+            break;
+        case REQUEST_GetEngineerByDistance:
+            return [NSString stringWithFormat:@"%sGetEngineerByDistance?",conn_url];
+            break;
+            
+            
         default:
             return @"";
             break;

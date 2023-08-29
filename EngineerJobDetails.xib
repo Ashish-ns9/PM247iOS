@@ -15,6 +15,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ManagerJobDetails">
             <connections>
                 <outlet property="btnAddFixedPrice" destination="4IE-J7-6Us" id="nIh-yn-Q37"/>
+                <outlet property="btnAddNote" destination="i4Y-Jv-1dL" id="7YD-1U-6mR"/>
                 <outlet property="btnAgrrement" destination="aUs-m1-0F9" id="1Sp-GO-8yV"/>
                 <outlet property="btnBillingAdress" destination="AGw-Yl-cTc" id="UOX-FQ-RLW"/>
                 <outlet property="btnChkAvl" destination="UZu-VS-2PZ" id="cC5-bF-19K"/>
@@ -29,6 +30,7 @@
                 <outlet property="btnMessagePress" destination="3Ed-h5-f0M" id="qSa-kN-AIh"/>
                 <outlet property="btnNotes" destination="2kB-r9-Laz" id="bLE-ri-WZ6"/>
                 <outlet property="btnOwner" destination="OvK-1P-jIt" id="ikF-fG-qXQ"/>
+                <outlet property="btnShowTime" destination="0yE-Q1-Lm8" id="g5h-Kp-M0c"/>
                 <outlet property="btnSlideMenu" destination="at7-lZ-3oh" id="q3F-do-Dnc"/>
                 <outlet property="btnTenant" destination="QlG-2t-314" id="aRm-qm-7NQ"/>
                 <outlet property="helpWidgetBtn" destination="UM4-sO-WiY" id="Zki-qB-gNm"/>
@@ -494,11 +496,14 @@
                         </textField>
                     </subviews>
                 </scrollView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UZu-VS-2PZ">
-                    <rect key="frame" x="245" y="1510" width="70" height="70"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UZu-VS-2PZ">
+                    <rect key="frame" x="235" y="1512" width="75" height="75"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="UZu-VS-2PZ" secondAttribute="height" multiplier="1:1" id="2QS-l0-WvI"/>
+                        <constraint firstAttribute="width" constant="75" id="o59-An-aXD"/>
+                    </constraints>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="12"/>
                     <state key="normal" title="Availabilty" backgroundImage="Requested">
                         <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -508,9 +513,8 @@
                         <action selector="btnchkAvailTapped:" destination="-1" eventType="touchUpInside" id="55g-W2-BGo"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBe-iB-u6v">
-                    <rect key="frame" x="0.0" y="1617" width="320" height="54"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBe-iB-u6v">
+                    <rect key="frame" x="0.0" y="1633" width="320" height="38"/>
                     <color key="backgroundColor" red="0.37647058820000001" green="0.57254901960000004" blue="0.1764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
                     <state key="normal" title="Activate Job">
@@ -520,9 +524,45 @@
                         <action selector="pressJobactivationbyEngineer:" destination="-1" eventType="touchUpInside" id="0fx-jV-zVZ"/>
                     </connections>
                 </button>
-                <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N3E-yK-wDq">
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XNl-dD-Xi5">
+                    <rect key="frame" x="10" y="1453" width="75" height="150"/>
+                    <subviews>
+                        <button opaque="NO" clipsSubviews="YES" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0yE-Q1-Lm8">
+                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="75" id="xMJ-6K-7uJ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" title="Show Time" backgroundImage="ready">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnShowTimeAction:" destination="-1" eventType="touchUpInside" id="nrN-9D-OBS"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="101" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4Y-Jv-1dL">
+                            <rect key="frame" x="0.0" y="75" width="75" height="75"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.89999999999999991" height="1"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="75" id="A4Y-BH-amx"/>
+                                <constraint firstAttribute="width" secondItem="i4Y-Jv-1dL" secondAttribute="height" multiplier="1:1" id="hue-zf-tPU"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="11"/>
+                            <state key="normal" title="Add Image" backgroundImage="note">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnAddNoteOuterAction:" destination="-1" eventType="touchUpInside" id="22G-qX-e2b"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                </stackView>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N3E-yK-wDq">
                     <rect key="frame" x="0.0" y="1617" width="320" height="54"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bDY-wK-Jot">
                             <rect key="frame" x="81" y="3" width="84" height="46"/>
@@ -602,6 +642,9 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="54" id="ICv-5e-kp5"/>
+                    </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ed-h5-f0M">
                     <rect key="frame" x="243" y="31" width="29" height="23"/>
@@ -615,6 +658,18 @@
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="XNl-dD-Xi5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="2x3-Vh-FXl"/>
+                <constraint firstItem="oBe-iB-u6v" firstAttribute="top" secondItem="XNl-dD-Xi5" secondAttribute="bottom" constant="30" id="46F-Vv-Aeo"/>
+                <constraint firstAttribute="bottom" secondItem="N3E-yK-wDq" secondAttribute="bottom" id="9Li-4u-ffe"/>
+                <constraint firstItem="N3E-yK-wDq" firstAttribute="top" secondItem="UZu-VS-2PZ" secondAttribute="bottom" constant="30" id="CGK-fI-TL6"/>
+                <constraint firstItem="oBe-iB-u6v" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="E6W-93-lRJ"/>
+                <constraint firstAttribute="trailing" secondItem="UZu-VS-2PZ" secondAttribute="trailing" constant="10" id="QMB-md-Vym"/>
+                <constraint firstAttribute="trailing" secondItem="N3E-yK-wDq" secondAttribute="trailing" id="UpW-47-PZ3"/>
+                <constraint firstAttribute="trailing" secondItem="oBe-iB-u6v" secondAttribute="trailing" id="Z3g-dd-JNS"/>
+                <constraint firstItem="N3E-yK-wDq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="c2r-NG-eNw"/>
+                <constraint firstAttribute="bottom" secondItem="oBe-iB-u6v" secondAttribute="bottom" id="efi-bm-qM1"/>
+            </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -670,7 +725,9 @@
         <image name="gsformcert" width="32" height="32"/>
         <image name="images-2" width="108" height="116.5"/>
         <image name="nav_bar" width="320" height="44"/>
+        <image name="note" width="75" height="75"/>
         <image name="pound" width="32" height="32"/>
+        <image name="ready" width="75" height="75"/>
         <image name="slideIcon" width="47.5" height="46"/>
     </resources>
 </document>

@@ -8,6 +8,7 @@
 #import "SWRevealViewController.h"
 #import "GlobalDirector.h"
 #import "GlobalDirector.h"
+#import "EngineerList/EngineerListVC.h"
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITYself.DEFAULT, 0)
 
 @interface DashBoard ()
@@ -20,7 +21,9 @@
     NSArray *arrJobStatus;
     NSArray *arrDates;
     BOOL isLoadMoreAvail;
-    
+    int isUserWantOnline;
+    UIAlertController *distanceAlert;
+
 }
 
 @end
@@ -877,6 +880,28 @@
     [self activePress:_btnActive];
 }
 
+- (IBAction)btnOnlineOfflineAction:(id)sender {
+
+    if([[_btnOnlineOffline currentTitle]  isEqual: @"Online"]){
+        [_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"rejected"] forState:UIControlStateNormal];
+        isUserWantOnline = 0;
+        [_btnOnlineOffline setTitle:@"Offline" forState:UIControlStateNormal];
+      //  [self showAlert:@"You are not available to accept jobs." withTitle:@"Offline"];
+
+        [self setEngAvailabilityDetails:@"0" addressValue:@""];
+    }
+    else{
+        PostCodePopupController *post = [[PostCodePopupController alloc] initWithNibName:@"PostCodePopupController" bundle:nil];
+        post.delegate=self;
+        post.isComeFromOnlineOffline = TRUE;
+        [self presentViewController:post animated:YES completion:nil];
+        
+        isUserWantOnline = 1;
+
+
+    }
+}
+
 - (IBAction)btnBothAgreementPress:(id)sender {
     _btnNoAgreement.selected=NO;
     _btnSmallRepairAgreement.selected=NO;
@@ -1147,6 +1172,7 @@
     
     
     [tabvToDoList reloadData];
+    [_btnOnlineOffline setHidden:TRUE];
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"cu"])
     {
@@ -1160,6 +1186,7 @@
     else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
         
+        [_btnOnlineOffline setHidden:FALSE];
         
         if (_btnJobsInvitation.selected==YES)
         {
@@ -1170,7 +1197,8 @@
             [self assignedJobsPress:_btnAssignedJobs];
         }
         
-        
+       // [self fetchEngAvailabilityDetails];
+
     }
     
 }
@@ -1213,17 +1241,18 @@
         app.locationManager.distanceFilter = 100;
         app.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         app.locationManager.activityType = CLActivityTypeAutomotiveNavigation;
-        
         [app requestAlwaysAuthorization];
-        
-        
-        
     }
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
-      
+        NSDictionary *user = [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+        engineerStaffId = [user valueForKey:@"StaffID"];
+        
         [app.locationManager startUpdatingLocation];
+        
+        [_btnOnlineOffline.layer setCornerRadius:_btnOnlineOffline.frame.size.height/2.0];
+
     }
     
     
@@ -1490,6 +1519,7 @@
     conn=nil;
     [refreshControl beginRefreshing];
     [self fetchJobdetails];
+   // [self fetchEngAvailabilityDetails];
 }
 
 
@@ -1645,11 +1675,7 @@
                 
                 urlString=[NSString stringWithFormat:@"%sManagerCompleteJobList?userToken=%@&CompletePage=%ld",conn_url,(NSString *)[user valueForKey:@"UserToken"],(long)CompletePage];
                 refreshCompletePagecount=1;
-   
-                
             }
-            
-            
         }
         connIdentifier=@"conn";
         conn = [[NSURLConnection alloc]init];
@@ -1661,9 +1687,27 @@
                 if (error==nil) {
                     self->_responseData=[data mutableCopy];
                     [self connectionDidFinishLoading:self->conn];
+                    
+                    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
+                    {
+                        self.activity.hidden=YES;
+                        self.lblRefresh.hidden=YES;
+                        [self.activity stopAnimating];
+                        self.btnRefresh.hidden=NO;
+                        
+                        [self->refreshControl endRefreshing];
+                        
+                        [self fetchEngAvailabilityDetails];
+
+                    }
                 }
                 else
                 {
+                    self.activity.hidden=YES;
+                    self.lblRefresh.hidden=YES;
+                    [self.activity stopAnimating];
+                    self.btnRefresh.hidden=NO;
+                    
                     [self->refreshControl endRefreshing];
                 }
                 
@@ -1675,20 +1719,215 @@
 }
 
 
+#pragma mark - Fetch Engineer Availability method
+-(void)fetchEngAvailabilityDetails
+{
+    NSString *post =[NSString stringWithFormat:@""];
+    NSString *urlString;
+    NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    urlString=[NSString stringWithFormat:@"%sGetEngineerAvailabilityList?userToken=%@&staffId=%@",conn_url,(NSString *)[user valueForKey:@"UserToken"],(NSString *)[user valueForKey:@"StaffID"]];
+
+    urlString=[urlString stringByReplacingOccurrencesOfString:@"" withString:@"%20"];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    DLog(@"PostString=%@",request);
+    
+    connGetAvailability = [[NSURLConnection alloc] init];
+    [self getDataFromServerWithUrl:urlString finishLoading:^(NSData *data, NSURLResponse *response, NSError *error){
+        
+        DLog(@"PostString=%@",urlString);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error==nil) {
+                self->_responseEngineerAvailability=[data mutableCopy];
+                [self connectionDidFinishLoading:self->connGetAvailability];
+            }
+            else
+            {
+                
+                
+            }
+            
+        });
+        
+    }];
+    
+    
+//    hud=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    hud.labelText=@"Loading Available time...";
+//    [hud show:YES];
+}
 
 
+#pragma mark - Set Engineer Availability method
+-(void)setEngAvailabilityDetails:(NSString *)flag addressValue:(NSString *)addressValue
+{
+    
+    if([flag  isEqual: @"1"]){
+        [self->_btnOnlineOffline setTitle:@"Online" forState:UIControlStateNormal];
+        [self->_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"allocated"] forState:UIControlStateNormal];
+        [self setEngLocation:flag addressValue:addressValue];
+    }
+    else{
+        [self->_btnOnlineOffline setTitle:@"Offline" forState:UIControlStateNormal];
+        [self setEngLocation:flag addressValue:@""];
+        [self->_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"rejected"] forState:UIControlStateNormal];
+    }
+    
+    
+//    NSString *post =[NSString stringWithFormat:@""];
+//    NSString *urlString;
+//    NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+//
+//    urlString=[NSString stringWithFormat:@"%sEngineerAvailbilityUpdate?userToken=%@&staffId=%@&flag=%@",conn_url,(NSString *)[user valueForKey:@"UserToken"],(NSString *)[user valueForKey:@"StaffID"],flag];
+
+//
+//    urlString=[urlString stringByReplacingOccurrencesOfString:@"" withString:@"%20"];
+//    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+//    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+//    [request setURL:[NSURL URLWithString:urlString]];
+//    [request setHTTPMethod:@"GET"];
+//    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+//    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+//    [request setHTTPBody:postData];
+//    request.timeoutInterval = 300;
+//    DLog(@"GetString=%@",request);
+//
+//    [self getDataFromServerWithUrl:urlString finishLoading:^(NSData *data, NSURLResponse *response, NSError *error){
+//
+//        DLog(@"PostString=%@",urlString);
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (error==nil) {
+//
+//                if([flag  isEqual: @"1"]){
+//                    [self->_btnOnlineOffline setTitle:@"Online" forState:UIControlStateNormal];
+//                    [self->_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"allocated"] forState:UIControlStateNormal];
+//                    [self setEngLocation:flag addressValue:addressValue];
+//                }
+//                else{
+//                    [self->_btnOnlineOffline setTitle:@"Offline" forState:UIControlStateNormal];
+//                    [self setEngLocation:flag addressValue:@""];
+//                    [self->_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"rejected"] forState:UIControlStateNormal];
+//                }
+//            }
+//            else
+//            {
+//
+//
+//            }
+//
+//        });
+//
+//    }];
+
+}
+
+#pragma mark - Set Engineer Location method
+-(void)setEngLocation:(NSString *)flag addressValue:(NSString *)addressValue
+{
+    
+    NSString *post =[NSString stringWithFormat:@""];
+    NSString *urlString;
+    NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    CLLocationCoordinate2D coordinate = app.locationManager.location.coordinate;
+    
+    NSString *latitude = [NSString stringWithFormat:@"%f", coordinate.latitude];
+    NSString *longitude = [NSString stringWithFormat:@"%f", coordinate.longitude];
+
+    NSLog(@"Latitude : %@", latitude);
+    NSLog(@"Longitude : %@",longitude);
+    
+    if([flag  isEqual: @"1"]){
+        MBProgressHUD *hudshow=[MBProgressHUD showHUDAddedTo:Vwtbl animated:YES];
+        hudshow.labelText=@"";
+
+        urlString=[NSString stringWithFormat:@"%sUpdateEngineerCurrentAddressDtl?userToken=%@&EngineerId=%@&IsActive=1&IsDelete=0&Lat=%@&Long=%@&CurrentAddress=%@",conn_url,(NSString *)[user valueForKey:@"UserToken"],(NSString *)[user valueForKey:@"StaffID"],latitude,longitude, addressValue];
+
+    }
+    else{
+        MBProgressHUD *hudshow=[MBProgressHUD showHUDAddedTo:Vwtbl animated:YES];
+        hudshow.labelText=@"";
+
+        urlString=[NSString stringWithFormat:@"%sUpdateEngineerCurrentAddressDtl?userToken=%@&EngineerId=%@&IsActive=0&IsDelete=1&Lat=%@&Long=%@",conn_url,(NSString *)[user valueForKey:@"UserToken"],(NSString *)[user valueForKey:@"StaffID"],latitude,longitude];
+
+    }
+
+    
+    urlString=[urlString stringByReplacingOccurrencesOfString:@" " withString:@"%20"];
+    NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu",(unsigned long)[postData length]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    
+
+    DLog(@"GetString=%@",request);
+    [self getDataFromServerWithUrl:urlString finishLoading:^(NSData *data, NSURLResponse *response, NSError *error){
+        
+        DLog(@"PostString=%@",urlString);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error==nil) {
+                [MBProgressHUD hideAllHUDsForView:Vwtbl animated:YES];
+                if([flag  isEqual: @"1"]){
+                    [self showAlert:@"You are ready to accept jobs." withTitle:@"Online"];
+                }
+                else
+                {
+                    [self showAlert:@"You are not available to accept jobs." withTitle:@"Offline"];
+                }
+            }
+            else
+            {
+                
+                [MBProgressHUD hideAllHUDsForView:Vwtbl animated:YES];
+            }
+            
+        });
+        
+    }];
+  
+}
 
 #pragma mark NSURLConnection Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    _responseData = [[NSMutableData alloc] init];
+    if (connection == connGetAvailability){
+        _responseEngineerAvailability = [[NSMutableData alloc] init];
+
+    }
+    else{
+        _responseData = [[NSMutableData alloc] init];
+
+    }
+
 }
 
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    
-    [_responseData appendData:data];
+    if (connection == connGetAvailability){
+        [_responseEngineerAvailability appendData:data];
+
+    }
+    else{
+        [_responseData appendData:data];
+
+    }
 }
 
 
@@ -1702,9 +1941,69 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     
-    isLoadMore =NO;
-    if (lblNoJobs==nil)
-    {
+    if (connection == connGetAvailability){
+        NSMutableDictionary* temp;
+        if (_responseEngineerAvailability !=nil)
+        {
+            NSError *error;
+            temp = [NSJSONSerialization JSONObjectWithData:_responseEngineerAvailability  options:NSJSONReadingMutableContainers error:&error];
+            if (!error)
+            {
+                self.activity.hidden=YES;
+                self.lblRefresh.hidden=YES;
+                [self.activity stopAnimating];
+                self.btnRefresh.hidden=NO;
+                
+                if ([[temp valueForKey:@"ResponseMessages"]isEqualToString:@"SUCCESS"])
+                {
+                        [_btnOnlineOffline setHidden:FALSE];
+                   
+                        id shedule=[temp objectForKey:@"EnggAvailabilityListResponse"];
+                        
+                        if ([shedule isKindOfClass:[NSArray class]])
+                        {
+                            if([shedule count] > 0){
+                            for (NSDictionary *dict in shedule) {
+                                NSString *engineerId = dict[@"EngineerID"];
+                                if(engineerId == engineerStaffId){
+                                    if ([[dict valueForKey:@"IsSelect"]boolValue]==1) {
+                                        [_btnOnlineOffline setTitle:@"Online" forState:UIControlStateNormal];
+                                       // [_btnOnlineOffline setBackgroundColor:[UIColor systemGreenColor]];
+                                        [_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"allocated"] forState:UIControlStateNormal];
+                                    }
+                                    else{
+                                        [_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"rejected"] forState:UIControlStateNormal];
+
+//                                        [_btnOnlineOffline setBackgroundColor:[UIColor systemRedColor]];
+                                        [_btnOnlineOffline setTitle:@"Offline" forState:UIControlStateNormal];
+
+                                    }
+                                    break;
+                                }
+
+                            }
+                            }
+                            else{
+                                [_btnOnlineOffline setBackgroundImage:[UIImage imageNamed:@"rejected"] forState:UIControlStateNormal];
+//                                [_btnOnlineOffline setBackgroundColor:[UIColor systemRedColor]];
+                                [_btnOnlineOffline setTitle:@"Offline" forState:UIControlStateNormal];
+
+                            }
+                            //engineerStaffId
+                        }
+
+                }
+                else
+                {
+                    DLog(@"JSONObjectWithData error: %@", error);
+                }
+            }
+        }
+    }
+    else{
+        isLoadMore =NO;
+        if (lblNoJobs==nil)
+        {
         lblNoJobs=[[UILabel alloc]init];
         
         lblNoJobs.font=[UIFont fontWithName:@"TheSansArabic-Bold" size:20.0];
@@ -1717,9 +2016,9 @@
     }
     
     
-    NSMutableDictionary* temp;
-    if (_responseData !=nil)
-    {
+        NSMutableDictionary* temp;
+        if (_responseData !=nil)
+        {
         NSError *error;
         [MBProgressHUD hideAllHUDsForView:Vwtbl animated:YES];
         
@@ -1967,11 +2266,11 @@
         }
         
     }
-    else
-    {
+        else
+        {
         
+        }
     }
-    
     
     //[cal removeFromSuperview];
     // cal=nil;
@@ -2563,9 +2862,7 @@
         else
         {
             Map_show *mapShow=[[Map_show alloc]initWithNibName:@"Map_show" bundle:nil];
-            
-            
-            
+
             mapShow.strHeading=@"Map Navigation";
             mapShow.dicJobTemp=dicTemp;
             [self presentViewController:mapShow animated:YES completion:nil];
@@ -3569,6 +3866,24 @@
             //-----------------------------------------------------------------------------------------------
         }
         [cell.contentView addSubview:btnFMDetailsPage];
+        
+        if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"] && [jobstatus integerValue]==Book)
+        {
+            UIButton *btnInvite = [UIButton buttonWithType:UIButtonTypeCustom];
+            btnInvite.frame = CGRectMake(CGRectGetMaxX(btnMapLocation.frame)+5,CGRectGetMaxY(btnMapLocation.frame)-40,70,20);
+            [btnInvite setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            btnInvite.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Bold" size:12.0];;
+            [btnInvite.layer setBorderColor: [[UIColor clearColor] CGColor]];
+            [btnInvite.layer setBorderWidth: 0.0];
+            [btnInvite.layer setCornerRadius:3.0f];
+            [btnInvite.layer setMasksToBounds:YES];
+            [btnInvite setBackgroundColor:[UIColor colorWithRed:96/255.0 green:145/255.0 blue:45/255.0 alpha:1.0]];
+            [btnInvite setTitle:@"Invite" forState:UIControlStateNormal];
+            btnInvite.tag=indexPath.row;
+            btnInvite.accessibilityValue = [dicTemp valueForKey:@"JobID"];
+            [btnInvite addTarget:self action:@selector(pressInvite:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.contentView addSubview:btnInvite];
+        }
     }
     
     
@@ -4294,8 +4609,57 @@
     return cell;
 }
 
+-(void)pressInvite:(id)sender
+{
+    UIButton *btn=(UIButton *)sender;
+    DLog(@"Selected IndexPath :%ld",(long)btn.tag);
+    
+    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
+    {
+        
+        distanceAlert = [UIAlertController alertControllerWithTitle:@"" message:@"Please enter distance in miles." preferredStyle:UIAlertControllerStyleAlert];
+        [distanceAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+            [textField addTarget:self action:@selector(alertTextFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
 
 
+            textField.placeholder = @"distance(miles)";
+            textField.keyboardType = UIKeyboardTypeNumberPad;
+        }];
+        UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Continue" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            if(![[[self->distanceAlert textFields][0] text]  isEqual: @""]){
+                EngineerListVC *vcObj = [[EngineerListVC alloc]initWithNibName:@"EngineerListVC" bundle:nil];
+                vcObj.distnceValue = [[self->distanceAlert textFields][0] text];
+                NSString *jobId = btn.accessibilityValue;
+                vcObj.jobId = [jobId integerValue];
+
+                [self.navigationController pushViewController:vcObj animated:YES];
+
+                NSLog(@"Current password %@", [[self->distanceAlert textFields][0] text]);
+
+            }
+            else{
+                [self pressInvite:btn];
+            }
+            //compare the current password and do action here
+
+        }];
+        [confirmAction setEnabled:FALSE];          // Initially disabled
+
+        [distanceAlert addAction:confirmAction];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            NSLog(@"Canelled");
+        }];
+        [distanceAlert addAction:cancelAction];
+        [self presentViewController:distanceAlert animated:YES completion:nil];
+        
+        
+        
+    }
+}
+-(void)alertTextFieldDidChange:(UITextField*)sender
+{
+    [distanceAlert.actions[0] setEnabled: sender.text.length > 0 ? TRUE: FALSE];
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -4619,8 +4983,8 @@
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strJobType];
     [strJobDetails appendAttributedString:cr];
-    [strJobDetails appendAttributedString:strAddress];
-    [strJobDetails appendAttributedString:cr];
+   // [strJobDetails appendAttributedString:strAddress];
+   // [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strCity];
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strCountry];
@@ -5236,6 +5600,7 @@
     
 }
 #pragma mark Calender Button Press Method
+
 -(IBAction)listandCalenderPress:(id)sender
 {
     if (btnListandCalender.tag==0)
@@ -5261,6 +5626,20 @@
         viewToDoList.hidden=NO;
         ViewCalendar.hidden=YES;
         self.btnRefresh.hidden=NO;
+    }
+    
+}
+
+
+-(IBAction)onlineOfflineSwitchAction:(UISwitch*)sender
+{
+    if (sender.isOn)
+    {
+        [self showAlert:@"You are ready to accept jobs." withTitle:@"Online"];
+    }
+    else
+    {
+        [self showAlert:@"You are not available to accept jobs." withTitle:@"Offline"];
     }
     
 }
@@ -5527,6 +5906,36 @@
     [self animateSubSelectionViewForButton:sender forView:_vwSubInvitations];
     [self animateToActiveButton:sender withImageview:_selected];
 }
+
+#pragma mark- PostcodeDelegate
+-(void)PostCodeAddressSelection:(NSMutableDictionary*)dict{
+
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    if (dict) {
+        @try {
+            
+            NSLog(@"Address dict : %@",dict);
+            NSString * addressValue = @"";
+            if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"address"]]  isEqual: @""]){
+                addressValue =  [GlobalDirector ReplaceStringNull:[dict valueForKey:@"address"]];
+            }
+            if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"postcode"]]  isEqual: @""]){
+                addressValue =  [NSString stringWithFormat:@"%@, %@", addressValue,[GlobalDirector ReplaceStringNull:[dict valueForKey:@"postcode"]]];
+            }
+            if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"county"]]  isEqual: @""]){
+                addressValue =  [NSString stringWithFormat:@"%@, %@", addressValue,[GlobalDirector ReplaceStringNull:[dict valueForKey:@"county"]]];
+            }
+            
+            [self setEngAvailabilityDetails:@"1" addressValue:addressValue];
+
+
+        } @catch (NSException *exception) {
+            ;
+        }
+    }
+}
+
 
 #pragma mark - Refresh Press Method
 - (IBAction)btnRefreshTapped:(id)sender

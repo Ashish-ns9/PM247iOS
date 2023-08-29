@@ -23,8 +23,9 @@
 #import "GasForms.h"
 #import "GlobalDirector.h"
 #import "HelpWidgetVC.h"
+#import "ShowTimeVC.h"
 
-@interface ManagerJobDetails : ViewController<SWRevealViewControllerDelegate,NSURLConnectionDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,MFMessageComposeViewControllerDelegate,UITextViewDelegate>
+@interface ManagerJobDetails : ViewController<SWRevealViewControllerDelegate,NSURLConnectionDelegate,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,MFMessageComposeViewControllerDelegate,UITextViewDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate>
 
 {
     
@@ -99,7 +100,11 @@
     NSArray *arrRecipientList;
     NSMutableArray *arrSelectedRecipients,*arrSelectedRecipientsIds;
     NSString *engNumber;
-    
+    NSMutableDictionary *dicNotes;
+    NSMutableArray *Notes;
+    NSMutableArray *newNotes;
+    NSURLConnection *connPostNote;
+
     
     BOOL isCancel;
     
@@ -108,6 +113,7 @@
 
 
 
+@property (weak, nonatomic) IBOutlet UIButton *btnShowTime;
 @property (strong, nonatomic) IBOutlet UITextField *txtPurchOrder;
 @property (strong, nonatomic) IBOutlet UIButton *btnCall;
 @property (strong, nonatomic) IBOutlet UIButton *btnjobTypeSms;
@@ -186,6 +192,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnPayment;
 @property (strong, nonatomic) IBOutlet UIButton *btnMap;
 @property (strong, nonatomic) IBOutlet UIView *vwBeforeAllocation;
+@property (weak, nonatomic) IBOutlet UIButton *btnAddNote;
 
 - (IBAction)agreementPress:(id)sender;
 
@@ -219,6 +226,7 @@
 - (IBAction)btnCostTapped:(id)sender;
 - (IBAction)btnEditJobPressed:(id)sender;
 - (IBAction)callCustomer:(id)sender;
+- (IBAction)btnShowTimeAction:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UITextField *txtEngineer;
 

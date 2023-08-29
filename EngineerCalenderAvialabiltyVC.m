@@ -191,14 +191,9 @@
 
     for ( id key in arrDates)
     {
-
-
-
+        
             for (id object in themeColorArray)
             {
-
-
-
                 if (Count ==0)
                 {
 

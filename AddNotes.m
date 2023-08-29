@@ -587,7 +587,9 @@
             
             NSMutableData *body = [NSMutableData data];
             NSDictionary *_params=[[NSDictionary alloc]initWithObjects:@[(NSString *)[userdetails valueForKey:@"UserToken"],(NSString *)[userdetails valueForKey:@"UserID"],_jobID,note] forKeys:@[@"userToken",@"userId",@"jobId",@"note"]];
-                
+                NSLog(@"_params%@",_params);
+                NSLog(@"urlStr%@",urlStr);
+
                 ///only testing
                 NSData *noteData = [NSJSONSerialization dataWithJSONObject:_params
                                                                       options:0

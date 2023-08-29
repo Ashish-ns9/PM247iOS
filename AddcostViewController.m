@@ -680,8 +680,7 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (error==nil) {
-                            
-                            
+
                             _responseData=[data mutableCopy];
                             [self connectionDidFinishLoading:connPostCost];
                             

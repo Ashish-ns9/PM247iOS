@@ -9,6 +9,8 @@ target 'PM247' do
 pod 'SDWebImage', '~>3.8'
 
 pod 'Firebase/Messaging'
+pod 'Firebase/Core'
+pod 'Firebase/Analytics'
 
 pod 'SquareInAppPaymentsSDK'
 pod "SquareBuyerVerificationSDK"

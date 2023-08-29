@@ -257,7 +257,6 @@ AppDelegate *app;
             lblNotification.text = count;
             [cell.contentView addSubview:lblNotification];
 
-            
         }
         else if (row == 4)
         {
@@ -272,6 +271,13 @@ AppDelegate *app;
             
             [imgvIcon setFrame:CGRectMake(88,14,23,20)];
             [imgvIcon setImage:[UIImage imageNamed:@"slide_logout"]];
+        }
+        else if (row == 6)
+        {
+            cell.textLabel.text = @"                                Edit Profile";
+            
+            [imgvIcon setFrame:CGRectMake(88,14,23,20)];
+            [imgvIcon setImage:[UIImage imageNamed:@"slide_userprofile"]];
         }
     }
     return cell;
@@ -939,6 +945,20 @@ AppDelegate *app;
                 }
                 
             }];
+        }
+        else if (row == 6)
+        {
+            if ( ![frontNavigationController.topViewController isKindOfClass:[EditProfileVC class]] )
+            {
+                EditProfileVC *mssg =[[EditProfileVC alloc] initWithNibName:@"EditProfileVC" bundle:Nil];
+                    
+                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:mssg];
+                [revealController setFrontViewController:navigationController animated:YES];
+            }
+            else
+            {
+                [revealController revealToggle:self];
+            }
         }
     }
 }

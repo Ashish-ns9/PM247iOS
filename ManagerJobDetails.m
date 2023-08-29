@@ -10,13 +10,13 @@ AppDelegate *app;
 @interface ManagerJobDetails ()
 {
     GlobalDirector *globe;
+
 }
 @end
 
 @implementation ManagerJobDetails
 @synthesize btnSlideMenu,dicManagerJobDetails;
 @synthesize managedObjectContext;
-
 
 #pragma mark- JobactivationbyEngineer Method
 -(IBAction)pressJobactivationbyEngineer:(id)sender
@@ -409,7 +409,7 @@ AppDelegate *app;
     app=(AppDelegate *)[[UIApplication sharedApplication] delegate];
     globe = [GlobalDirector SharedDirector];
     arrPQNotes=[[NSMutableArray alloc] init];
-    
+
     SWRevealViewController *revealController = [self revealViewController];
     [self.navigationController.navigationBar addGestureRecognizer:revealController.panGestureRecognizer];
     [btnSlideMenu addTarget:revealController action:@selector(rightRevealToggle:) forControlEvents:UIControlEventTouchUpInside];
@@ -498,7 +498,8 @@ AppDelegate *app;
     DLog(@"IsEngAccept ::::::::::::::::::::::::::::::::::::::%@",IsEngAccept);
     DLog(@"IsEngAssign ::::::::::::::::::::::::::::::::::::%@",IsEngAssign);
     
-    
+    _btnShowTime.hidden=YES;
+    _btnAddNote.hidden=YES;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
@@ -518,6 +519,8 @@ AppDelegate *app;
         {
             
             btnFinancial=[[UIButton alloc] init];
+            _btnShowTime.hidden=NO;
+            _btnAddNote.hidden=NO;
             _btnJobactivationbyEngineer.hidden=YES;
             [_vwBeforeAllocation setHidden:YES];
             [_vwAfterAllocation setHidden:NO];
@@ -569,6 +572,8 @@ AppDelegate *app;
             _btnChkAvl.hidden=YES;
             btnAddFixedPrice.hidden=YES;
             _btnMap.hidden=YES;
+            _btnShowTime.hidden=NO;
+            _btnAddNote.hidden=NO;
             _btnJobactivationbyEngineer.hidden=YES;
             [_vwBeforeAllocation setHidden:YES];
             [_vwAfterAllocation setHidden:NO];
@@ -1075,13 +1080,18 @@ AppDelegate *app;
         if ([[dic valueForKey:@"TypeOfAddress"]integerValue]==3) {
             [self FetchAddressDicValue:dic];
         }
-        
     }
     
     [self animateToActiveButton:sender image:_selected2];
 }
 
 #pragma mark - Note / Material / Cost Press Method
+- (IBAction)btnAddNoteOuterAction:(id)sender {
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Gallery",@"Camera",nil];
+    [actionSheet showInView:self.view];
+
+}
+
 - (IBAction)btnNotesTapped:(id)sender
 {
     // NSMutableArray *arr=[dicManagerJobDetails valueForKey:@"JobNoteListResponse"];
@@ -1206,25 +1216,220 @@ AppDelegate *app;
 }
 
 -(void)FinancialDetailsAdded:(BOOL)isAdded{
-    
-    
+
     if (isAdded==YES) {
         [self.navigationController popViewControllerAnimated:YES];
-        
     }
-    
     
 }
 
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex)
+    {
+        case 0:
+        {
+            [self galleryBtnPressed];
+        }
+            break;
+        case 1:
+        {
+            [self cameraBtnPressed];
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)galleryBtnPressed
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+
+- (void)cameraBtnPressed
+{
+    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+    imagePickerController.allowsEditing = YES;
+    imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    imagePickerController.delegate = self;
+    [self presentViewController:imagePickerController animated:YES completion:nil];
+}
+
+#pragma mark - UIIMagePickerController Delegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+   // [imageButton setImage:chosenImage forState:UIControlStateNormal];
+    [self saveNoteOuter:chosenImage];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+
+    [self dismissViewControllerAnimated:YES completion:nil];
+
+}
+
+
+-(void)saveNoteOuter:(UIImage *)selectedimage
+{
+        dicNotes=[[NSMutableDictionary alloc]init];
+        newNotes=[[NSMutableArray alloc]init];
+
+        NSString* encodedImageString,*base64String;
+        encodedImageString=@"";
+        NSMutableArray *arrImageSrtrings=[[NSMutableArray alloc]init];
+        
+            NSData *imageData = UIImageJPEGRepresentation(selectedimage, 1.0);
+            base64String = [imageData base64EncodedStringWithOptions:0];
+            encodedImageString = [base64String stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
+            [arrImageSrtrings addObject:encodedImageString];
+        
+      
+        NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+
+        [dicNotes setObject:[userdetails valueForKey:@"FullName"] forKey:@"CreatedBy"];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"dd/MM/yyyy HH:mm:ss a"];
+        [dicNotes setObject:[NSString stringWithFormat:@"%@",[dateFormat stringFromDate:[NSDate date]]] forKey:@"CreatedDate"];
+        [dicNotes setObject:@"Engineer pic added" forKey:@"NoteBody"];
+        [dicNotes setObject:[NSString stringWithFormat:@"false"] forKey:@"IsPreviousJobNote"];
+        if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"cu"])
+        {
+            [dicNotes setObject:[NSString stringWithFormat:@"1"] forKey:@"NoteTypeID"];
+            [dicNotes setObject:[NSString stringWithFormat:@"Customer"] forKey:@"DisplayTextNoteType"];
+            
+        }
+        else{
+            [dicNotes setObject:@"63" forKey:@"NoteTypeID"];
+            [dicNotes setObject:@"Engineers Pic" forKey:@"DisplayTextNoteType"];
+
+        }
+        
+        [dicNotes setObject:arrImageSrtrings forKey:@"imageUpload"];
+        [dicNotes setObject:@"jpg" forKey:@"imageextension"];
+       // DLog(@"%@",base64String);
+        Notes = [Notes mutableCopy];
+      //  [Notes addObject:dicNotes];
+        
+        NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"CreatedDate" ascending: NO];
+        NSArray *arr = [Notes sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+        Notes = [arr mutableCopy];
+        
+        newNotes=[Notes mutableCopy];
+        NSString *strFromCustomerClass  = [NSString stringWithFormat:@"%@",[self class]];
+        
+        if ([strFromCustomerClass isEqualToString:@"ManagerJobDetails"] || [strFromCustomerClass isEqualToString:@"Customer_EngineerJobDetails"])
+        {
+            
+            if ([self InternetConnectionAvailable]==YES) {
+                
+            NSError *error;
+            
+            NSArray *arrDic=[NSArray arrayWithObjects:dicNotes, nil];
+            
+            NSData *jsonAddress = [NSJSONSerialization dataWithJSONObject:arrDic
+                                                                  options:0
+                                                                    error:&error];
+            NSString *note = [[NSString alloc] initWithBytes:[jsonAddress bytes] length:[jsonAddress length] encoding:NSUTF8StringEncoding];
+            
+            NSString *urlStr=[NSString stringWithFormat:@"%sSetJobNote",conn_url];
+    
+           
+            NSString *json;
+            NSError *jsonError;
+            
+            
+            NSMutableData *body = [NSMutableData data];
+            NSDictionary *_params=[[NSDictionary alloc]initWithObjects:@[(NSString *)[userdetails valueForKey:@"UserToken"],(NSString *)[userdetails valueForKey:@"UserID"],(NSString *)[dicManagerJobDetails valueForKey:@"JobID"],note] forKeys:@[@"userToken",@"userId",@"jobId",@"note"]];
+                
+                NSLog(@"_params%@",_params);
+                NSLog(@"urlStr%@",urlStr);
+
+                
+                ///only testing
+                NSData *noteData = [NSJSONSerialization dataWithJSONObject:_params
+                                                                      options:0
+                                                                        error:&error];
+                NSString *noteTest = [[NSString alloc] initWithBytes:[noteData bytes] length:[noteData length] encoding:NSUTF8StringEncoding];
+
+                NSLog(@"%@",noteTest);
+                //******
+            
+           NSMutableURLRequest *request=[[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+           // DLog(@"request :%@",request);
+            NSData *reqData=[NSData dataWithBytes:[json UTF8String] length:[json length]];
+            
+            [request setHTTPMethod:@"POST"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+            [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+            [request setValue:[NSString stringWithFormat:@"%ld",(unsigned long)[reqData length]] forHTTPHeaderField:@"Content-Length"];
+            request.timeoutInterval = 300;
+            //[request setHTTPBody:reqData];
+            NSData *postData = [NSJSONSerialization dataWithJSONObject:_params options:0
+                                                                 error:&jsonError];
+                
+                
+                
+            if (!jsonError)
+            {
+                //set POST body
+                [request setHTTPBody:postData];
+            }
+      
+                
+            // set the content-length
+            NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[body length]];
+            [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+            
+            // set URL
+            [request setURL:[NSURL URLWithString:urlStr]];
+            
+            connPostNote = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+            [connPostNote start];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            }
+            else
+            {
+                [self showAlert:@"Network connection not available" withTitle:@"Connection Problem!"];
+            }
+        }
+     
+        else
+        {
+//             [Notes addObject:dicNotes];
+//            newNotes=[Notes mutableCopy];
+//            [mainBg removeFromSuperview];
+//            [_tabvNotes reloadData];
+//            txtNoteTo.text=@"";
+//            txtNoteType.text=@"";
+//            txtvNoteBody.text=@"";
+//            [self btnNewNotesTapped:nil];
+        }
+}
+
 #pragma mark- Customer Phone Call Method
+- (IBAction)btnShowTimeAction:(id)sender {
+    ShowTimeVC *showTime = [[ShowTimeVC alloc] initWithNibName: @"ShowTimeVC" bundle: nil];
+    showTime.jobID = (NSString *)[dicManagerJobDetails valueForKey:@"JobID"];
+    [self.navigationController pushViewController:showTime animated:YES];
+}
+
 - (IBAction)callCustomer:(id)sender {
-    
-    
+
     UIDevice *device = [UIDevice currentDevice];
     if (![[device model] isEqualToString:@"iPhone Simulator"])
     {
-        
-        
         NSString *strPhoneNo=_txtContactNo.text;
         NSString *cleanedString = [[strPhoneNo componentsSeparatedByCharactersInSet:[[NSCharacterSet characterSetWithCharactersInString:@"0123456789-+()"] invertedSet]] componentsJoinedByString:@""];
         NSURL *telURL = [NSURL URLWithString:[NSString stringWithFormat:@"tel:%@", cleanedString]];
@@ -1970,6 +2175,9 @@ AppDelegate *app;
                         [self showAlert:@"Please try to send request later." withTitle:nil];
                         
                     }
+                }
+                else if (connection == connPostNote){
+                    
                 }
                 else
                 {

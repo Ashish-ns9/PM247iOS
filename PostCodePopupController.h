@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tblView;
 @property (strong, nonatomic) UITextField *txtDelegate;
 
+@property BOOL isComeFromOnlineOffline;
 
 @property (nonatomic,weak) id <PostCodePopupControllerDelegate> delegate;
 
