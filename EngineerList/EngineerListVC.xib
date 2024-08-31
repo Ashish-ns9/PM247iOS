@@ -14,6 +14,7 @@
                 <outlet property="btnInvite" destination="Tik-hl-7rN" id="SZ6-GW-9LB"/>
                 <outlet property="btnSlideMenu" destination="cKc-fO-kH2" id="trQ-k4-ZFp"/>
                 <outlet property="lblPlaceHolder" destination="E3j-1Z-psa" id="Reo-Ui-cF5"/>
+                <outlet property="searchBar" destination="lUh-aT-bSz" id="pHs-Eb-CHq"/>
                 <outlet property="tableView" destination="2LJ-fM-yij" id="yrw-ZN-j7Y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -56,8 +57,13 @@
                         <action selector="btnBackClicked:" destination="-1" eventType="touchUpInside" id="kGV-mC-2LD"/>
                     </connections>
                 </button>
+                <searchBar clipsSubviews="YES" contentMode="redraw" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lUh-aT-bSz">
+                    <rect key="frame" x="0.0" y="117" width="414" height="56"/>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <textInputTraits key="textInputTraits"/>
+                </searchBar>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="2LJ-fM-yij">
-                    <rect key="frame" x="0.0" y="122" width="414" height="680"/>
+                    <rect key="frame" x="0.0" y="183" width="414" height="619"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="NiB-qJ-Gzr"/>
@@ -93,20 +99,23 @@
             <constraints>
                 <constraint firstItem="2LJ-fM-yij" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="0Mr-Ar-oV7"/>
                 <constraint firstItem="gzr-wK-bGi" firstAttribute="centerX" secondItem="dll-Tu-P6m" secondAttribute="centerX" id="0Nq-72-04n"/>
-                <constraint firstItem="2LJ-fM-yij" firstAttribute="top" secondItem="gzr-wK-bGi" secondAttribute="bottom" constant="10" id="50K-4D-qSo"/>
                 <constraint firstItem="cKc-fO-kH2" firstAttribute="bottom" secondItem="gzr-wK-bGi" secondAttribute="bottom" id="5Uw-OL-deD"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="gzr-wK-bGi" secondAttribute="trailing" id="7B7-uL-eQ8"/>
                 <constraint firstItem="Tik-hl-7rN" firstAttribute="centerX" secondItem="Q5M-cg-NOt" secondAttribute="centerX" id="7yM-3a-EE9"/>
                 <constraint firstItem="dll-Tu-P6m" firstAttribute="centerY" secondItem="gzr-wK-bGi" secondAttribute="centerY" id="8hC-LS-YlS"/>
+                <constraint firstItem="lUh-aT-bSz" firstAttribute="trailing" secondItem="2LJ-fM-yij" secondAttribute="trailing" id="A5q-Aq-swj"/>
+                <constraint firstItem="2LJ-fM-yij" firstAttribute="top" secondItem="lUh-aT-bSz" secondAttribute="bottom" constant="10" id="BcJ-zL-jsv"/>
                 <constraint firstItem="E3j-1Z-psa" firstAttribute="centerX" secondItem="Q5M-cg-NOt" secondAttribute="centerX" id="I1d-hB-VBM"/>
                 <constraint firstItem="Tik-hl-7rN" firstAttribute="top" secondItem="2LJ-fM-yij" secondAttribute="bottom" constant="10" id="JHi-Nn-WEY"/>
                 <constraint firstItem="CQ5-Dq-Fen" firstAttribute="top" secondItem="gzr-wK-bGi" secondAttribute="top" constant="4" id="JbC-M4-sIr"/>
+                <constraint firstItem="lUh-aT-bSz" firstAttribute="top" secondItem="gzr-wK-bGi" secondAttribute="bottom" constant="5" id="KVp-CG-7Ke"/>
                 <constraint firstItem="E3j-1Z-psa" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="25" id="KyV-bd-qFu"/>
                 <constraint firstAttribute="trailing" secondItem="E3j-1Z-psa" secondAttribute="trailing" constant="25" id="Nbu-2m-k2U"/>
                 <constraint firstItem="gzr-wK-bGi" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="20" id="TN4-Cd-ai3"/>
                 <constraint firstItem="E3j-1Z-psa" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" constant="200" id="TdP-JR-3y5"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="Tik-hl-7rN" secondAttribute="bottom" constant="10" id="WDK-vJ-NmD"/>
                 <constraint firstItem="CQ5-Dq-Fen" firstAttribute="bottom" secondItem="gzr-wK-bGi" secondAttribute="bottom" constant="-4" id="aKk-B7-ZGI"/>
+                <constraint firstItem="lUh-aT-bSz" firstAttribute="leading" secondItem="2LJ-fM-yij" secondAttribute="leading" id="btI-UE-lOC"/>
                 <constraint firstItem="cKc-fO-kH2" firstAttribute="top" secondItem="gzr-wK-bGi" secondAttribute="top" id="h5a-70-xjM"/>
                 <constraint firstItem="cKc-fO-kH2" firstAttribute="trailing" secondItem="gzr-wK-bGi" secondAttribute="trailing" id="lAD-SO-o9Q"/>
                 <constraint firstItem="gzr-wK-bGi" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="lG6-Ua-RXL"/>

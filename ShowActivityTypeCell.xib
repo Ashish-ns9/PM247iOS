@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="ShowActivityTypeCell" rowHeight="162" id="HtO-im-TNG" customClass="ShowActivityTypeCell">
+            <rect key="frame" x="0.0" y="0.0" width="554" height="162"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" tableViewCell="HtO-im-TNG" id="Ke8-hb-GM6">
+                <rect key="frame" x="0.0" y="0.0" width="554" height="162"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g0G-i7-ALU">
+                        <rect key="frame" x="15" y="5" width="524" height="152"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WB1-Dj-bSZ">
+                        <rect key="frame" x="0.0" y="161" width="554" height="1"/>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.97254901959999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="7DP-AW-FIV"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="g0G-i7-ALU" secondAttribute="bottom" constant="5" id="6V3-Vm-1Uq"/>
+                    <constraint firstItem="g0G-i7-ALU" firstAttribute="leading" secondItem="Ke8-hb-GM6" secondAttribute="leading" constant="15" id="AkP-56-Kg7"/>
+                    <constraint firstAttribute="trailing" secondItem="WB1-Dj-bSZ" secondAttribute="trailing" id="Tv3-eE-kWC"/>
+                    <constraint firstItem="WB1-Dj-bSZ" firstAttribute="leading" secondItem="Ke8-hb-GM6" secondAttribute="leading" id="Vhn-sQ-oKh"/>
+                    <constraint firstAttribute="bottom" secondItem="WB1-Dj-bSZ" secondAttribute="bottom" id="noi-lF-C98"/>
+                    <constraint firstItem="g0G-i7-ALU" firstAttribute="top" secondItem="Ke8-hb-GM6" secondAttribute="top" constant="5" id="zAq-Cg-WeT"/>
+                    <constraint firstAttribute="trailing" secondItem="g0G-i7-ALU" secondAttribute="trailing" constant="15" id="zwd-zt-ewf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="4CP-UZ-3GP"/>
+            <connections>
+                <outlet property="lblActionType" destination="g0G-i7-ALU" id="ao4-PF-02a"/>
+            </connections>
+            <point key="canvasLocation" x="311.59420289855075" y="211.60714285714286"/>
+        </tableViewCell>
+    </objects>
+</document>

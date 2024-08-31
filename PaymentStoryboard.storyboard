@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,10 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nav_bar" translatesAutoresizingMaskIntoConstraints="NO" id="Zou-AL-EZ0">
-                                <rect key="frame" x="0.0" y="64" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMk-ea-239">
-                                <rect key="frame" x="8" y="64" width="32" height="44"/>
+                                <rect key="frame" x="8" y="48" width="32" height="44"/>
                                 <state key="normal" backgroundImage="backButton">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -30,13 +30,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create Customer" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="55O-fY-xm6">
-                                <rect key="frame" x="130" y="133" width="154.5" height="23"/>
+                                <rect key="frame" x="130" y="117" width="154.5" height="23"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Y1O-Ah-ser">
-                                <rect key="frame" x="20" y="176" width="374" height="282"/>
+                                <rect key="frame" x="20" y="160" width="374" height="282"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DwG-QU-jQm">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
@@ -182,7 +182,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mbg-Pd-rjB">
-                                <rect key="frame" x="25" y="498" width="364" height="46"/>
+                                <rect key="frame" x="25" y="482" width="364" height="46"/>
                                 <color key="backgroundColor" red="0.44840526580000001" green="0.62398606540000001" blue="0.230335176" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="46" id="VRa-nW-cp0"/>
@@ -214,7 +214,7 @@
                             <constraint firstItem="Mbg-Pd-rjB" firstAttribute="top" secondItem="Y1O-Ah-ser" secondAttribute="bottom" constant="40" id="Sa1-Ge-kKY"/>
                             <constraint firstItem="Y1O-Ah-ser" firstAttribute="top" secondItem="55O-fY-xm6" secondAttribute="bottom" constant="20" id="Y8d-B9-la9"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Zou-AL-EZ0" secondAttribute="trailing" id="cs6-7b-9uc"/>
-                            <constraint firstItem="Zou-AL-EZ0" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="20" id="kMm-AX-xqd"/>
+                            <constraint firstItem="Zou-AL-EZ0" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="kMm-AX-xqd"/>
                             <constraint firstItem="XMk-ea-239" firstAttribute="bottom" secondItem="Zou-AL-EZ0" secondAttribute="bottom" id="tBh-S8-AJn"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Y1O-Ah-ser" secondAttribute="trailing" constant="20" id="tyV-z4-GiW"/>
                             <constraint firstItem="55O-fY-xm6" firstAttribute="top" secondItem="Zou-AL-EZ0" secondAttribute="bottom" constant="25" id="xbz-nj-5MI"/>

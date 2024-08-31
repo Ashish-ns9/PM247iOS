@@ -33,6 +33,7 @@
     addNote.strHeading=@"Add Notes";
     addNote.Notes=arrCustomeradditionalNotes;
     addNote.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];
+    addNote.modalPresentationStyle = UIModalPresentationCustom;
     [self presentViewController:addNote animated:YES completion:nil];
     
 }

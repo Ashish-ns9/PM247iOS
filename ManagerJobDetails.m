@@ -469,11 +469,7 @@ AppDelegate *app;
     
     NSAttributedString *str2 = [[NSAttributedString alloc] initWithString:timestring attributes:@{ NSForegroundColorAttributeName : [UIColor blackColor] }];
         self->_txtfdsaveETAEnggTime.attributedPlaceholder = str2;
-    
-    
 
-    
-    [self GetSquareUpInvoiceID];
     
 }
 
@@ -830,47 +826,47 @@ AppDelegate *app;
     
     [self animateToActiveButton:sender image:_selected];
 }
-
-
--(void) GetSquareUpInvoiceID
-{
-    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
-    [dict setObject:[GlobalDirector ReplaceStringNull:[dicManagerJobDetails valueForKey:@"JobID"]] forKey:@"jobId"];
-    
-    GlobalDirector *globe = [GlobalDirector SharedDirector];
-    
-    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    [globe SyncRequestGet:REQUEST_GetSquareUpInvoiceID withPrams:dict andCompletionHandler:^(NSDictionary *result) {
-        NSLog(@"%@",result);
-        
-        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            @try {
-                
-                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
-                
-                if (strValue==1) {
-                    
-                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
-                    
-                }else{
-                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
-                }
-            } @catch (NSException *exception) {
-                // _txtPost.text=@"";
-                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
-            }
-        });
-        
-    }];
-}
+//
+//
+//-(void) GetSquareUpInvoiceID
+//{
+//    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+//    
+//    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+//    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+//    [dict setObject:[GlobalDirector ReplaceStringNull:[dicManagerJobDetails valueForKey:@"JobID"]] forKey:@"jobId"];
+//    
+//    GlobalDirector *globe = [GlobalDirector SharedDirector];
+//    
+//    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+//    
+//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    
+//    [globe SyncRequestGet:REQUEST_GetSquareUpInvoiceID withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+//        NSLog(@"%@",result);
+//        
+//        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [MBProgressHUD hideHUDForView:self.view animated:YES];
+//            @try {
+//                
+//                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
+//                
+//                if (strValue==1) {
+//                    
+//                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
+//                    
+//                }else{
+//                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
+//                }
+//            } @catch (NSException *exception) {
+//                // _txtPost.text=@"";
+//                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
+//            }
+//        });
+//        
+//    }];
+//}
 
 #pragma mark - People Related Button Press Method
 - (IBAction)btnOwnerTapped:(UIButton *)sender
@@ -1104,6 +1100,8 @@ AppDelegate *app;
     notes.jobID=(NSString *)[dicManagerJobDetails valueForKey:@"JobID"];
     notes.jobStatus=(NSString *)[dicManagerJobDetails valueForKey:@"JobStatus"];
     notes.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];
+    notes.modalPresentationStyle = UIModalPresentationCustom;
+
     [self presentViewController:notes animated:YES completion:nil];
     
     //}
@@ -1149,34 +1147,34 @@ AppDelegate *app;
 -(void)btnFinancialTapped:(id)sender
 {
     
-    if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
-    {
-        
-        FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVCEng" bundle:nil];
-        financial.jobDic=dicManagerJobDetails;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
-        if (@available(iOS 13.0, *)) {
-            [nav setModalPresentationStyle: UIModalPresentationFullScreen];
-         }
-        [self presentViewController:nav animated:YES completion:nil];
-        
-        
-    }
-    else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
-    {
-        
-        
-        FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVC" bundle:nil];
-        financial.jobDic=dicManagerJobDetails;
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
-        if (@available(iOS 13.0, *)) {
-            [nav setModalPresentationStyle: UIModalPresentationFullScreen];
-         }
-        
-        [self presentViewController:nav animated:YES completion:nil];
-        
-        
-    }
+   
+        if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
+        {
+            
+            FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVCEng" bundle:nil];
+            financial.jobDic=dicManagerJobDetails;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
+            if (@available(iOS 13.0, *)) {
+                [nav setModalPresentationStyle: UIModalPresentationFullScreen];
+             }
+            [self presentViewController:nav animated:YES completion:nil];
+            
+            
+        }
+        else if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
+        {
+            
+            
+            FinancialVC *financial = [[FinancialVC alloc]initWithNibName:@"FinancialVC" bundle:nil];
+            financial.jobDic=dicManagerJobDetails;
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:financial];
+            if (@available(iOS 13.0, *)) {
+                [nav setModalPresentationStyle: UIModalPresentationFullScreen];
+             }
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+ 
     
 }
 
@@ -1311,9 +1309,10 @@ AppDelegate *app;
             
         }
         else{
-            [dicNotes setObject:@"63" forKey:@"NoteTypeID"];
-            [dicNotes setObject:@"Engineers Pic" forKey:@"DisplayTextNoteType"];
-
+            
+            [dicNotes setObject:@"18" forKey:@"NoteTypeID"];
+            [dicNotes setObject:@"Engineers Note Added" forKey:@"DisplayTextNoteType"];
+            
         }
         
         [dicNotes setObject:arrImageSrtrings forKey:@"imageUpload"];
@@ -1422,6 +1421,8 @@ AppDelegate *app;
 - (IBAction)btnShowTimeAction:(id)sender {
     ShowTimeVC *showTime = [[ShowTimeVC alloc] initWithNibName: @"ShowTimeVC" bundle: nil];
     showTime.jobID = (NSString *)[dicManagerJobDetails valueForKey:@"JobID"];
+    showTime.arrNotes=[dicManagerJobDetails valueForKey:@"JobNoteListResponse"];
+
     [self.navigationController pushViewController:showTime animated:YES];
 }
 

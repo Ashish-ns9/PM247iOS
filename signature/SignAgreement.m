@@ -318,8 +318,7 @@ AppDelegate *app;
     
     if (![[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fm"])
     {
-        
-        
+
         UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(signTapped:)];
         [singleTap setNumberOfTapsRequired:1];
         [ImgSign addGestureRecognizer:singleTap];
@@ -1744,8 +1743,6 @@ AppDelegate *app;
     }
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"]) {
-        
-        
         txtvNoteInvoice.userInteractionEnabled=NO;
     }
     

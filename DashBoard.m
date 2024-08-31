@@ -281,13 +281,16 @@
     
     [self fetchJobdetails];
     
-    if (_btnAssigned.selected==YES)
+    if (_btnAll.selected==YES)
+    {
+        [self allPress:_btnAll];
+    }
+    else if (_btnAssigned.selected==YES)
     {
         [self bookedPress:_btnAssigned];
     }
     else if (_btnActiveAssigns.selected==YES)
     {
-        
         [self activePress:_btnActiveAssigns];
     }
     else if (_btnCompleteAssign.selected==YES)
@@ -298,6 +301,7 @@
     {
         [self bookedPress:_btnAssigned];
     }
+    
     [self hideSubSelectionView:_vwSubInvitations];
     [self hideSubSelectionView:_viewsubTabAgreement];
     [self animateToActiveButton:sender withImageview:_selectedEngineer];
@@ -596,27 +600,54 @@
     lblNoJobs.hidden=YES;
     [tabvToDoList setContentOffset:CGPointZero];
     
-    
     NSPredicate *predicate ;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
+             
+        _btnAll.selected=NO;
+
         _btnActiveAssigns.selected=NO;
-        _btnAssigned.selected=YES;
+
+        _btnAssigned.selected=NO;
+
         _btnCompleteAssign.selected=NO;
-        btnActiveCategory=_btnAssigned;
         
-        predicate = [NSPredicate predicateWithFormat:@"JobStatus == 1"];
-        DLog(@"pree :%@",predicate);
-        
-        NSArray *newArray = [arrMAssignedJobs filteredArrayUsingPredicate:predicate];
-        DLog(@"%lu", (unsigned long)[newArray count]);
-        arrMFilterJobsList=(NSMutableArray *)newArray;
-        if (arrMFilterJobsList.count==0) {
-            lblNoJobs.text=@"No New Job Assigned";
-            lblNoJobs.hidden=NO;
-            
+        if(sender == _btnAll){
+            _btnAll.selected=YES;
         }
+        else if(sender == _btnAssigned){
+            _btnAssigned.selected=YES;
+            predicate = [NSPredicate predicateWithFormat:@"JobStatus == 1"];
+            DLog(@"pree :%@",predicate);
+            
+            NSArray *newArray = [arrMAssignedJobs filteredArrayUsingPredicate:predicate];
+            DLog(@"%lu", (unsigned long)[newArray count]);
+            arrMFilterJobsList=(NSMutableArray *)newArray;
+            if (arrMFilterJobsList.count==0) {
+                lblNoJobs.text=@"No New Job Assigned";
+                lblNoJobs.hidden=NO;
+                
+            }
+
+        }
+        else if(sender == _btnCompleteAssign){
+            _btnCompleteAssign.selected=YES;
+
+        }
+        else if(sender == _btnActiveAssigns){
+            _btnActiveAssigns.selected=YES;
+
+        }
+        
+        btnActiveCategory=sender;
+
+//        _btnActiveAssigns.selected=NO;
+//        _btnAssigned.selected=YES;
+//        _btnCompleteAssign.selected=NO;
+//        btnActiveCategory=_btnAssigned;
+        
+      
         [tabvToDoList reloadData];
         
         for (UIButton  *btn in [_viewSubTabAssignment subviews]) {
@@ -918,7 +949,7 @@
     UIView *selectionView;
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"fe"])
     {
-        
+        _btnAll.selected=YES;
         _btnAssigned.selected=NO;
         _btnActiveAssigns.selected=NO;
         _btnCompleteAssign.selected=NO;
@@ -950,7 +981,7 @@
     
     for (UIButton  *btn in [selectionView subviews])
     {
-        if (btn==sender)
+        if (btn.currentTitle == sender.currentTitle)
         {
             btn.backgroundColor=[UIColor colorWithRed:91/255.0f green:178/255.0f blue:50/255.0f alpha:1];
             [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -1282,7 +1313,7 @@
     _btnCurrent.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:13.0];
     _btnPrevious.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:13.0];
     _btnNext.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:13.0];
-    _btnAll.selected=YES;
+    _btnAssigned.selected=YES;
     _HelpWidgetBtn.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:19.0];
     
     
@@ -2025,11 +2056,8 @@
         temp = [NSJSONSerialization JSONObjectWithData:_responseData  options:NSJSONReadingMutableContainers error:&error];
         if (!error)
         {
-            
-            
             if ([[temp valueForKey:@"ResponseMessages"]isEqualToString:@"SUCCESS"])
             {
-                
                 id jobs=[temp objectForKey:@"JobListResponse"];
                 
                 if ([jobs isKindOfClass:[NSArray class]]&&(![connIdentifier isEqualToString:@"connAccept"]||![connIdentifier isEqualToString:@"connReject"]))
@@ -2069,8 +2097,13 @@
                             
                             refreshedList=YES;
                             arrCFilterJoblist=arrMFilterJobsList;
-                            [self btnNewInvitationTapped:_btnNewInvitation];
                             
+                            if(_btnNewInvitation.selected==YES){
+                                [self btnNewInvitationTapped:_btnNewInvitation];
+                            }
+                            else{
+                                [self btnAcceptedInvitationTapped:_btnAcceptedInvitation];
+                            }
                         }
                         else
                         {
@@ -2078,8 +2111,11 @@
                             [arrMAssignedJobs removeAllObjects];
                             [arrMAssignedJobs addObjectsFromArray:arrMJobDetails];
                             
-                            
-                            if (_btnAssigned.selected==YES)
+                            if (_btnAll.selected==YES)
+                            {
+                                [self allPress:_btnAll];
+                            }
+                            else if (_btnAssigned.selected==YES)
                             {
                                 [self bookedPress:_btnAssigned];
                             }
@@ -2948,6 +2984,8 @@
     cell.accessoryType=UITableViewCellAccessoryNone;
     cell.backgroundColor=[UIColor clearColor];
     
+    NSString *dateTimeForStatus = @"";
+    
     if (tableView.tag==111)
     {
         tblarr=JobsOnDate;
@@ -3363,11 +3401,18 @@
                 btnRefuse.titleLabel.font=[UIFont fontWithName:@"TheSansArabic-Bold" size:16.0];
                 [cell.contentView addSubview:btnRefuse];
                 
+                if(![[dicTemp valueForKey:@"CreatedOn"] isKindOfClass:[NSNull class]] && [[dicTemp objectForKey:@"CreatedOn"] length] > 0){
+                    dateTimeForStatus = [NSString stringWithFormat:@"%@", [dicTemp objectForKey:@"CreatedOn"]];
+                }
+                
             }
             else if ([IsAccepted isEqualToString:@"1"])
             {
                 [btnFMDetailsPage setBackgroundColor:[UIColor colorWithRed:96/255.0 green:145/255.0 blue:45/255.0 alpha:1.0]];
                 [btnFMDetailsPage setTitle:@"Accepted" forState:UIControlStateNormal];
+                if(![[dicTemp valueForKey:@"AcceptedDate"] isKindOfClass:[NSNull class]] && [[dicTemp objectForKey:@"AcceptedDate"] length] > 0){
+                    dateTimeForStatus = [NSString stringWithFormat:@"%@", [dicTemp objectForKey:@"AcceptedDate"]];
+                }
             }
             
             if ([IsEngAssign isEqualToString:@"1"])
@@ -3376,6 +3421,10 @@
                 [btnDetails setBackgroundImage:[UIImage imageNamed:@"greenman"] forState:UIControlStateNormal];
                 [btnFMDetailsPage setBackgroundColor:[UIColor colorWithRed:96/255.0 green:145/255.0 blue:45/255.0 alpha:1.0]];
                 [btnFMDetailsPage setTitle:@"Assigned" forState:UIControlStateNormal];
+                if(![[dicTemp valueForKey:@"AssignedDate"] isKindOfClass:[NSNull class]] && [[dicTemp objectForKey:@"AssignedDate"] length] > 0){
+                    dateTimeForStatus = [NSString stringWithFormat:@"%@", [dicTemp objectForKey:@"AssignedDate"]];
+                }
+
             }
             
         }
@@ -3478,32 +3527,32 @@
         NSString *jobstatus=[NSString stringWithFormat:@"%@",[dicTemp objectForKey:@"JobStatus"]];
         if ([jobstatus integerValue]==Book)
         {
-            if ([IsJobExpired isEqualToString:@"1"])
-            {
-                
-                //Job Expired
-                imgvCellbg.image=nil;
-                imgvCellbg.backgroundColor=[UIColor orangeColor];
-                UIImageView *imgProxybg=[[UIImageView  alloc]initWithFrame:imgvCellbg.frame];
-                imgProxybg.backgroundColor=[UIColor whiteColor];
-                [cell.contentView addSubview:imgProxybg];
-                [cell.contentView   sendSubviewToBack:imgProxybg];
-                [UIView animateWithDuration:0.7 delay:0 options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat|UIViewAnimationOptionAllowUserInteraction) animations:^{
-                    
-                    imgvCellbg.alpha=0.0;
-                    
-                }completion:^(BOOL finished){
-                    [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
-                        
-                        imgvCellbg.alpha=1.0;
-                        
-                    }completion:^(BOOL finished){
-                        
-                        
-                    }];
-                    
-                }];
-            }
+//            if ([IsJobExpired isEqualToString:@"1"])
+//            {
+//
+//                //Job Expired
+//                imgvCellbg.image=nil;
+//                imgvCellbg.backgroundColor=[UIColor orangeColor];
+//                UIImageView *imgProxybg=[[UIImageView  alloc]initWithFrame:imgvCellbg.frame];
+//                imgProxybg.backgroundColor=[UIColor whiteColor];
+//                [cell.contentView addSubview:imgProxybg];
+//                [cell.contentView   sendSubviewToBack:imgProxybg];
+//                [UIView animateWithDuration:0.7 delay:0 options:(UIViewAnimationOptionAutoreverse | UIViewAnimationOptionRepeat|UIViewAnimationOptionAllowUserInteraction) animations:^{
+//
+//                    imgvCellbg.alpha=0.0;
+//
+//                }completion:^(BOOL finished){
+//                    [UIView animateWithDuration:0.7 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+//
+//                        imgvCellbg.alpha=1.0;
+//
+//                    }completion:^(BOOL finished){
+//
+//
+//                    }];
+//
+//                }];
+//            }
             if ([IsEngAccept isEqualToString:@"0"]&&[IsEngAssign isEqualToString:@"0"])
             {
                 //Booked
@@ -3886,11 +3935,12 @@
         }
     }
     
-    
     //*********************************************** Cell Management **********************************************************************
     UILabel *lblJobTitle;
     UILabel *lblName;
     UILabel *lblTimePeriod;
+    UILabel *lblTimePeriod2;
+
     UILabel *lblAddress;
     
     if ([[[NSUserDefaults standardUserDefaults] valueForKey:@"LoggedUser"] isEqualToString:@"cu"])
@@ -4070,10 +4120,35 @@
         [imgvTimeP setImage:[UIImage imageNamed:@"clock_icon"]];
         [cell.contentView addSubview:imgvTimeP];
         
+        lblTimePeriod=[[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imgvTimeP.frame)+2,CGRectGetMinY(imgvTimeP.frame),130,20)];
         
-        lblTimePeriod=[[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imgvTimeP.frame)+2,CGRectGetMinY(imgvTimeP.frame),80,15)];
+        if(![dateTimeForStatus isEqual: @""]){
+            
+            UIImageView *imgvTimeP2=[[UIImageView alloc] initWithFrame:CGRectMake(CGRectGetMinX(lblJobTitle.frame),CGRectGetMaxY(lblTimePeriod.frame)-5, 13, 12)];
+            [imgvTimeP2 setImage:[UIImage imageNamed:@"clock_icon"]];
+            [cell.contentView addSubview:imgvTimeP2];
+            
+            lblTimePeriod2=[[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imgvTimeP2.frame)+2,CGRectGetMinY(imgvTimeP2.frame),130,20)];
+            lblTimePeriod2.center=CGPointMake(CGRectGetMaxX(imgvTimeP2.frame)+CGRectGetWidth(lblTimePeriod2.frame)/2.0f+5, imgvTimeP2.center.y);
+            
+            lblTimePeriod2.textAlignment=NSTextAlignmentLeft;
+            lblTimePeriod2.numberOfLines=0;
+            
+            lblTimePeriod2.textColor=[UIColor lightGrayColor];
+            lblTimePeriod2.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:10.0];
+            lblTimePeriod2.backgroundColor=[UIColor clearColor];
+            lblTimePeriod2.text= dateTimeForStatus;
+            [cell.contentView addSubview:lblTimePeriod2];
+            
+            
+        }
+        else{
+            
+        }
         lblTimePeriod.center=CGPointMake(CGRectGetMaxX(imgvTimeP.frame)+CGRectGetWidth(lblTimePeriod.frame)/2.0f+5, imgvTimeP.center.y);
         lblTimePeriod.textAlignment=NSTextAlignmentLeft;
+        lblTimePeriod.numberOfLines=0;
+        
         lblTimePeriod.textColor=[UIColor lightGrayColor];
         lblTimePeriod.font=[UIFont fontWithName:@"TheSansArabic-Plain" size:10.0];
         lblTimePeriod.backgroundColor=[UIColor clearColor];
@@ -4086,6 +4161,11 @@
             strStartDate=[foo objectAtIndex:0];
             lblTimePeriod.text=[NSString stringWithFormat:@"%@ %@",strStartDate,[dicTemp valueForKey:@"JobStartTime"]];
         }
+        
+        if(![dateTimeForStatus isEqual: @""]){
+            lblTimePeriod.text = [NSString stringWithFormat:@"%@\n%@",lblTimePeriod.text,dateTimeForStatus];
+        }
+        
         [cell.contentView addSubview:lblTimePeriod];
         
         DLog(@"gdfghdfh :%@",[dicTemp valueForKey:@"TimeAllowance"]);
@@ -4148,8 +4228,20 @@
         lblAddress1.numberOfLines=3;
         lblAddress1.lineBreakMode=NSLineBreakByCharWrapping;
         [lblAddress1 sizeToFit];
-        [cell.contentView addSubview:lblAddress1];
         
+        NSString *IsEngAssign=[NSString stringWithFormat:@"%@",[dicTemp objectForKey:@"IsEngAssign"]];
+        
+        if (![IsEngAssign isEqualToString:@"1"]){
+            lblAddress1.text = @"";
+           lblAddress1=[[UILabel alloc] initWithFrame:CGRectMake(10,5,100,1)];
+
+        }
+        else{
+
+        }
+        [cell.contentView addSubview:lblAddress1];
+
+
         UILabel *lblAddress2=[[UILabel alloc] initWithFrame:CGRectMake(10,CGRectGetMaxY(lblAddress1.frame)+4,100,15)];
         lblAddress2.textAlignment=NSTextAlignmentLeft;
         lblAddress2.textColor=[UIColor darkGrayColor];
@@ -4908,12 +5000,58 @@
     NSAttributedString *cr = [[NSAttributedString alloc] initWithString: @"\n\n"];
     NSAttributedString *strJobDesc=[self FormatString:[NSString stringWithFormat:@"Job Description: %@",[dic valueForKey:@"JobDescription"]] initial:@"Job Description"];
     
+    
+    
+    
+    
+    NSString *jobstatus=[NSString stringWithFormat:@"%@",[dic objectForKey:@"JobStatus"]];
+    NSString *IsAccepted=[NSString stringWithFormat:@"%@",[dic objectForKey:@"IsAccepted"]];
+    NSString *IsEngAssign=[NSString stringWithFormat:@"%@",[dic objectForKey:@"IsEngAssign"]];
+
+    NSAttributedString * dateTimeForStatus = [[NSMutableAttributedString alloc]initWithString:@""];
+
+    //NSString *IsActive=[NSString stringWithFormat:@"%@",[dicTemp objectForKey:@"IsActive"]];
+    
+    if ([jobstatus integerValue]==Book)
+    {
+        //Booked
+        if ([IsAccepted isEqualToString:@"0"]&&[[dic objectForKey:@"IsEngAssign"]integerValue]==0)
+        {
+            if(![[dic valueForKey:@"CreatedOn"] isKindOfClass:[NSNull class]] && [[dic objectForKey:@"CreatedOn"] length] > 0){
+                dateTimeForStatus=[self FormatString:[NSString stringWithFormat:@"Invited Date & Time:: %@",[GlobalDirector ReplaceStringNull: [dic objectForKey:@"CreatedOn"]]] initial:@"Invited Date & Time:"];
+
+            }
+           
+        }
+        else if ([IsAccepted isEqualToString:@"1"])
+        {
+            if(![[dic valueForKey:@"AcceptedDate"] isKindOfClass:[NSNull class]] && [[dic objectForKey:@"AcceptedDate"] length] > 0){
+                dateTimeForStatus=[self FormatString:[NSString stringWithFormat:@"Accepted Date & Time: %@",[GlobalDirector ReplaceStringNull: [dic objectForKey:@"AcceptedDate"]]] initial:@"Accepted Date & Time:"];
+
+            }
+        }
+        
+        if ([IsEngAssign isEqualToString:@"1"])
+        {
+            //Assigned
+            if(![[dic valueForKey:@"AssignedDate"] isKindOfClass:[NSNull class]] && [[dic objectForKey:@"AssignedDate"] length] > 0){
+                dateTimeForStatus=[self FormatString:[NSString stringWithFormat:@"Assigned Date & Time:: %@",[GlobalDirector ReplaceStringNull: [dic objectForKey:@"AssignedDate"]]] initial:@"Assigned Date & Time:"];
+
+            }
+
+        }
+        
+    }
+    
     NSString *StartDate =[NSString stringWithFormat:@"%@",[dic valueForKey:@"JobStartDate"]];
     //StartDate = [StartDate substringToIndex:10];
     NSArray* foo = [StartDate componentsSeparatedByString: @" "];
     StartDate=[foo objectAtIndex:0];
+    
     NSAttributedString *strStartDate=[self FormatString:[NSString stringWithFormat:@"Job StartDate: %@",StartDate] initial:@"Job StartDate"];
     NSAttributedString *strStartTime=[self FormatString:[NSString stringWithFormat:@"Job StartTime: %@",[dic valueForKey:@"JobStartTime"]] initial:@"Job StartTime"];
+
+    
     
     NSArray *arr=[dic objectForKey:@"JobAddrListResponse"];
     NSDictionary *PresentingJob,*PresentingUser;
@@ -4977,14 +5115,16 @@
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strStartTime];
     [strJobDetails appendAttributedString:cr];
+    [strJobDetails appendAttributedString:dateTimeForStatus];
+    [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strTitle];
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strFullName];
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strJobType];
     [strJobDetails appendAttributedString:cr];
-   // [strJobDetails appendAttributedString:strAddress];
-   // [strJobDetails appendAttributedString:cr];
+//    [strJobDetails appendAttributedString:strAddress];
+//    [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strCity];
     [strJobDetails appendAttributedString:cr];
     [strJobDetails appendAttributedString:strCountry];
@@ -5005,7 +5145,7 @@
     [txtvAgreement.layer setMasksToBounds:YES];
     [bgVw22 addSubview:txtvAgreement];
     
-    NSString *IsAccepted=[NSString stringWithFormat:@"%@",[dic objectForKey:@"IsAccepted"]];
+//    NSString *IsAccepted=[NSString stringWithFormat:@"%@",[dic objectForKey:@"IsAccepted"]];
     
     DLog(@"jobdetails :%@",dic);
     DLog(@"IsAccepted :%@",IsAccepted);

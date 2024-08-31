@@ -7,16 +7,6 @@
 #define Partner_Maintenance_DefaultSettings_h
 
 
-//Stage new azure API
-//    #define conn_url "http://218d-103-46-239-130.ngrok.io/PartnersService.svc/"
-
-
-//#define squareUpBaseURL "https://connect.squareupsandbox.com/v2/"
-//#define squareUpLocationId  "LWYFCYNQJYDV7"
-//#define squareUpApplicationId "sandbox-sq0idb-rgcfZO8hRkKZR8EDOpNuCQ"
-//#define squareUpAccessToken  "EAAAEOWCQg-JI7_vsquofTRkiH5P6bYvjWMnTw1eUTqAFdjzlShzLR5ocaZezZ-A"
-
-
 //Testing Url
 #define conn_url  "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/"
 //Test Mahendra Account
@@ -25,7 +15,6 @@
 #define squareUpApplicationId "sandbox-sq0idb-Z5IEv4BrecUJhwCf-9d1zw"
 #define squareUpAccessToken  "EAAAEGbNeznS0jzWJKSgIc7qSVI2bfPGxOr0b9tNZZ7But1qvULid3acsM2CIxM4"
 
-
 //LIVE azure API
 // #define conn_url  "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/"
 ////Live Square Up Client
@@ -33,6 +22,21 @@
 //#define squareUpLocationId  "LH5DF4N9CFZPK"
 //#define squareUpApplicationId "sq0idp-3Znix2LDK_rDkwql1fBarg"
 //#define squareUpAccessToken  "EAAAFM2j-JVMj0UtbvZpFPHCD_BVmISy3aCp5HobcqYfFllqgmjv0bJ0j2napQuC"
+
+
+// TESTING VOLT
+#define voltBaseURL "https://api.sandbox.volt.io/"
+#define voltClientID "308bc389-00cf-4a1d-8122-6e116db6aa66"
+#define voltClientSecret "67aaca17-1394-413f-ae4a-c79761389bf6"
+#define voltUsername "pm264df9deac0e805.77008803@volt.io"
+#define voltPassword "X1q$&kE8PVT%Z#!745f9iz@wu0S3*Ib1"
+
+// PRODUCTION VOLT
+//#define voltBaseURL "https://api.volt.io/"
+//#define voltClientID "9b31ea15-a857-4fd9-b8ba-fc1f25f9b2e9"
+//#define voltClientSecret "f5f196f4-be8e-4751-86e4-e883b5075c76"
+//#define voltUsername "pm264facb49d898e6.28096146@volt.io"
+//#define voltPassword "pG*8cXe0#%f$95iS1&@!C27VRjPM3gb1"
 
 
 // API Names
@@ -139,29 +143,28 @@ typedef enum AgreementSatus {
 
 
 // live term url (3d secure redirect term url for payment)
-//#define term_url_segpayresponse "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
-//#define sageMerchantSessionKey  "merchant-session-keys"
-//#define sagecard_identifiers "card-identifiers"
-//#define transactions "transactions"
+#define term_url_segpayresponse "http://pm247live-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
+#define sageMerchantSessionKey  "merchant-session-keys"
+#define sagecard_identifiers "card-identifiers"
+#define transactions "transactions"
 
 //term url for stage (3d secure redirect term url for payment)
-    #define term_url_segpayresponse "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
-    #define sageMerchantSessionKey  "merchant-session-keys"
-    #define sagecard_identifiers "card-identifiers"
-    #define transactions "transactions"
+//    #define term_url_segpayresponse "http://pm247uat-mobile.azurewebsites.net/PartnersService.svc/Validate3DTransaction"
+//    #define sageMerchantSessionKey  "merchant-session-keys"
+//    #define sagecard_identifiers "card-identifiers"
+//    #define transactions "transactions"
 
 
 //Basic profile test (payment test account)
 //
-//#define Sageconn_url  "https://pi-test.sagepay.com/api/v1/"  //test sage pay url
+#define Sageconn_url  "https://pi-test.sagepay.com/api/v1/"  //test sage pay url
 //#define vendorName "pm247ltd"
 //#define integrationKey "E0l8iFAkS0nehVSUrx5AnrrlVWtwjXUDuS93sOJw1uulmsKRxy"
-//
 //#define integrationPassword "tjnjHmrLIz8QGSRbE2LTHGvzf1TG9xDt2zsyN55fKN58msuFPSNPy1dVJd6qclfem"
 
 
 //Basic profile test (payment live account)
-#define Sageconn_url  "https://pi-live.sagepay.com/api/v1/" //test sage pay url
+//#define Sageconn_url  "https://pi-live.sagepay.com/api/v1/" //test sage pay url
 #define vendorName "pm247ltd"
 #define integrationKey "9v7fmp14s7safQjrC7QxfLXtRg9wyF3VqBbbEf8mwPuJ8IOGwF"
 #define integrationPassword "wAioONamdHXb4ylATCCh09LHDajYjZNJJgfgCSFxdMrYmjAGOE6VpsOpo6jtowvMN"

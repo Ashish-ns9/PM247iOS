@@ -46,6 +46,8 @@
 		18F4D6151B7CA40300F88F1D /* WarningNotice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18F4D6131B7CA40300F88F1D /* WarningNotice.xib */; };
 		5168F31A27DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5168F31827DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m */; };
 		5168F31B27DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5168F31927DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib */; };
+		94A050362AEDA58100603268 /* ShowActivityTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 94A050332AEDA58000603268 /* ShowActivityTypeCell.m */; };
+		94A050372AEDA58100603268 /* ShowActivityTypeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94A050352AEDA58000603268 /* ShowActivityTypeCell.xib */; };
 		AC1809FA291D6FB20043BE2C /* PaymentStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC1809F9291D6FB20043BE2C /* PaymentStoryboard.storyboard */; };
 		AC180A02291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AC180A01291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m */; };
 		AC392FD62A08296C00E8DE9D /* ShowTimeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = FE91DB212A06048C00011E96 /* ShowTimeVC.m */; };
@@ -358,6 +360,9 @@
 		5168F31827DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EngineerCalenderAvialabiltyVC.m; sourceTree = "<group>"; };
 		5168F31927DF3A57005E0413 /* EngineerCalenderAvialabiltyVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EngineerCalenderAvialabiltyVC.xib; sourceTree = "<group>"; };
 		7061F5DABE1BD3E9466625FF /* Pods-PM247.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PM247.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PM247/Pods-PM247.debug.xcconfig"; sourceTree = "<group>"; };
+		94A050332AEDA58000603268 /* ShowActivityTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowActivityTypeCell.m; sourceTree = "<group>"; };
+		94A050342AEDA58000603268 /* ShowActivityTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowActivityTypeCell.h; sourceTree = "<group>"; };
+		94A050352AEDA58000603268 /* ShowActivityTypeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShowActivityTypeCell.xib; sourceTree = "<group>"; };
 		AC1809F9291D6FB20043BE2C /* PaymentStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PaymentStoryboard.storyboard; sourceTree = "<group>"; };
 		AC180A00291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratePaymentLinkInvoiceVC.h; sourceTree = "<group>"; };
 		AC180A01291D80400043BE2C /* GeneratePaymentLinkInvoiceVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GeneratePaymentLinkInvoiceVC.m; sourceTree = "<group>"; };
@@ -555,7 +560,7 @@
 		F42110B81DDF2B6A00A1C68D /* CustomerFinDtl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerFinDtl.m; sourceTree = "<group>"; };
 		F42110B91DDF2B6A00A1C68D /* CustomerFinDtl.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomerFinDtl.xib; sourceTree = "<group>"; };
 		F42110BA1DDF2B6A00A1C68D /* FinancialVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FinancialVC.h; sourceTree = "<group>"; };
-		F42110BB1DDF2B6A00A1C68D /* FinancialVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinancialVC.m; sourceTree = "<group>"; };
+		F42110BB1DDF2B6A00A1C68D /* FinancialVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FinancialVC.m; sourceTree = "<group>"; wrapsLines = 0; };
 		F42110BC1DDF2B6A00A1C68D /* FinancialVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FinancialVC.xib; sourceTree = "<group>"; };
 		F42110C11DDF2C0D00A1C68D /* Customer_EngineerJobDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Customer_EngineerJobDetails.h; sourceTree = "<group>"; };
 		F42110C21DDF2C0D00A1C68D /* Customer_EngineerJobDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Customer_EngineerJobDetails.m; sourceTree = "<group>"; };
@@ -1313,6 +1318,9 @@
 				AC965CCF2A4B640900258CC0 /* ShowTimerTableViewCell.h */,
 				AC965CD02A4B640900258CC0 /* ShowTimerTableViewCell.m */,
 				AC965CD12A4B640900258CC0 /* ShowTimerTableViewCell.xib */,
+				94A050342AEDA58000603268 /* ShowActivityTypeCell.h */,
+				94A050332AEDA58000603268 /* ShowActivityTypeCell.m */,
+				94A050352AEDA58000603268 /* ShowActivityTypeCell.xib */,
 			);
 			name = Engineer_Xib;
 			sourceTree = "<group>";
@@ -2003,6 +2011,7 @@
 				C2F6429E1FB4362D0040F4AA /* diners@2x.png in Resources */,
 				C2CB1C26205285320029A78C /* signatureBg@3x.png in Resources */,
 				F43B58071B7CE5F400B5EFF6 /* BoilerChecks.xib in Resources */,
+				94A050372AEDA58100603268 /* ShowActivityTypeCell.xib in Resources */,
 				F421AE201B7E33FC006403E6 /* AdditionalNotes.xib in Resources */,
 				C2CB1C25205285320029A78C /* signatureBg@2x.png in Resources */,
 				F404AF431A2700EF00FB871F /* MyriadPro-Regular.otf in Resources */,
@@ -2239,6 +2248,7 @@
 				F4D86ADB19EBC06E00AE90D6 /* Login.m in Sources */,
 				C2B43ACA1E0933E30043D772 /* KLCPopup.m in Sources */,
 				18A97EF31AC2E96E00F10BAD /* ProfileEdit.m in Sources */,
+				94A050362AEDA58100603268 /* ShowActivityTypeCell.m in Sources */,
 				C2355E1D1FC6EBF80031C1AA /* SaveCardCell.m in Sources */,
 				C283A201203F0AFB000DC059 /* NewCardCell.m in Sources */,
 				F405091C1A3066F6007E3B56 /* MyTextField.m in Sources */,
@@ -2347,7 +2357,7 @@
 				CODE_SIGN_ENTITLEMENTS = PM247.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 9Y5DTXY655;
 				EXCLUDED_ARCHS = arm64;
@@ -2360,7 +2370,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.66;
+				MARKETING_VERSION = 2.0.67;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;
@@ -2503,7 +2513,7 @@
 				CODE_SIGN_ENTITLEMENTS = PM247.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 9Y5DTXY655;
 				EXCLUDED_ARCHS = arm64;
@@ -2516,7 +2526,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.66;
+				MARKETING_VERSION = 2.0.67;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;
@@ -2540,7 +2550,7 @@
 				CODE_SIGN_ENTITLEMENTS = PM247.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 9Y5DTXY655;
 				EXCLUDED_ARCHS = arm64;
@@ -2554,7 +2564,7 @@
 				INFOPLIST_FILE = "Partner Maintenance/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.66;
+				MARKETING_VERSION = 2.0.67;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = uk.co.pm247;
 				PRODUCT_NAME = PM247;

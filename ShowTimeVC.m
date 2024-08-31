@@ -10,15 +10,20 @@
 #import "ShowTimeVC.h"
 #import "GlobalDirector.h"
 #import "ShowTimerTableViewCell.h"
+#import "ShowActivityTypeCell.h"
 
 AppDelegate *app;
 @interface ShowTimeVC ()
 {
     GlobalDirector *globe;
+    NSArray *arrActivityValues;
+    NSDate *stopTimeDate;
+    NSString *selectedActivityType;
 
 }
 @property (strong, nonatomic) NSTimer *timer;
 @property (strong, nonatomic) NSArray *arrTimerValues;
+
 
 @end
 
@@ -30,6 +35,10 @@ int timerValue;
 {
     [super viewDidLoad];
     timerValue = 0;
+    
+    arrActivityValues = [[NSArray alloc] init];
+    arrActivityValues = @[@"choice", @"Travelling to job", @"Investigation", @"Waiting payment &amp", @"Contracts", @"Fixed Price work", @"completed work wating"];
+
     NSInteger savedTimer = [[NSUserDefaults standardUserDefaults] integerForKey:[NSString stringWithFormat:@"JOB_ID_%@", _jobID]];
     
     timerValue = (int)(savedTimer);
@@ -56,7 +65,10 @@ int timerValue;
     
     [_tblView registerNib:[UINib nibWithNibName:@"ShowTimerTableViewCell" bundle:nil] forCellReuseIdentifier:@"ShowTimerTableViewCell"];
     
+    [_tblViewActionType registerNib:[UINib nibWithNibName:@"ShowActivityTypeCell" bundle:nil] forCellReuseIdentifier:@"ShowActivityTypeCell"];
+
     [self getEngineerTimer];
+    [ self.viewMainActionType setHidden:true];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -149,7 +161,15 @@ int timerValue;
     if (timerValue == 0) {
         return;
     }
-    [self SetEngineerTimer:timerValue endDate:[NSDate date]];
+    selectedActivityType = @"";
+    stopTimeDate = [NSDate date];
+    self->_tblViewActionType.delegate = self;
+    self->_tblViewActionType.dataSource = self;
+
+    [self->_tblViewActionType reloadData];
+
+    [ self.viewMainActionType setHidden:false];
+
     
 }
 
@@ -174,6 +194,19 @@ int timerValue;
     [[NSUserDefaults standardUserDefaults] setInteger:timerValue forKey:[NSString stringWithFormat:@"JOB_ID_%@", _jobID]];
 }
 
+-(void)showNotePopup{
+    
+    AddNotes *notes=[[AddNotes alloc]initWithNibName:@"AddNotes" bundle:nil];
+            
+        
+   // notes.Notes=arrNotes;
+    notes.jobID=[NSString stringWithFormat:@"%@",_jobID];
+    notes.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];
+    notes.modalPresentationStyle = UIModalPresentationCustom;
+
+    [self presentViewController:notes animated:YES completion:nil];
+}
+
 -(NSString *)getFormattedTime
 {
     NSUInteger h = timerValue / 3600;
@@ -186,31 +219,83 @@ int timerValue;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_arrTimerValues count];
+    if(tableView == _tblView){
+        return [_arrTimerValues count];
+    }
+    else if(tableView == _tblViewActionType){
+        return [arrActivityValues count];
+    }
+    return 0;
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == _tblView){
+        NSDictionary *data = _arrTimerValues[indexPath.section];
+        if(data[@"ActivityBy"] == nil || [data[@"ActivityBy"]  isEqual: @""]){
+            return 70;
+        }
+        else{
+            return 120;
+        }
+    }
+    else{
+        return 40;
+    }
+}
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    
-    ShowTimerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ShowTimerTableViewCell" forIndexPath:indexPath];
+    ;
+    if(tableView == _tblView){
+        ShowTimerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ShowTimerTableViewCell" forIndexPath:indexPath];
 
-    NSDictionary *data = _arrTimerValues[indexPath.section];
-    NSString *totalTime = [data valueForKey:@"TotalTime"];
-    cell.lblTimer.text = totalTime;
+        NSDictionary *data = _arrTimerValues[indexPath.section];
+        NSString *totalTime = [data valueForKey:@"TotalTime"];
+        cell.lblTimer.text = totalTime;
+        
+        NSString *startTime = [data valueForKey:@"StartTimer"];
+        NSString *endTime = [data valueForKey:@"EndTimer"];
+        
+        cell.lblStartTimer.text = startTime;
+        cell.lblEndTimer.text = endTime;
+        
+        if(data[@"ActivityBy"] == nil || [data[@"ActivityBy"]  isEqual: @""]){
+            [cell.lblName setHidden:true];
+            [cell.lblActionType setHidden:true];
+        }
+        else{
+            [cell.lblName setHidden:false];
+            [cell.lblActionType setHidden:false];
+            cell.lblName.text = [NSString stringWithFormat:@"Activity By - %@",data[@"ActivityBy"]];
+            cell.lblActionType.text = [NSString stringWithFormat:@"Activity Type - %@",data[@"ActionType"]];
+
+        }
+        return cell;
+    }
+    else {
+
+        ShowActivityTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ShowActivityTypeCell" forIndexPath:indexPath];
+        NSString *value = arrActivityValues[indexPath.section];
+        NSLog(@"%@", value);
+
+        cell.lblActionType.text = value;
+        return cell;
+
+    }
     
-    NSString *startTime = [data valueForKey:@"StartTimer"];
-    NSString *endTime = [data valueForKey:@"EndTimer"];
-    
-    cell.lblStartTimer.text = startTime;
-    cell.lblEndTimer.text = endTime;
-    
-    cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
-    
-    return cell;
+}
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == _tblViewActionType){
+        selectedActivityType = arrActivityValues[indexPath.section];
+
+    }
 }
 
 -(void)SetEngineerTimer:(int)totalTime endDate:(NSDate *)endDate
@@ -225,7 +310,7 @@ int timerValue;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
     
-    NSString *engineerID = (NSString *)[userdetails valueForKey:@"UserID"];
+    NSString *engineerID = (NSString *)[userdetails valueForKey:@"StaffID"];
     
     [dict setObject:_jobID forKey:@"JobId"];
     [dict setObject:engineerID forKey:@"EngineerId"];
@@ -240,9 +325,12 @@ int timerValue;
     
     NSString *endDateString = [formatter stringFromDate:endDate];
     
-    
     [dict setObject:startDateString forKey:@"StartTimer"];
     [dict setObject:endDateString forKey:@"EndTimer"];
+    
+//    selectedActivityType = [selectedActivityType stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [dict setObject:selectedActivityType forKey:@"ActionType"];
+
     
     long h = (totalTime / 3600);
     long m = (totalTime / 60) % 60;
@@ -296,7 +384,7 @@ int timerValue;
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
     
-    NSString *engineerID = (NSString *)[userdetails valueForKey:@"UserID"];
+    NSString *engineerID = (NSString *)[userdetails valueForKey:@"StaffID"];
     
     [dict setObject:_jobID forKey:@"JobId"];
     [dict setObject:engineerID forKey:@"EngineerId"];
@@ -324,6 +412,24 @@ int timerValue;
         });
         
     }];
+}
+
+- (IBAction)actionCancelPress:(id)sender {
+    [ self.viewMainActionType setHidden:true];
+
+}
+
+- (IBAction)actionTypePress:(id)sender {
+    if([selectedActivityType  isEqual: @""]){
+        [self showAlert:@"Please select Action type in the list.."  withTitle:@"Action Type"];
+
+    }
+    else{
+        [ self.viewMainActionType setHidden:true];
+        [self SetEngineerTimer:timerValue endDate:stopTimeDate];
+
+    }
+
 }
 
 @end

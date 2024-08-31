@@ -16,7 +16,8 @@
     UITextField *Activetxtfld;
     UIView *popUpVW;
     NSArray *arrFeedTblPopup;
-    NSMutableArray *arrPayments;
+    NSMutableArray *arrSquareUpPayments;
+    NSMutableArray *arrVoltPayments;
 
     NSURLConnection *connFinancialDetails;
     NSString *strIdentifier;

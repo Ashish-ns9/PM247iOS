@@ -869,9 +869,6 @@
     [connRequestedFE start];
 }
 
-
-
-
 #pragma mark NSURLConnection Delegate Methods
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {

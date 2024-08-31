@@ -12,10 +12,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface EngineerListVC : ViewController<SWRevealViewControllerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface EngineerListVC : ViewController<SWRevealViewControllerDelegate,UITableViewDataSource,UITableViewDelegate, UISearchBarDelegate>
 {
-    NSMutableArray *arrList;
+    NSMutableArray *arrList, *filterArray;
 }
+@property(nonatomic,retain)IBOutlet UISearchBar *searchBar;
+
 @property (strong, nonatomic) IBOutlet UIButton *btnInvite;
 @property (strong, nonatomic) IBOutlet UILabel *lblPlaceHolder;
 

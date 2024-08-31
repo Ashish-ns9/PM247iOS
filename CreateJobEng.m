@@ -520,8 +520,16 @@
    
      _txtPurchOrder.text=[GlobalDirector ReplaceStringNull:[dicJobDetails valueForKey:@"PurchaseOrder"]];
     _txtStartTime.text=[dicJobDetails valueForKey:@"JobStartTime"];
-    _txtEndTime.text=[dicJobDetails valueForKey:@"JobEndTime"];
-    _txtTimeAllowance.text=[dicJobDetails valueForKey:@"BookingAgentName"];
+    if (![[dicJobDetails valueForKey:@"JobEndTime"] isEqual:[NSNull null]])
+    {
+        _txtEndTime.text=[dicJobDetails valueForKey:@"JobEndTime"];
+
+    }
+    if (![[dicJobDetails valueForKey:@"BookingAgentName"] isEqual:[NSNull null]])
+    {
+        _txtTimeAllowance.text=[dicJobDetails valueForKey:@"BookingAgentName"];
+
+    }
     _txtTimeAllowance.tag=[[dicJobDetails valueForKey:@"BookingAgentId"]integerValue];
     
     _txtMainConNumber.text=[dicJobDetails valueForKey:@"MainContactNumber"];
@@ -560,7 +568,10 @@
         
         _txtfdLastEtatime.hidden = false;
         _txtLastname.enabled=YES;
-        _txtfdLastEtatime.text=[dicJobDetails valueForKey:@"JobEtaTime"];
+        if (![[dicJobDetails valueForKey:@"JobEtaTime"]isKindOfClass:[NSNull class]]) {
+            _txtfdLastEtatime.text=[dicJobDetails valueForKey:@"JobEtaTime"];
+        }
+
     }
     else if ([jobstatusShown isEqualToString:@"3"])
     {
@@ -2169,7 +2180,9 @@ replacementString: (NSString*) string
   //  addNote.jobStatus=(NSString *)[_jobDic valueForKey:@"JobStatus"];
     
 
-    addNote.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];
+    addNote.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];\
+    self.modalPresentationStyle = UIModalPresentationOverFullScreen;
+
     [self presentViewController:addNote animated:YES completion:nil];
     
     

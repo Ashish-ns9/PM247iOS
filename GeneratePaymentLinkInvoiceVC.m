@@ -152,13 +152,15 @@
     [dict setObject:dueDate forKey:@"dueDate"];
     [dict setObject:status forKey:@"status"];
     [dict setObject:amount forKey:@"amount"];
+    [dict setObject:@"SquareUp" forKey:@"paymentType"];
+
     [dict setObject:objId forKey:@"id"];
     
     NSArray *users = [dictJob valueForKey:@"JobPeopleListResponse"];
     NSDictionary * user = [users firstObject];
     NSString *phoneNo = [[user valueForKey:@"ContactNumber"] stringByReplacingOccurrencesOfString:@" " withString:@""];
     [dict setObject:phoneNo forKey:@"phoneNumber"];
-    
+
     GlobalDirector *globe= [GlobalDirector SharedDirector];
     [globe SyncRequestGet:REQUEST_SaveSquarePaymentDetailAndSendSms withPrams:dict andCompletionHandler:^(NSDictionary *result) {
         NSLog(@"%@",result);

@@ -15,7 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) IBOutlet UILabel *lblStartTimer;
 @property (strong, nonatomic) IBOutlet UILabel *lblEndTimer;
 @property (strong, nonatomic) IBOutlet UILabel *lblTimer;
+@property (weak, nonatomic) IBOutlet UILabel *lblActionType;
 
+@property (strong, nonatomic) IBOutlet UILabel *lblName;
+@property (weak, nonatomic) IBOutlet UIStackView *timerStackView;
 
 @end
 

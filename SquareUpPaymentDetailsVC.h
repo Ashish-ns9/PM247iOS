@@ -45,6 +45,7 @@
 @property (nonatomic) NSUInteger totalBytes;
 @property (nonatomic) NSUInteger receivedBytes;
 @property (nonatomic) NSMutableData *imageData;
+@property (nonatomic,retain) NSString *paymentmode; //1- volt, 2- squareup
 
 @property(nonatomic,retain)  NSDictionary *dictJob;
 @property (strong, nonatomic) IBOutlet UITableView *tblPayment;

@@ -795,10 +795,10 @@ withCompletionHandler:(void(^)())completionHandler {
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"deviceToken"];
         
     }
-    - (void)messaging:(FIRMessaging *)messaging didReceiveMessage:(FIRMessagingRemoteMessage *)remoteMessage {
-        NSLog(@"Received data message: %@", [[remoteMessage.appData valueForKey:@"aps"] valueForKey:@"alert"]);
-        
-    }
+//    - (void)messaging:(FIRMessaging *)messaging didReceiveMessage:(FIRMessagingRemoteMessage *)remoteMessage {
+//        //NSLog(@"Received data message: %@", [[remoteMessage.appData valueForKey:@"aps"] valueForKey:@"alert"]);
+//
+//    }
     -(void)NotificationPopup:(NSDictionary*)userInfo{
         
         NSString *message = nil;

@@ -19,6 +19,8 @@
 
 @implementation EngineerListVC
 
+#pragma mark - Init Method
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     selectedIds = [[NSMutableArray alloc] init];
@@ -37,10 +39,14 @@
     [[self view] addGestureRecognizer:recognizer1];
     [[self view] addGestureRecognizer:recognizer];
     
-    
+
+    _searchBar.placeholder=@"Search via name";
+    _searchBar.delegate = self;
     [_tableView registerNib:[UINib nibWithNibName:@"EngineerListTableViewCell" bundle:nil] forCellReuseIdentifier:@"EngineerListTableViewCell"];
     [self GetEngineerList];
 }
+
+#pragma mark - IBAction Method
 
 - (IBAction)btnInviteClicked:(id)sender {
     if(selectedIds.count == 0){
@@ -55,6 +61,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - Custom Method
 -(void)SetEngineerInvite
 {
     MBProgressHUD   *hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -149,6 +156,7 @@
                     if (!error)
                     {
                         self->arrList = [[NSMutableArray alloc] init];
+                        self->filterArray =  [[NSMutableArray alloc] init];
                         if([temp valueForKey:@"AvailableEngineerList"])
                         {
                             self->arrList = [temp valueForKey:@"AvailableEngineerList"];
@@ -163,6 +171,7 @@
                             [self->_lblPlaceHolder setHidden:TRUE];
                             [self->_btnInvite setHidden:FALSE];
                         }
+                        self->filterArray = self->arrList;
                         [self->_tableView reloadData];
                     }
                 }
@@ -172,21 +181,38 @@
     
 }
 
-
+#pragma mark - UITableView Delegate/Datasource
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if([self->arrList isEqual:[NSNull null]] || self->arrList.count == 0){
         return 0;
     }
-    return arrList.count + 1;
+    int subForselectAllIndex = 0;
+    if([_searchBar.text isEqual: @""]){
+        subForselectAllIndex = 1;
+    }
+    else{
+        subForselectAllIndex = 0;
+        //Remove Select All
+    }
+    return filterArray.count + subForselectAllIndex;
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     
     EngineerListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EngineerListTableViewCell" forIndexPath:indexPath];
-
-    if(indexPath.row == 0){
+    
+    int subForselectAllIndex = 0;
+    if([_searchBar.text isEqual: @""]){
+        subForselectAllIndex = 1;
+    }
+    else{
+        subForselectAllIndex = 0;
+        //Remove Select All
+    }
+    
+    if(indexPath.row == 0 && subForselectAllIndex == 1){
         cell.lblName.text = @"Select All";
-        if(selectedIds.count == arrList.count){
+        if(selectedIds.count == filterArray.count){
             [cell.btnInvite setBackgroundImage:[UIImage imageNamed:@"check"] forState:normal];
         }
         else{
@@ -194,7 +220,7 @@
         }
     }
     else{
-        NSDictionary *dicTemp=[arrList objectAtIndex:indexPath.row - 1];
+        NSDictionary *dicTemp=[filterArray objectAtIndex:indexPath.row - subForselectAllIndex];
         NSString *name=[NSString stringWithFormat:@"%@ %@",[dicTemp objectForKey:@"FirstName"] ,[dicTemp objectForKey:@"LastName"]];
 
         if([selectedIds containsObject:[dicTemp objectForKey:@"StaffID"]]){
@@ -211,14 +237,23 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == 0){
-        if(selectedIds.count == arrList.count){
+    int subForselectAllIndex = 0;
+    if([_searchBar.text isEqual: @""]){
+        subForselectAllIndex = 1;
+    }
+    else{
+        subForselectAllIndex = 0;
+        //Remove Select All
+    }
+    
+    if(indexPath.row == 0 && subForselectAllIndex == 1){
+        if(selectedIds.count == filterArray.count){
              selectedIds=[[NSMutableArray alloc] init];
 
         }
         else{
             selectedIds=[[NSMutableArray alloc] init];
-            for (id dicTemp in arrList)
+            for (id dicTemp in filterArray)
             {
                 [selectedIds addObject:[dicTemp objectForKey:@"StaffID"]];
 
@@ -232,7 +267,7 @@
         }
     }
     else{
-        NSDictionary *dicTemp=[arrList objectAtIndex:indexPath.row - 1];
+        NSDictionary *dicTemp=[filterArray objectAtIndex:indexPath.row - subForselectAllIndex];
         if([selectedIds containsObject:[dicTemp objectForKey:@"StaffID"]]){
             NSInteger index = [selectedIds indexOfObject:[dicTemp objectForKey:@"StaffID"]];
             [selectedIds removeObjectAtIndex:index];
@@ -247,5 +282,40 @@
     }
     [self->_tableView reloadData];
 }
+
+
+#pragma mark - SearchBar Delegate/Datasource
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    DLog(@"search button clicked");
+
+    [searchBar resignFirstResponder];
+}
+
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    DLog(@"search cancel clicked");
+    [searchBar resignFirstResponder];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if(arrList.count > 0){
+        NSPredicate *searchSearch = [NSPredicate predicateWithFormat:@"FirstName CONTAINS[cd] %@ OR LastName CONTAINS[cd] %@", searchText, searchText];
+        NSArray *searchResults = [arrList filteredArrayUsingPredicate:searchSearch];
+        if([searchText isEqual: @""]){
+            filterArray = arrList;
+        }
+        else{
+            filterArray = [NSMutableArray arrayWithArray:searchResults];
+        }
+        
+        [self->_tableView reloadData];
+        DLog(@"%@", searchResults);
+
+    }
+}
+
 
 @end

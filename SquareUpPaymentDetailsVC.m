@@ -13,6 +13,8 @@
 @interface SquareUpPaymentDetailsVC () < SQIPCardEntryViewControllerDelegate>
 {
     CGFloat currX;
+    NSString *voltAccessToken;
+
 }
 @end
 
@@ -27,6 +29,7 @@
     arrImages = [[NSMutableArray alloc] init];
     _tblPayment.rowHeight = UITableViewAutomaticDimension;
     _tblPayment.estimatedRowHeight = 100.0;
+    voltAccessToken = @"";
     [self GetSquareUpPaymentDetails:true];
     
 }
@@ -266,7 +269,8 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
     [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
-    
+    [dict setObject:_paymentmode forKey:@"paymentmode"];
+
     GlobalDirector *globe= [GlobalDirector SharedDirector];
     [globe SyncRequestGet:REQUEST_GetSquareUpPaymentDetails withPrams:dict andCompletionHandler:^(NSDictionary *result) {
         NSLog(@"%@",result);
@@ -286,12 +290,35 @@
 //                    _viewTakePayment.hidden=YES;
 //                }
                 */
-                self->arrPayments = [result valueForKey:@"SquareUpPaymentDetailListResponse"];
-                if(isFirstTime){
-                    [self CheckInvoiceStatus:0];
+//                self->arrPayments  = [[NSMutableArray alloc] init];
+                
+                self->arrPayments = [NSMutableArray arrayWithArray:[result valueForKey:@"SquareUpPaymentDetailListResponse"]] ;
+
+                NSMutableArray *tempAerray =  [NSMutableArray arrayWithArray:[result valueForKey:@"SquareUpPaymentDetailListResponse"]] ;
+                [tempAerray removeAllObjects];
+                int i;
+
+                for (i = 0; i<[self->arrPayments count]; i++) {
+                    NSDictionary *dictInner = self->arrPayments[i];
+                    if([self->_paymentmode isEqual:@"Volt"] && [dictInner[@"PaymentType"] isEqual:@"Volt"]){
+                        [tempAerray addObject: dictInner];
+//                        [self->arrPayments removeObjectAtIndex:i];
+                    }
+                    else if([self->_paymentmode isEqual:@"SquareUp"] && ![dictInner[@"PaymentType"] isEqual:@"Volt"]){
+                        [tempAerray addObject: dictInner];
+
+//                        [self->arrPayments removeObjectAtIndex:i];
+                    }
+                }
+                self->arrPayments = tempAerray;
+                
+                if(isFirstTime && ![self->_paymentmode isEqual:@"Volt"] && self->arrPayments.count > 0){
+                    [self CheckInvoiceStatusForSquareUp:0];
+                }
+                else if(isFirstTime && [self->_paymentmode isEqual:@"Volt"] && self->arrPayments.count > 0){
+                    [self voltGetAuthTokenApi];
                 }
                 [self->_tblPayment reloadData];
-                
                 
             } @catch (NSException *exception) {
                 [self showAlert:@"There are some problem right now, try again later. " withTitle:@"Sorry!"];
@@ -301,39 +328,41 @@
     }];
 }
 
+#pragma mark - SquareUp Status check
 
--(void)CheckInvoiceStatus:(int)indexValue{
+-(void)CheckInvoiceStatusForSquareUp:(int)indexValue{
     if([self->arrPayments count] > indexValue){
         NSDictionary *dict = [self->arrPayments objectAtIndex:indexValue];
-        if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]] isEqualToString:@"PAID"]){
-            
-            NSString *invoiceUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"InvoiceUrl"]];
-
-            NSString *publicUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"PublishUrl"]];
-            
-            NSString *jobId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"JobPaymentID"]];
-
-            NSString *title = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"title"]];
-
-            NSString *status = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]];
-            
-            NSString *amountString = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Amount"]];
-            
-            NSString *objId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Id"]];
-            
-            NSString *dueDate = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"DueDate"]];
-
-//            NSString *amount = [GlobalDirector ReplaceStringNull:[dict valueForKeyPath:@"invoice.next_payment_amount_money.amount"]];
-//
-//            double amountValue =  [amount floatValue] / 100;
-//            NSString *amountString = [NSString stringWithFormat:@"%f", amountValue];
-            
-            [self GetInvoiceStatusAPI:invoiceUrl  jobId:jobId  publicUrl:publicUrl title:title status:status amountString:amountString objId:objId dueDate:dueDate currentIndex:indexValue];
-
-        }
-        else{
-            [self CheckInvoiceStatus:indexValue+1];
-        }
+            if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]] isEqualToString:@"PAID"]){
+                
+                NSString *invoiceUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"InvoiceUrl"]];
+                
+                NSString *publicUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"PublishUrl"]];
+                
+                NSString *jobId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"JobPaymentID"]];
+                
+                NSString *title = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"title"]];
+                
+                NSString *status = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]];
+                
+                NSString *amountString = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Amount"]];
+                
+                NSString *objId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Id"]];
+                
+                NSString *dueDate = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"DueDate"]];
+                
+                //            NSString *amount = [GlobalDirector ReplaceStringNull:[dict valueForKeyPath:@"invoice.next_payment_amount_money.amount"]];
+                //
+                //            double amountValue =  [amount floatValue] / 100;
+                //            NSString *amountString = [NSString stringWithFormat:@"%f", amountValue];
+                
+                [self GetInvoiceStatusAPIForSquareUp:invoiceUrl  jobId:jobId  publicUrl:publicUrl title:title status:status amountString:amountString objId:objId dueDate:dueDate currentIndex:indexValue];
+                
+            }
+            else{
+                [self CheckInvoiceStatusForSquareUp:indexValue+1];
+            }
+        
     }
     else{
         if(indexValue != 0){
@@ -344,7 +373,8 @@
     
 }
 
--(void)GetInvoiceStatusAPI:(NSString *)invoiceUrl jobId:(NSString *)jobId publicUrl:(NSString *)publicUrl title:(NSString *)title status:(NSString *)status amountString:(NSString *)amountString objId:(NSString *)objId dueDate:(NSString *)dueDate currentIndex:(int)currentIndex
+
+-(void)GetInvoiceStatusAPIForSquareUp:(NSString *)invoiceUrl jobId:(NSString *)jobId publicUrl:(NSString *)publicUrl title:(NSString *)title status:(NSString *)status amountString:(NSString *)amountString objId:(NSString *)objId dueDate:(NSString *)dueDate currentIndex:(int)currentIndex
 {
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
@@ -409,14 +439,13 @@
                     if (publicUrl != nil) {
                         if([status isEqualToString:@"PAID"]){
                             dispatch_async(dispatch_get_main_queue(), ^{
-                                [self saveSquarePaymentDetailAndSendSms:invoiceUrl publishUrl:publicUrl
+                                [self saveSquarePaymentDetailAndSendSmsForSquareUp:invoiceUrl publishUrl:publicUrl
                                             jobId:jobId  title:title status:status amount:amountString objId:objId dueDate:dueDate
                                                            currentIndex:currentIndex];
                             });
-                            
                         }
                         else{
-                            [self CheckInvoiceStatus:currentIndex+1];
+                            [self CheckInvoiceStatusForSquareUp:currentIndex+1];
                         }
                     }
                     else {
@@ -439,7 +468,7 @@
         
     }
 }
--(void) saveSquarePaymentDetailAndSendSms:(NSString *)invoiceUrl publishUrl:(NSString *)publishUrl  jobId:(NSString *)jobId
+-(void) saveSquarePaymentDetailAndSendSmsForSquareUp:(NSString *)invoiceUrl publishUrl:(NSString *)publishUrl  jobId:(NSString *)jobId
                                     title:(NSString *)title
                                    status:(NSString *)status
                                    amount:(NSString *)amount
@@ -466,11 +495,13 @@
     [dict setObject:dueDate forKey:@"dueDate"];
     [dict setObject:status forKey:@"status"];
     [dict setObject:amount forKey:@"amount"];
+    [dict setObject:@"SqaureUp" forKey:@"paymentType"];
     [dict setObject:objId forKey:@"id"];
     [dict setObject:jobId forKey:@"JobPaymentID"];
 
     NSArray *users = [dictJob valueForKey:@"JobPeopleListResponse"];
     NSDictionary * user = [users firstObject];
+
     NSString *phoneNo = [[user valueForKey:@"ContactNumber"] stringByReplacingOccurrencesOfString:@" " withString:@""];
     [dict setObject:phoneNo forKey:@"phoneNumber"];
     
@@ -490,7 +521,7 @@
                 
                 if (code==0) {
                     
-                    [self CheckInvoiceStatus:currentIndex+1];
+                    [self CheckInvoiceStatusForSquareUp:currentIndex+1];
 
 //                    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:publishUrl forKey:@"invoice_link"];
 //                    [[NSNotificationCenter defaultCenter] postNotificationName:
@@ -506,6 +537,249 @@
         
     }];
 }
+
+
+#pragma mark - Volt Status check
+
+- (void)voltGetAuthTokenApi
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setObject:@"password" forKey:@"grant_type"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltClientID] forKey:@"client_id"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltClientSecret] forKey:@"client_secret"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltUsername] forKey:@"username"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltPassword] forKey:@"password"];
+    
+    NSData * postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingFragmentsAllowed error:NULL];
+    NSLog(@"PARAMS = %@",dict);
+    
+    NSString *urlString= [NSString stringWithFormat:@"%s%@",voltBaseURL, @"oauth"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    DLog(@"PostString=%@",request);
+    
+    //NSLog(@"%@", [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"]);
+    
+    MBProgressHUD * hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hudd.labelText=@"Checking Updated Status...";
+    
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    
+    NSURLSessionDataTask * _dataTask =[defaultSession dataTaskWithRequest:request
+                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString * text = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+        NSLog(@"Data = %@",text);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (data != nil) {
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                NSLog(@"%@", dict);
+                
+                self->voltAccessToken = [dict valueForKey:@"access_token"];
+                [self CheckInvoiceStatusForVolt:0];
+               // [self voltPayByLinkAction:accessToken];
+            }
+            else{
+                [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+            }
+        });
+        
+    }];
+    [_dataTask resume];
+}
+
+-(void)CheckInvoiceStatusForVolt:(int)indexValue{
+    if([self->arrPayments count] > indexValue){
+        NSDictionary *dict = [self->arrPayments objectAtIndex:indexValue];
+            if(![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]] isEqualToString:@"FAILED"] && ![[GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]] isEqualToString:@"RECEIVED"]){
+                
+                NSString *invoiceUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"InvoiceUrl"]];
+                
+                NSString *publicUrl = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"PublishUrl"]];
+                
+                NSString *jobId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"JobPaymentID"]];
+                
+                NSString *title = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Title"]];
+                
+                NSString *status = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Status"]];
+                
+                NSString *amountString = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Amount"]];
+                
+                NSString *objId = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"Id"]];
+                
+                NSString *dueDate = [GlobalDirector ReplaceStringNull:[dict valueForKey:@"DueDate"]];
+                                
+                [self GetInvoiceStatusAPIForVolt:invoiceUrl  idValue:objId jobId:jobId  publicUrl:publicUrl title:title status:status amountString:amountString objId:objId dueDate:dueDate currentIndex:indexValue];
+            }
+            else{
+                [self CheckInvoiceStatusForVolt:indexValue+1];
+            }
+        
+    }
+    else{
+        if(indexValue != 0){
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+
+            [self GetSquareUpPaymentDetails:false];
+        }
+    }
+    
+}
+
+
+-(void)GetInvoiceStatusAPIForVolt:(NSString *)invoiceUrl idValue:(NSString *)idValue jobId:(NSString *)jobId publicUrl:(NSString *)publicUrl title:(NSString *)title status:(NSString *)status amountString:(NSString *)amountString objId:(NSString *)objId dueDate:(NSString *)dueDate currentIndex:(int)currentIndex
+{
+    Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
+    NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
+    if (networkStatus == NotReachable) {
+        DLog(@"There IS NO internet connection");
+        [self showAlert:@"Check your Internet connection" withTitle:@"Connection Error!"];
+    } else {
+        
+        [self.dataTask cancel];
+        
+        DLog(@"There IS internet connection");
+
+        NSString *urlString;
+        
+        urlString=[NSString stringWithFormat:@"%spayments/%@",voltBaseURL, invoiceUrl];
+        
+        NSString *authToken = [NSString stringWithFormat:@"Bearer %@", self-> voltAccessToken];
+        
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+        [request setURL:[NSURL URLWithString:urlString]];
+        [request setHTTPMethod:@"GET"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:authToken forHTTPHeaderField:@"Authorization"];
+        
+        NSMutableDictionary *body=[[NSMutableDictionary alloc]init];
+        NSString *uuid = [[NSUUID UUID] UUIDString];
+
+        NSData * postData = [NSJSONSerialization dataWithJSONObject:body options:NSJSONWritingFragmentsAllowed error:NULL];
+        
+        NSLog(@"PARAMS = %@",body);
+        
+        //[request setHTTPBody:postData];
+        request.timeoutInterval = 300;
+        DLog(@"PostString=%@",request);
+        
+        //NSLog(@"%@", [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"]);
+                
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+        
+        NSURLSessionDataTask * _dataTask =[defaultSession dataTaskWithRequest:request  completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSString * text = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+            NSLog(@"Data = %@",text);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (data != nil) {
+                    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                    NSLog(@"%@", dict);
+                    NSLog(@"INVOICE LINK: %@", publicUrl);
+                    NSString *status = [dict valueForKeyPath:@"status"];
+                    if (publicUrl != nil) {
+                        if([status isEqualToString:@"RECEIVED"] || [status isEqualToString:@"COMPLETED"] || [status isEqualToString:@"FAILED"]){
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self saveSquarePaymentDetailAndSendSmsForVolt:invoiceUrl publishUrl:publicUrl
+                                            jobId:jobId  title:title status:status amount:amountString objId:objId dueDate:dueDate
+                                                           currentIndex:currentIndex];
+                            });
+                        }
+                        else{
+                            [self CheckInvoiceStatusForVolt:currentIndex+1];
+                        }
+                    }
+                    else {
+                        [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+
+                        NSArray *errors = [dict valueForKey:@"errors"];
+                        NSString *error;
+                        if (errors && errors.count > 0) {
+                            error = errors[0][@"detail"];
+                        }
+                        if (error) {
+                            [self showAlert:error withTitle:@"Error!"];
+                        } else {
+                            [self showAlert:@"Something went wrong. Please try again later." withTitle:@"Error!"];
+                        }
+                    }
+                }
+            });
+            
+        }];
+        [_dataTask resume];
+        
+    }
+}
+
+-(void) saveSquarePaymentDetailAndSendSmsForVolt:(NSString *)invoiceUrl publishUrl:(NSString *)publishUrl  jobId:(NSString *)jobId
+                                    title:(NSString *)title
+                                   status:(NSString *)status
+                                   amount:(NSString *)amount
+                                    objId:(NSString *)objId
+                                  dueDate:(NSString *)dueDate
+
+                             currentIndex:(int)currentIndex
+{
+        
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    NSDictionary *userdetails = [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
+    
+    [dict setObject:invoiceUrl forKey:@"invoiceUrl"];
+    [dict setObject:publishUrl forKey:@"publishUrl"];
+    [dict setObject:title forKey:@"title"];
+    [dict setObject:dueDate forKey:@"dueDate"];
+    [dict setObject:status forKey:@"status"];
+    [dict setObject:amount forKey:@"amount"];
+    [dict setObject:@"Volt" forKey:@"paymentType"];
+    [dict setObject:@"" forKey:@"id"];
+    [dict setObject:jobId forKey:@"JobPaymentID"];
+
+    NSArray *users = [dictJob valueForKey:@"JobPeopleListResponse"];
+    NSDictionary * user = [users firstObject];
+
+    NSString *phoneNo = [[user valueForKey:@"ContactNumber"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [dict setObject:phoneNo forKey:@"phoneNumber"];
+    
+    GlobalDirector *globe= [GlobalDirector SharedDirector];
+    [globe SyncRequestGet:REQUEST_SaveSquarePaymentDetailAndSendSms withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        NSLog(@"%@",result);
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            
+            @try{
+                
+                int code = [[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseCode"] intValue] ;
+                
+                if (code==0) {
+
+                    [self CheckInvoiceStatusForVolt:currentIndex+1];
+                }else{
+                    [self showAlert:[GlobalDirector ReplaceStringNull:[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseMessages"]] withTitle:@"Error"];
+                }
+            } @catch (NSException *exception) {
+                [self showAlert:@"There are some problem right now, try again later. " withTitle:@"Sorry!"];
+            }
+        });
+        
+    }];
+}
+
+
 
 -(IBAction)crossNoteDesc:(id)sender
 {
@@ -730,7 +1004,13 @@
         NSDictionary *dic = [arrPayments objectAtIndex:indexPath.row];
         
         cell.lblPayTaken.text= [NSString stringWithFormat:@"Title: %@",[GlobalDirector ReplaceStringNull:[dic valueForKey:@"Title"]]];
+
         cell.lblPaydate.text= [NSString stringWithFormat:@"Due Date: %@",[GlobalDirector ReplaceStringNull:[dic valueForKey:@"DueDate"]]];
+        if([_paymentmode isEqual:@"Volt"]){
+            cell.lblPaydate.text= @"Due Date: - N/A";
+
+        }
+
         cell.lblPayAmt.text= [NSString stringWithFormat:@"Amount: %.02f",[[GlobalDirector ReplaceStringNull:[dic valueForKey:@"Amount"]] floatValue]];
         
         cell.linkTextView.text= [NSString stringWithFormat:@"Publish Url: %@",[dic valueForKey:@"PublishUrl"]];

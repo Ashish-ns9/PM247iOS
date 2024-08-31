@@ -16,13 +16,12 @@
 @import Firebase;
 
 
-
 @class Login;
 @class SWRevealViewController;
 
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate,FIRMessagingDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate,CLLocationManagerDelegate>
 {
     double currentUserlatitude,currentUserlongitude;
      NSDictionary *UserInfoNotification;

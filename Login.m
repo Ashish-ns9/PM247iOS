@@ -91,7 +91,7 @@ AppDelegate *app;
     btnLogin.layer.borderColor=[[UIColor lightGrayColor]CGColor];
     btnLogin.layer.cornerRadius=0.0f;
     count=0;
-    
+
 }
 
 //NSDictionary *user=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
@@ -597,8 +597,6 @@ AppDelegate *app;
                         {
                             [self navToDashBoard];
                         }
-                       
-                        
                     }
                     
                     if(count==0)

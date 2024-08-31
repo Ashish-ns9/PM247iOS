@@ -217,6 +217,8 @@
    // notes.Notes=arrNotes;
     notes.jobID=[NSString stringWithFormat:@"%@",[dicCustomerJobDetails valueForKey:@"JobID"]];
     notes.strFromCustomerClass=[NSString stringWithFormat:@"%@",[self class]];
+    notes.modalPresentationStyle = UIModalPresentationCustom;
+
     [self presentViewController:notes animated:YES completion:nil];
 }
 

@@ -51,11 +51,9 @@
         else
         {
             _btnAdd.hidden=NO;
-            
         }
     
     }
-  
     
    // [self btnNewNotesTapped:nil];
     
@@ -628,6 +626,8 @@
             // set URL
             [request setURL:[NSURL URLWithString:urlStr]];
             
+            
+            NSLog(@"Add Note %@", request);
             connPostNote = [[NSURLConnection alloc] initWithRequest:request delegate:self];
             [connPostNote start];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -637,9 +637,6 @@
             {
                 [self showAlert:@"Network connection not available" withTitle:@"Connection Problem!"];
             }
-            
-            
-            
         }
      
         else
@@ -770,13 +767,9 @@
                     NSDictionary *dict = [arr objectAtIndex:0];
                     [Notes insertObject:dict atIndex:0];
                 }
-                
-                
+
                 [self btnNewNotesTapped:_btnNewNotes];
-                
                 [_tabvNotes reloadData];
-                
-                
             }
         }
         else

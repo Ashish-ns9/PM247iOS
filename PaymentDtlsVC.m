@@ -142,17 +142,12 @@
             _txtVDes.text=@"";
         }
         
-        
-        if ((_txtPayType.tag == 14 || _txtPayType.tag == 15)  && isEdit == NO) {  //real
+        if ((_txtPayType.tag == 14 || _txtPayType.tag == 15)  && isEdit != YES) {  //real
             //  if (_txtPayType.tag == 144 || _txtPayType.tag == 154 ) { //fake
-            
             NSString *invoice = [GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"InvoiceNumberID"]] ;
             if (invoice.length>0) {
                 PaymentTransactionDtls *dtls = [[PaymentTransactionDtls alloc] initWithNibName:@"PaymentTransactionDtls" bundle:nil];
-                
-                
                 NSMutableDictionary *dictDtls = [[NSMutableDictionary alloc] init];
-                
                 [dictDtls setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
                 [dictDtls setObject:[GlobalDirector ReplaceStringNull:_txtVDes.text] forKey:@"description"];
                 [dictDtls setObject:[GlobalDirector ReplaceStringNull:_txtAmt.text] forKey:@"amount"];
@@ -180,24 +175,20 @@
                 
                 [self presentViewController: controller animated: YES completion: nil];
             }
-            
         }
-        else if ((_txtPayType.tag == 4)  && isEdit == NO) { // SQUARE UP LINK
-            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PaymentStoryboard" bundle: nil];
-            CreateCustomerVC * vc = [storyboard instantiateViewControllerWithIdentifier:@"CreateCustomerVC"];
-            //[[CreateCustomerVC alloc] initWithNibName:@"CreateCustomerVC" bundle:nil];
-            
-            NSMutableDictionary *dictDtls = [[NSMutableDictionary alloc] init];
-            [dictDtls setObject:[GlobalDirector ReplaceStringNull:_txtAmt.text] forKey:@"amount"];
-            [dictDtls setObject:_outStandingAmount forKey:@"DueAmount"];
-
-            vc.dictJob=dictJob;
-            vc.dictPaymentMethod = dictDtls;
-            [self.navigationController pushViewController:vc animated:YES];
-            
+//        else if (((_txtPayType.tag == 4) || (_txtPayType.tag == 25)) && isEdit == NO) { // SQUARE UP LINK
+        else if ([_txtPayType.text  isEqual: @"SquareUp Payment Link"] && isEdit != YES) { // SQUARE UP LINK
+            [self SquareUpPaymentLinkAction] ;
         }
-        else if ((_txtPayType.tag == 19)  && isEdit == NO) { // SQUARE UP CARD
+        else if ([_txtPayType.text  isEqual: @"Square Up Card"]  && isEdit != YES) { // SQUARE UP CARD
             [self showCardEntryViewController];
+        }
+        else if ([_txtPayType.text  isEqual: @"voltPayment"]  && isEdit != YES) { // volt payment link
+
+//        else if (((_txtPayType.tag == 24) || (_txtPayType.tag == 4))  && isEdit == NO) { // volt payment link
+
+//        else if (((_txtPayType.tag == 24) || (_txtPayType.tag == 4))  && isEdit == NO) { // volt payment link
+            [self voltPaymentLinkAction];
         }
         else{
             
@@ -229,9 +220,7 @@
                     NSString *encodedImageString = [base64String stringByReplacingOccurrencesOfString:@"+" withString:@"%2B"];
                     [arrImageSrtrings addObject:encodedImageString];
                 }else{
-                    
                     [arrImgExit addObject:imgvw.strURL];
-                    
                 }
             }
             
@@ -241,7 +230,6 @@
                 [dicNotes setObject:arrImageSrtrings forKey:@"ImageUpload"];
                 [dicNotes setObject:@"jpg" forKey:@"ImageExtension"];
             }
-            
             
             NSError *error;
             NSArray *arrDic=[NSArray arrayWithObjects:dicNotes, nil];
@@ -321,6 +309,259 @@
     [self presentViewController:navigationController animated:YES completion:nil];
 }
 
+- (void)SquareUpPaymentLinkAction
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PaymentStoryboard" bundle: nil];
+    CreateCustomerVC * vc = [storyboard instantiateViewControllerWithIdentifier:@"CreateCustomerVC"];
+    //[[CreateCustomerVC alloc] initWithNibName:@"CreateCustomerVC" bundle:nil];
+    
+    NSMutableDictionary *dictDtls = [[NSMutableDictionary alloc] init];
+    [dictDtls setObject:[GlobalDirector ReplaceStringNull:_txtAmt.text] forKey:@"amount"];
+    [dictDtls setObject:_outStandingAmount forKey:@"DueAmount"];
+
+    vc.dictJob=dictJob;
+    vc.dictPaymentMethod = dictDtls;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (void)voltPaymentLinkAction
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setObject:@"password" forKey:@"grant_type"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltClientID] forKey:@"client_id"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltClientSecret] forKey:@"client_secret"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltUsername] forKey:@"username"];
+    [dict setObject:[NSString stringWithFormat:@"%s", voltPassword] forKey:@"password"];
+    
+    NSData * postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingFragmentsAllowed error:NULL];
+    NSLog(@"PARAMS = %@",dict);
+    
+    NSString *urlString= [NSString stringWithFormat:@"%s%@",voltBaseURL, @"oauth"];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    DLog(@"PostString=%@",request);
+    
+    //NSLog(@"%@", [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"]);
+    
+    MBProgressHUD * hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hudd.labelText=@"Loading...";
+    
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    
+    NSURLSessionDataTask * _dataTask =[defaultSession dataTaskWithRequest:request
+                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString * text = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+        NSLog(@"Data = %@",text);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+            
+            if (data != nil) {
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                NSLog(@"%@", dict);
+                
+                NSString *accessToken = [dict valueForKey:@"access_token"];
+                [self voltPayByLinkAction:accessToken];
+            }
+        });
+        
+    }];
+    [_dataTask resume];
+}
+
+- (void)voltPayByLinkAction:(NSString *)accessToken
+{
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:@"EUR" forKey:@"currencyCode"];
+//    NSNumber *amount = @([[GlobalDirector ReplaceStringNull:_txtAmt.text] floatValue]);
+    
+    double amountFloat = ([_txtAmt.text floatValue]);
+    NSNumber *finalAmount = [NSNumber numberWithLong:(long)(amountFloat * 100)];
+    [dict setObject:finalAmount forKey:@"amount"];
+    
+    [dict setObject:@"BILL" forKey:@"type"];
+
+    NSString *invoiceNoId = [dictJob valueForKey:@"InvoiceNumberID"];
+    NSString *postCode = @"";
+    NSArray *jobAddrList = [dictJob valueForKey:@"JobAddrListResponse"];
+      if (jobAddrList.count > 0) {
+          postCode = [[jobAddrList firstObject] valueForKey:@"PostCode"];
+      }
+    
+    NSString *titleFinalValue = [NSString stringWithFormat:@"In%@PC%@%@", invoiceNoId, postCode, [self randomStringWithLength:2]];
+    NSString *titleFinalValueFinal = [titleFinalValue stringByReplacingOccurrencesOfString:@" " withString:@""];
+
+    
+    [dict setObject:titleFinalValueFinal forKey:@"uniqueReference"];
+    
+    NSMutableDictionary *payerDict = [[NSMutableDictionary alloc] init];
+    [payerDict setObject:@"PM247" forKey:@"reference"];
+    
+    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    [payerDict setObject:[userdetails valueForKey:@"Email"] forKey:@"email"];
+    [payerDict setObject:[userdetails valueForKey:@"FullName"] forKey:@"name"];
+
+    [dict setObject:payerDict forKey:@"payer"];
+    
+    NSNumber *validityPeriod = [NSNumber numberWithLong:1440];
+    [dict setObject:validityPeriod forKey:@"validityPeriod"];
+    
+    
+    NSData * postData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingFragmentsAllowed error:NULL];
+    NSLog(@"PARAMS = %@",dict);
+    
+    NSString *urlString= [NSString stringWithFormat:@"%s%@",voltBaseURL, @"pay-by-link"];
+    NSString *authToken = [NSString stringWithFormat:@"Bearer %@", accessToken];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    [request setURL:[NSURL URLWithString:urlString]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:authToken forHTTPHeaderField:@"Authorization"];
+    
+    
+    [request setHTTPBody:postData];
+    request.timeoutInterval = 300;
+    DLog(@"PostString=%@",request);
+    
+    //NSLog(@"%@", [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"]);
+    
+    MBProgressHUD * hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hudd.labelText=@"Loading...";
+    
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    
+    NSURLSessionDataTask * _dataTask =[defaultSession dataTaskWithRequest:request
+                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSString * text = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+        NSLog(@"Data = %@",text);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideAllHUDsForView:self.view animated:NO];
+            
+            if (data != nil) {
+                NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+                NSLog(@"%@", dict);
+                NSString *checkoutUrl = [dict valueForKey:@"checkoutUrl"];
+                NSString *idValue = [dict valueForKey:@"id"];
+
+                // [self voltPayByLinkGenratedAction:checkoutUrl];
+                [self savePaymentDetailAndSendSmsForVolt:checkoutUrl amount:self->_txtAmt.text  objIdValue:idValue titleFinalValueFinal: titleFinalValueFinal];
+            }
+        });
+        
+    }];
+    [_dataTask resume];
+}
+
+- (void)voltPayByLinkGenratedAction:(NSString *)checkoutUrl
+{
+    if (checkoutUrl) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        pasteboard.string = checkoutUrl;
+        
+        NSArray* sharedObjects=[NSArray arrayWithObjects:checkoutUrl,  nil];
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:sharedObjects applicationActivities:nil];
+        activityViewController.popoverPresentationController.sourceView = self.view;
+        
+        //  [self presentViewController:activityViewController animated:YES completion:nil];
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Link Generated" message:[NSString stringWithFormat:@"Link has been generated successfully./n%@",checkoutUrl] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *actionOk = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            // [self dismissViewControllerAnimated:YES completion:NULL];
+            [self GetPaymentDetails];
+        }];
+        
+        [alertController addAction:actionOk];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }
+}
+
+-(void) savePaymentDetailAndSendSmsForVolt:(NSString *)paymentLink
+                                   amount:(NSString *)amount
+                                 objIdValue:(NSString *)objIdValue
+                      titleFinalValueFinal:(NSString *)titleFinalValueFinal
+
+{
+
+    MBProgressHUD   *hudd=[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hudd.labelText=@"Please wait...";
+    [hudd show:YES];
+    
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    NSDictionary *userdetails = [[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
+    [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
+    
+    [dict setObject:objIdValue forKey:@"invoiceUrl"];
+    [dict setObject:paymentLink forKey:@"publishUrl"];
+    [dict setObject:amount forKey:@"amount"];
+    
+    
+    [dict setObject: titleFinalValueFinal forKey:@"title"];
+    [dict setObject:@"" forKey:@"dueDate"];
+    [dict setObject:@"NEW_PAYMENT" forKey:@"status"];
+    [dict setObject:amount forKey:@"amount"];
+    [dict setObject:@"Volt" forKey:@"paymentType"];
+    [dict setObject:@"" forKey:@"id"];
+
+    NSArray *users = [dictJob valueForKey:@"JobPeopleListResponse"];
+    NSDictionary * user = [users firstObject];
+    NSString *phoneNo = [[user valueForKey:@"ContactNumber"] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [dict setObject:phoneNo forKey:@"phoneNumber"]; 
+
+    GlobalDirector *globe= [GlobalDirector SharedDirector];
+    [globe SyncRequestGet:REQUEST_SaveSquarePaymentDetailAndSendSms withPrams:dict andCompletionHandler:^(NSDictionary *result) {
+        NSLog(@"%@",result);
+
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [hudd hide:YES];
+            
+            @try{
+                
+                int code = [[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseCode"] intValue] ;
+                
+                if (code==0) {
+                    [self voltPayByLinkGenratedAction:paymentLink];
+                }else{
+                    [self showAlert:[GlobalDirector ReplaceStringNull:[[result valueForKey:@"SaveJobPaymentResult"] valueForKey:@"ResponseMessages"]] withTitle:@"Error"];
+                }
+            } @catch (NSException *exception) {
+                [self showAlert:@"There are some problem right now, try again later. " withTitle:@"Sorry!"];
+            }
+        });
+        
+    }];
+}
+
+
+-(NSString *) randomStringWithLength: (int) len {
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
+
+    for (int i=0; i<len; i++) {
+         [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform([letters length])]];
+    }
+
+    return randomString;
+}
+
 - (IBAction)CancelPicker:(UIButton *)sender {
     [popPicker dismiss:YES];
 }
@@ -362,7 +603,6 @@
                 }else{
                     self->_viewTakePayment.hidden=YES;
                 }
-                
                 self->arrPayments = [result valueForKey:@"JobPayments"];
                 [self->_tblPayment reloadData];
                 
@@ -374,51 +614,6 @@
         
     }];
 }
-
--(void) GetSquareUpInvoiceID
-{
-    NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
-    
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    [dict setObject:[GlobalDirector ReplaceStringNull:[userdetails valueForKey:@"UserToken"]] forKey:@"userToken"];
-    [dict setObject:[GlobalDirector ReplaceStringNull:[dictJob valueForKey:@"JobID"]] forKey:@"jobId"];
-
-    GlobalDirector *globe = [GlobalDirector SharedDirector];
-    
-    //  [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
-    [globe SyncRequestGet:REQUEST_GetSquareUpInvoiceID withPrams:dict andCompletionHandler:^(NSDictionary *result) {
-        
-        NSLog(@"%@",result);
-        
-        
-        // [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            @try {
-                
-                
-                BOOL strValue= [[result valueForKey:@"ResponseStatus"] intValue];
-                
-                if (strValue==1) {
-                    
-                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Success"];
-                    
-                }else{
-                    //[self showAlert:[GlobalDirector ReplaceStringNull:[result valueForKey:@"ReturnValue"]] withTitle:@"Error!"];
-                }
-            } @catch (NSException *exception) {
-                // _txtPost.text=@"";
-                [self showAlert:@"There are some problem right now, try again later " withTitle:@"Sorry!"];
-            }
-        });
-    }];
-}
-
 
 -(void) GetInvoice:(NSString *)urlStr
 {
@@ -470,12 +665,22 @@
 }
 
 
+
+
 - (IBAction)ClickSquareUpStatus:(UIButton *)sender {
     SquareUpPaymentDetailsVC *vc = [[SquareUpPaymentDetailsVC alloc] initWithNibName:@"SquareUpPaymentDetailsVC" bundle:nil];
     vc.dictJob=dictJob;
+    vc.paymentmode = @"SquareUp";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (IBAction)clickVoltStatus:(id)sender {
+    SquareUpPaymentDetailsVC *vc = [[SquareUpPaymentDetailsVC alloc] initWithNibName:@"SquareUpPaymentDetailsVC" bundle:nil];
+    vc.dictJob=dictJob;
+    vc.paymentmode = @"Volt";
+
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 - (IBAction)ClickTakePayment:(UIButton *)sender {
     
@@ -520,33 +725,70 @@
                 self->arrModeList = [NSMutableArray arrayWithObject:dict];
                 [self->arrModeList addObjectsFromArray:[result valueForKey:@"DataResponses"]] ;
                 
-                
                 NSDictionary *userdetails=[[NSUserDefaults standardUserDefaults]valueForKey:@"userdetails"];
 
                 int i;
                 int u_Type = [[userdetails valueForKey:@"UserType"] intValue];
                 
-                for (i = 0; i<[self->arrModeList count]; i++) {
-                    NSDictionary *dictInner = self->arrModeList[i];
+                
+                NSMutableArray *tempAerray =  [NSMutableArray arrayWithArray:self->arrModeList] ;
+                [tempAerray removeAllObjects];
+                int index;
+
+                for (index = 0; index<[self->arrModeList count]; index++) {
+                    NSDictionary *dictInner = self->arrModeList[index];
                     if([dictInner[@"Value"]  isEqual: @"14"]){
-                        // Remove Card
-                        [self->arrModeList removeObjectAtIndex:i];
+                        
                     }
-                    if(u_Type == 4 && [dictInner[@"Value"] isEqual:@"4"])
+                    else if((u_Type == 4) && ([dictInner[@"DisplayText"] isEqual:@"SquareUp Payment Link"]))
                     {
                         // Square up Link removed from Eng login
-                        [self->arrModeList removeObjectAtIndex:i];
+                    }
+                    else if((u_Type == 4) && ([dictInner[@"DisplayText"] isEqual:@"voltPayment"]))
+                    {
+                        // Volt up Link removed from Eng login
                     }
                     
-                    if([dictInner[@"Value"] isEqual:@"15"])
+                    else if([dictInner[@"Value"] isEqual:@"15"])
                     {
                         // Dabit Square removed
-                        [self->arrModeList removeObjectAtIndex:i];
                     }
+                    else{
+                        [tempAerray addObject: dictInner];
+                    }
+                    
                 }
                 
+                self->arrModeList = tempAerray;
 
                 
+//                for (i = 0; i<[self->arrModeList count]; i++) {
+//                    NSDictionary *dictInner = self->arrModeList[i];
+//                    if([dictInner[@"Value"]  isEqual: @"14"]){
+//                        // Remove Card
+//                        [self->arrModeList removeObjectAtIndex:i];
+//                    }
+//                    
+//                    if((u_Type == 4) && ([dictInner[@"Value"] isEqual:@"4"] || [dictInner[@"Value"] isEqual:@"25"]))
+//                    {
+//                        // Square up Link removed from Eng login
+//                        [self->arrModeList removeObjectAtIndex:i];
+//                    }
+//                    if((u_Type == 4) && ([dictInner[@"Value"] isEqual:@"4"] || [dictInner[@"Value"] isEqual:@"24"]))
+//                    {
+//                        // Volt up Link removed from Eng login
+//                        [self->arrModeList removeObjectAtIndex:i];
+//                    }
+//                    
+//                    if([dictInner[@"Value"] isEqual:@"15"])
+//                    {
+//                        // Dabit Square removed
+//                        [self->arrModeList removeObjectAtIndex:i];
+//                    }
+//
+//                    
+//                    
+//                }
                 //Remove payment link
                 
                 [hudd hide:YES];
